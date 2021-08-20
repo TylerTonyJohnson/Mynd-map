@@ -1,3 +1,10 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
 canvas {
   border: solid black 1px;
+  margin: auto;
+  border-radius: 20px;
 }
