@@ -1,75 +1,68 @@
 class Circle {
-  x = 0;
-  y = 0;
   r = 30;
-  xSpeed = 100;
-  ySpeed = 0;
-
-  force = 0;
-
   hasConnector = true;
 
   // Constructor
-  constructor(context, x, y) {
-    this.x = x;
-    this.y = y;
-    this.context = context;
+  constructor(x, y) {
+    this.pos = new Vector2D(x, y);
+    this.vel = new Vector2D(100, 100);
+    this.acc = new Vector2D(0, 1000);
+    // this.x = x;
+    // this.y = y;
   }
 
   // Update function
   update(secondsPassed) {
-    console.log("Updating circle");
+
+    // Update velocity
+    this.vel = this.vel.add(this.acc.multiply(secondsPassed));
+
+    // Update position
+    this.pos = this.pos.add(this.vel.multiply(secondsPassed));
 
     // Horizontal boundary check
-    if (this.x < 0 + this.r) {
-      this.x = 0 + this.r;
-      this.xSpeed = Math.abs(this.xSpeed);
-    } else if (this.x > canvas.width - this.r) {
-      this.x = canvas.width - this.r;
-      this.xSpeed = Math.abs(this.xSpeed) * -1;
+    if (this.pos.x < 0 + this.r) {
+      this.pos.x = 0 + this.r;
+      this.vel.x *= -1 * 0.9;
+    } else if (this.pos.x > canvas.width - this.r) {
+      this.pos.x = canvas.width - this.r;
+      this.vel.x *= -1 * 0.9;
     }
 
     // Vertical boundary check
-    if (this.y < 0 + this.r) {
-      this.y = 0 + this.r;
-      this.ySpeed = Math.abs(this.ySpeed);
-    } else if (this.y > canvas.width - this.r) {
-      this.y = canvas.width - this.r;
-      this.ySpeed = Math.abs(this.ySpeed) * -1;
+    if (this.pos.y < 0 + this.r) {
+      this.pos.y = 0 + this.r;
+      this.vel.y *= -1 * 0.9;
+    } else if (this.pos.y > canvas.width - this.r) {
+      this.pos.y = canvas.width - this.r;
+      this.vel.y *= -1 * 0.9;
     }
-
-    // Update speed
-    this.ySpeed += this.force * secondsPassed;
-
-    // Update position
-    this.x += this.xSpeed * secondsPassed;
-    this.y += this.ySpeed * secondsPassed;
   }
 
   // Draw function
-  draw() {
+  draw(ctx) {
     // Connecting line
     if (this.hasConnector) {
       if (anchor) {
-        this.context.beginPath();
-        this.context.moveTo(anchor.x, anchor.y);
-        this.context.strokeStyle = "#999999";
-        this.context.lineTo(this.x, this.y);
-        this.context.stroke();
-        this.context.closePath();
+        ctx.beginPath();
+        ctx.moveTo(anchor.x, anchor.y);
+        ctx.strokeStyle = "#999999";
+        ctx.lineTo(this.pos.x, this.pos.y);
+        ctx.stroke();
+        ctx.closePath();
       } else {
         this.hasConnector = false;
       }
     }
 
     // Circle body
-    this.context.beginPath();
-    this.context.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-    this.context.fillStyle = "#08aaff";
-    this.context.fill();
-    this.context.lineWidth = 4;
-    this.context.strokeStyle = "#999999";
-    this.context.stroke();
-    this.context.closePath();
+    ctx.beginPath();
+    ctx.arc(this.pos.x, this.pos.y, this.r, 0, 2 * Math.PI);
+    ctx.fillStyle = "#08aaff";
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = "#999999";
+    ctx.stroke();
+    ctx.closePath();
   }
 }

@@ -1,5 +1,5 @@
 let canvas;
-let context;
+let ctx;
 
 window.onload = setup;
 let shapes = [];
@@ -8,13 +8,19 @@ let anchor = {};
 
 function setup() {
   canvas = $("canvas");
-  context = canvas.getContext("2d");
+  ctx = canvas.getContext("2d");
 
   anchor.x = canvas.width / 2;
   anchor.y = canvas.height / 2;
 
-  // console.log(context);
-  shapes.push(new Circle(context, canvas.width / 5, canvas.height / 5));
+  // Generate shapes
+  for (let i = 0; i < 5; i++) {
+    let newCircle = new Circle(Math.random()*canvas.width, Math.random()*canvas.height/2);
+    newCircle.vel = new Vector2D(Math.random() * 1000, Math.random() * 1000);
+
+    shapes.push(newCircle);
+  }
+
   window.requestAnimationFrame(frameLoop);
 }
 
@@ -40,23 +46,23 @@ function frameLoop(timeStamp) {
 
 function draw() {
   // Clear the canvas
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw background
-  context.fillStyle = "rgb(50, 50, 50)";
-  context.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgb(50, 50, 50)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Draw circles
   shapes.forEach((shape) => {
-    shape.draw();
+    shape.draw(ctx);
   });
 
-    // Draw anchor
-    context.beginPath();
-    context.arc(anchor.x, anchor.y, 10, 0, 2 * Math.PI);
-    context.closePath();
-    context.fillStyle = "#FFFFFF";
-    context.fill();
-    context.strokeStyle = "#999999";
-    context.stroke();
+  // Draw anchor
+  ctx.beginPath();
+  ctx.arc(anchor.x, anchor.y, 10, 0, 2 * Math.PI);
+  ctx.closePath();
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fill();
+  ctx.strokeStyle = "#999999";
+  ctx.stroke();
 }
