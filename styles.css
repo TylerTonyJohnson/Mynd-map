@@ -4,6 +4,8 @@ body {
 }
 
 canvas {
+  width: 90%;
+  aspect-ratio: 1;
   border: solid black 1px;
   margin: auto;
   border-radius: 20px;

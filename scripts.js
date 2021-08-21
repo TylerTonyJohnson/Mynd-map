@@ -10,6 +10,11 @@ function setup() {
   canvas = $("canvas");
   ctx = canvas.getContext("2d");
 
+  console.log(canvas.style.width);
+
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+
   anchor.x = canvas.width / 2;
   anchor.y = canvas.height / 2;
 
