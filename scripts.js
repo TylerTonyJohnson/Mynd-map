@@ -2,14 +2,13 @@ let canvas;
 let ctx;
 
 window.onload = setup;
+let ideas = [];
 let shapes = [];
 let anchor = {};
 
 function setup() {
   canvas = $("canvas");
   ctx = canvas.getContext("2d");
-
-  console.log(canvas.style.width);
 
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
@@ -24,6 +23,9 @@ function setup() {
 
     shapes.push(newCircle);
   }
+
+  let newIdea = new Idea(canvas.width/3, canvas.height/3);
+  ideas.push(newIdea);
 
   window.requestAnimationFrame(frameLoop);
 }
@@ -69,4 +71,9 @@ function draw() {
   ctx.fill();
   ctx.strokeStyle = "#999999";
   ctx.stroke();
+
+  // Draw ideas
+  ideas.forEach((idea) => {
+    idea.render(ctx);
+  });
 }
