@@ -1,6 +1,6 @@
 class Idea {
     r = 60;
-    text = "Idea";
+    text = "n";
     dateCreated = null;
     dateUpdated = null;
 
@@ -25,7 +25,7 @@ class Idea {
         ctx.closePath();
 
         // Draw text
-        ctx.font = "30px Arial";
+        ctx.font = "100px Arial";
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";

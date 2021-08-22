@@ -20,7 +20,7 @@ function setup() {
   for (let i = 0; i < 5; i++) {
     let newCircle = new Circle(Math.random()*canvas.width, Math.random()*canvas.height/2);
     newCircle.vel = new Vector2D(Math.random() * 1000, Math.random() * 1000);
-
+    newCircle.bodyColor = "#" + Math.floor(Math.random()*16777216).toString(16).padStart(6,"0");
     shapes.push(newCircle);
   }
 

@@ -1,14 +1,15 @@
 class Circle {
+  text = "n";
   r = 30;
   hasConnector = true;
+  bodyColor = "#08aa00";
 
   // Constructor
   constructor(x, y) {
     this.pos = new Vector2D(x, y);
     this.vel = new Vector2D(100, 100);
     this.acc = new Vector2D(0, 1000);
-    // this.x = x;
-    // this.y = y;
+    this.text = getRandomLetter();
   }
 
   // Update function
@@ -58,11 +59,19 @@ class Circle {
     // Circle body
     ctx.beginPath();
     ctx.arc(this.pos.x, this.pos.y, this.r, 0, 2 * Math.PI);
-    ctx.fillStyle = "#08aaff";
+    ctx.fillStyle = this.bodyColor;
     ctx.fill();
     ctx.lineWidth = 4;
     ctx.strokeStyle = "#999999";
     ctx.stroke();
     ctx.closePath();
+
+    // Draw text
+    ctx.font = "50px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.text, this.pos.x, this.pos.y)
+
   }
 }
