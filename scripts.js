@@ -1,3 +1,4 @@
+"use strict";
 let canvas;
 let ctx;
 
@@ -5,6 +6,8 @@ window.onload = setup;
 let ideas = [];
 let shapes = [];
 let anchor = {};
+
+let circleNum = 26;
 
 function setup() {
   canvas = $("canvas");
@@ -17,10 +20,11 @@ function setup() {
   anchor.y = canvas.height / 2;
 
   // Generate shapes
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < circleNum; i++) {
     let newCircle = new Circle(Math.random()*canvas.width, Math.random()*canvas.height/2);
     newCircle.vel = new Vector2D(Math.random() * 1000, Math.random() * 1000);
     newCircle.bodyColor = "#" + Math.floor(Math.random()*16777216).toString(16).padStart(6,"0");
+    newCircle.text = getLetter(circleNum - i -1);
     shapes.push(newCircle);
   }
 

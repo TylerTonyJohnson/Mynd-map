@@ -1,5 +1,5 @@
 class Circle {
-  text = "n";
+  text = null;
   r = 30;
   hasConnector = true;
   bodyColor = "#08aa00";
@@ -38,6 +38,11 @@ class Circle {
       this.pos.y = canvas.width - this.r;
       this.vel.y *= -1 * 0.9;
     }
+
+    // Ball collision check
+
+
+
   }
 
   // Draw function
