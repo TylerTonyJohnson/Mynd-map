@@ -4,7 +4,6 @@ let ctx;
 window.onload = setup;
 let shapes = [];
 let anchor = {};
-// let newCircle;
 
 function setup() {
   canvas = $("canvas");

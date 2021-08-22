@@ -1,3 +1,10 @@
+
+html {
+  background: rgb(100,100,125);
+  color: white;
+  text-align: center;
+}
+
 body {
   display: flex;
   flex-direction: column;
