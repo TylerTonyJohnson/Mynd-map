@@ -1,6 +1,7 @@
 class Idea {
     title = null;
     text = "hi";
+    prevText = this.text;
     dateCreated = null;
     dateUpdated = null;
 
@@ -9,6 +10,7 @@ class Idea {
     width = 200;
     height = 250;
     bodyColor = "#996633";
+    prevBodyColor = this.bodyColor;
     borderThickness = 4;
     borderColor = "#336699";
 
@@ -24,10 +26,20 @@ class Idea {
 
     // Mood recorder
 
+    // Update function
+    update() {
+        if (this.isHovered) {
+            this.text = "!";
+            this.bodyColor = "red";
+        } else {
+            this.text = this.prevText;
+            this.bodyColor = this.prevBodyColor;
+        }
+    }
+
     // Render function
     render(ctx) {
-        // Draw a circle
-        // let path = new Path2D("M182.15 0C192.01 0 200 7.99 200 17.85C200 64.28 200 185.72 200 232.15C200 242.01 192.01 250 182.15 250C145.72 250 54.28 250 17.85 250C7.99 250 0 242.01 0 232.15C0 185.72 0 64.28 0 17.85C0 7.99 7.99 0 17.85 0C54.28 0 145.72 0 182.15 0Z")
+        // Draw rounded rectangle
         ctx.fillStyle = this.bodyColor;
         ctx.lineWidth = this.borderThickness;
         ctx.strokeStyle = this.borderColor;
@@ -44,9 +56,6 @@ class Idea {
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
-        // ctx.arc(this.pos.x, this.pos.y, this.r, 0, 2 * Math.PI);
-
-
 
         // Draw text
         ctx.font = "100px Arial";

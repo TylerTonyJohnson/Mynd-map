@@ -11,31 +11,47 @@ let circleNum = 26;
 
 let secondsPassed = 0;
 let oldTimeStamp = 0;
+let offsetX = 0;
+let offsetY = 0;
 
 function setup() {
   canvas = $("canvas");
   ctx = canvas.getContext("2d");
 
+  // Size canvas
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
 
+  let boundingBox = canvas.getBoundingClientRect();
+  offsetX = boundingBox.left;
+  offsetY = boundingBox.top;
+
+  // Canvas events
   canvas.onmousedown = mouseDown;
   canvas.onmouseup = mouseUp;
   canvas.onmousemove = mouseMove;
 
+  // Generate anchor
   anchor.x = canvas.width / 2;
   anchor.y = canvas.height / 2;
 
   // Generate shapes
   for (let i = 0; i < circleNum; i++) {
-    let newCircle = new Circle(Math.random()*canvas.width, Math.random()*canvas.height/2);
+    let newCircle = new Circle(
+      Math.random() * canvas.width,
+      (Math.random() * canvas.height) / 2
+    );
     newCircle.vel = new Vector2D(Math.random() * 1000, Math.random() * 1000);
-    newCircle.bodyColor = "#" + Math.floor(Math.random()*16777216).toString(16).padStart(6,"0");
-    newCircle.text = getLetter(circleNum - i -1);
+    newCircle.bodyColor =
+      "#" +
+      Math.floor(Math.random() * 16777216)
+        .toString(16)
+        .padStart(6, "0");
+    newCircle.text = getLetter(circleNum - i - 1);
     shapes.push(newCircle);
   }
 
-  let newIdea = new Idea(canvas.width/3, canvas.height/3);
+  let newIdea = new Idea(canvas.width / 3, canvas.height / 3);
   ideas.push(newIdea);
 
   window.requestAnimationFrame(frameLoop);
@@ -50,6 +66,8 @@ function frameLoop(timeStamp) {
   shapes.forEach((shape) => {
     shape.update(secondsPassed);
   });
+
+  ideas.forEach((idea) => {idea.update();})
 
   // Call draw function
   draw();
@@ -89,9 +107,7 @@ function draw() {
 function mouseDown(e) {
   console.log("mouse down");
   e.preventDefault();
-  e.stopPropogation();
-
-  let mouseX
+  e.stopPropagation();
 }
 
 function mouseUp(e) {
@@ -99,5 +115,37 @@ function mouseUp(e) {
 }
 
 function mouseMove(e) {
-  console.log("mouse move");
+  // console.log("mouse move");
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  // Get current mouse position
+  let mouseX = parseInt(e.clientX - offsetX);
+  let mouseY = parseInt(e.clientY - offsetY);
+
+  // console.log(mouseX, mouseY)
+
+  // Test for first object that overlaps with mouse
+  for (let i = ideas.length-1; i >= 0; i--) {
+    let thisIdea = ideas[i];
+    if (mouseX > thisIdea.pos.x && mouseX < thisIdea.pos.x + thisIdea.width && mouseY > thisIdea.pos.y && mouseY < thisIdea.pos.y + thisIdea.height) {
+      thisIdea.isHovered = true;
+    } else {
+      thisIdea.isHovered = false;
+    }
+
+
+
+    // // Circle test
+    // let dx = thisShape.x - mouseX;
+    // let dy = thisShape.y - mouseY;
+
+    // if (dx*dx+dy*dy<thisShape.r*thisShape.r) {
+    //   console.log(thisShape.text);
+    //   thisShape.text = "!";
+    // }
+  }
+
+
 }
