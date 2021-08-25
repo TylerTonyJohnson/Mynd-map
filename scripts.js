@@ -9,12 +9,19 @@ let anchor = {};
 
 let circleNum = 26;
 
+let secondsPassed = 0;
+let oldTimeStamp = 0;
+
 function setup() {
   canvas = $("canvas");
   ctx = canvas.getContext("2d");
 
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
+
+  canvas.onmousedown = mouseDown;
+  canvas.onmouseup = mouseUp;
+  canvas.onmousemove = mouseMove;
 
   anchor.x = canvas.width / 2;
   anchor.y = canvas.height / 2;
@@ -33,9 +40,6 @@ function setup() {
 
   window.requestAnimationFrame(frameLoop);
 }
-
-let secondsPassed = 0;
-let oldTimeStamp = 0;
 
 function frameLoop(timeStamp) {
   // Calculate how much time has passed
@@ -80,4 +84,20 @@ function draw() {
   ideas.forEach((idea) => {
     idea.render(ctx);
   });
+}
+
+function mouseDown(e) {
+  console.log("mouse down");
+  e.preventDefault();
+  e.stopPropogation();
+
+  let mouseX
+}
+
+function mouseUp(e) {
+  console.log("mouse up");
+}
+
+function mouseMove(e) {
+  console.log("mouse move");
 }

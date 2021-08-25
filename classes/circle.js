@@ -1,6 +1,7 @@
 class Circle {
   text = null;
   r = 30;
+  bounciness = 0.95;
   hasConnector = true;
   bodyColor = "#08aa00";
 
@@ -24,19 +25,23 @@ class Circle {
     // Horizontal boundary check
     if (this.pos.x < 0 + this.r) {
       this.pos.x = 0 + this.r;
-      this.vel.x *= -1 * 0.9;
+      this.vel.x *= -1 * this.bounciness;
+      this.vel.y *= this.bouncinessbounciness;
     } else if (this.pos.x > canvas.width - this.r) {
       this.pos.x = canvas.width - this.r;
-      this.vel.x *= -1 * 0.9;
+      this.vel.x *= -1 * this.bounciness;
+      this.vel.y *= this.bounciness;
     }
 
     // Vertical boundary check
     if (this.pos.y < 0 + this.r) {
       this.pos.y = 0 + this.r;
-      this.vel.y *= -1 * 0.9;
+      this.vel.y *= -1 * this.bounciness;
+      this.vel.x *= this.bounciness;
     } else if (this.pos.y > canvas.width - this.r) {
       this.pos.y = canvas.width - this.r;
-      this.vel.y *= -1 * 0.9;
+      this.vel.y *= -1 * this.bounciness;
+      this.vel.x *= this.bounciness;
     }
 
     // Ball collision check
