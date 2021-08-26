@@ -40,7 +40,7 @@ class Idea {
 
   // Update function
   update() {
-    console.log(this.status);
+    // console.log(this.status);
     switch (this.status) {
       case "passive":
         this.text = this.prevText;

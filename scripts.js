@@ -111,7 +111,9 @@ function draw() {
   });
 }
 
-// Resize function
+// ---------- EVENTS ----------
+
+// Window resize event
 function onWindowResize(e) {
   console.log("resizing");
   canvas.width = canvas.clientWidth;
@@ -122,7 +124,7 @@ function onWindowResize(e) {
   offsetY = boundingBox.top;
 } 
 
-
+// Mouse down event
 function mouseDown(e) {
   console.log("mouse down");
   e.preventDefault();
@@ -132,10 +134,12 @@ function mouseDown(e) {
   let mouseY = parseInt(e.clientY - offsetY);
 }
 
+// Mouse up event
 function mouseUp(e) {
   console.log("mouse up");
 }
 
+// Mouse move event
 function mouseMove(e) {
   // console.log("mouse move");
 
@@ -153,6 +157,7 @@ function mouseMove(e) {
     let thisIdea = ideas[i];
     if (mouseX > thisIdea.pos.x && mouseX < thisIdea.pos.x + thisIdea.width && mouseY > thisIdea.pos.y && mouseY < thisIdea.pos.y + thisIdea.height) {
       thisIdea.status = "hovered";
+      console.log(`${thisIdea.text} is now ${thisIdea.status}`);
     } else {
       thisIdea.status = "passive";
     }
