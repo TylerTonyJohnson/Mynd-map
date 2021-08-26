@@ -31,6 +31,9 @@ function setup() {
   canvas.onmouseup = mouseUp;
   canvas.onmousemove = mouseMove;
 
+  // Window events
+  window.addEventListener("resize",onWindowResize);
+
   // Generate anchor
   anchor.x = canvas.width / 2;
   anchor.y = canvas.height / 2;
@@ -57,6 +60,8 @@ function setup() {
   window.requestAnimationFrame(frameLoop);
 }
 
+
+// Main frame function
 function frameLoop(timeStamp) {
   // Calculate how much time has passed
   secondsPassed = (timeStamp - oldTimeStamp) / 1000;
@@ -76,6 +81,8 @@ function frameLoop(timeStamp) {
   window.requestAnimationFrame(frameLoop);
 }
 
+
+// Main draw function
 function draw() {
   // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -104,10 +111,25 @@ function draw() {
   });
 }
 
+// Resize function
+function onWindowResize(e) {
+  console.log("resizing");
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+
+  let boundingBox = canvas.getBoundingClientRect();
+  offsetX = boundingBox.left;
+  offsetY = boundingBox.top;
+} 
+
+
 function mouseDown(e) {
   console.log("mouse down");
   e.preventDefault();
   e.stopPropagation();
+
+  let mouseX = parseInt(e.clientX - offsetX);
+  let mouseY = parseInt(e.clientY - offsetY);
 }
 
 function mouseUp(e) {
@@ -130,22 +152,9 @@ function mouseMove(e) {
   for (let i = ideas.length-1; i >= 0; i--) {
     let thisIdea = ideas[i];
     if (mouseX > thisIdea.pos.x && mouseX < thisIdea.pos.x + thisIdea.width && mouseY > thisIdea.pos.y && mouseY < thisIdea.pos.y + thisIdea.height) {
-      thisIdea.isHovered = true;
+      thisIdea.status = "hovered";
     } else {
-      thisIdea.isHovered = false;
+      thisIdea.status = "passive";
     }
-
-
-
-    // // Circle test
-    // let dx = thisShape.x - mouseX;
-    // let dy = thisShape.y - mouseY;
-
-    // if (dx*dx+dy*dy<thisShape.r*thisShape.r) {
-    //   console.log(thisShape.text);
-    //   thisShape.text = "!";
-    // }
   }
-
-
 }
