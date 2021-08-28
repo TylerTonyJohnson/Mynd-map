@@ -126,12 +126,13 @@ function onWindowResize(e) {
 
 // Mouse down event
 function mouseDown(e) {
-  console.log("mouse down");
   e.preventDefault();
   e.stopPropagation();
 
-  let mouseX = parseInt(e.clientX - offsetX);
-  let mouseY = parseInt(e.clientY - offsetY);
+  let mouseTarget = getMouseTarget(e);
+  if (mouseTarget === null) {return null}
+  mouseTarget.status = "active";
+  console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
 }
 
 // Mouse up event
@@ -141,25 +142,40 @@ function mouseUp(e) {
 
 // Mouse move event
 function mouseMove(e) {
-  // console.log("mouse move");
-
   e.preventDefault();
   e.stopPropagation();
+
+  let mouseTarget = getMouseTarget(e);
+
+  // Test for first object that overlaps with mouse
+  // if (mouseTarget === null) { return null; }
+  if (mouseTarget?.status === "passive") {  
+    mouseTarget.status = "hovered";
+    console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
+  } else {
+    ideas.forEach((idea) => {idea.status = "passive"});
+  }
+}
+
+// Get whatever the mouse is pointing at, just one object.
+function getMouseTarget(e) {
 
   // Get current mouse position
   let mouseX = parseInt(e.clientX - offsetX);
   let mouseY = parseInt(e.clientY - offsetY);
 
-  // console.log(mouseX, mouseY)
-
   // Test for first object that overlaps with mouse
   for (let i = ideas.length-1; i >= 0; i--) {
     let thisIdea = ideas[i];
     if (mouseX > thisIdea.pos.x && mouseX < thisIdea.pos.x + thisIdea.width && mouseY > thisIdea.pos.y && mouseY < thisIdea.pos.y + thisIdea.height) {
-      thisIdea.status = "hovered";
-      console.log(`${thisIdea.text} is now ${thisIdea.status}`);
+      // thisIdea.status = "hovered";
+      // console.log(`${thisIdea.text} is now ${thisIdea.status}`);
+      return thisIdea;
+      break;
     } else {
-      thisIdea.status = "passive";
+      // thisIdea.status = "passive";
     }
+    return null;
   }
+
 }

@@ -25,9 +25,6 @@ class Idea {
   //   });
 
   // Runtime
-  state = "default";
-  isHovered = false;
-  isDragging = false;
 
   constructor(x, y) {
     this.pos = new Vector2D(x, y);
@@ -50,6 +47,10 @@ class Idea {
         this.text = "!";
         this.bodyColor = "red";
         break;
+    case "active":
+        this.text = ":)";
+        this.bodyColor = "green";  
+        break; 
       default:
         console.log("else");
         break;
