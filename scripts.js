@@ -8,6 +8,7 @@ let shapes = [];
 let anchor = {};
 
 let circleNum = 26;
+let ideaCount = 4;
 
 let secondsPassed = 0;
 let oldTimeStamp = 0;
@@ -32,7 +33,7 @@ function setup() {
   canvas.onmousemove = mouseMove;
 
   // Window events
-  window.addEventListener("resize",onWindowResize);
+  window.addEventListener("resize", onWindowResize);
 
   // Generate anchor
   anchor.x = canvas.width / 2;
@@ -53,13 +54,16 @@ function setup() {
     newCircle.text = getLetter(circleNum - i - 1);
     shapes.push(newCircle);
   }
-
-  let newIdea = new Idea(canvas.width / 3, canvas.height / 3);
-  ideas.push(newIdea);
+  for (let i = 0; i < ideaCount; i++) {
+    let newIdea = new Idea(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height
+    );
+    ideas.push(newIdea);
+  }
 
   window.requestAnimationFrame(frameLoop);
 }
-
 
 // Main frame function
 function frameLoop(timeStamp) {
@@ -72,7 +76,9 @@ function frameLoop(timeStamp) {
     shape.update(secondsPassed);
   });
 
-  ideas.forEach((idea) => {idea.update();})
+  ideas.forEach((idea) => {
+    idea.update();
+  });
 
   // Call draw function
   draw();
@@ -80,7 +86,6 @@ function frameLoop(timeStamp) {
   // The loop has reached its end. Keep requesting frames
   window.requestAnimationFrame(frameLoop);
 }
-
 
 // Main draw function
 function draw() {
@@ -122,22 +127,24 @@ function onWindowResize(e) {
   let boundingBox = canvas.getBoundingClientRect();
   offsetX = boundingBox.left;
   offsetY = boundingBox.top;
-} 
+}
 
 // Mouse down event
-function mouseDown(e) {
+function mouseDown(e) {}
+
+// Mouse up event
+function mouseUp(e) {
   e.preventDefault();
   e.stopPropagation();
 
   let mouseTarget = getMouseTarget(e);
-  if (mouseTarget === null) {return null}
-  mouseTarget.status = "active";
+  if (mouseTarget === null) {
+    return null;
+  }
+  if (mouseTarget.status === "hovered") {
+    mouseTarget.status = "active";
+  }
   console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
-}
-
-// Mouse up event
-function mouseUp(e) {
-  console.log("mouse up");
 }
 
 // Mouse move event
@@ -148,34 +155,43 @@ function mouseMove(e) {
   let mouseTarget = getMouseTarget(e);
 
   // Test for first object that overlaps with mouse
-  // if (mouseTarget === null) { return null; }
-  if (mouseTarget?.status === "passive") {  
-    mouseTarget.status = "hovered";
-    console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
-  } else {
-    ideas.forEach((idea) => {idea.status = "passive"});
+  if (mouseTarget !== null) {
+    if (mouseTarget.status !== "hovered" || mouseTarget.status !== "active") {
+      mouseTarget.status = "hovered";
+      console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
+    } else {
+      // ideas.forEach((idea) => {idea.status = "passive"});
+    }
   }
+  // Reset objects that aren't selected
+  ideas.forEach((idea) => {
+    if (idea !== mouseTarget && idea.status === "hovered") {
+      idea.status = "passive";
+      console.log("making passive");
+    }
+  });
 }
 
 // Get whatever the mouse is pointing at, just one object.
 function getMouseTarget(e) {
-
   // Get current mouse position
   let mouseX = parseInt(e.clientX - offsetX);
   let mouseY = parseInt(e.clientY - offsetY);
 
   // Test for first object that overlaps with mouse
-  for (let i = ideas.length-1; i >= 0; i--) {
+  for (let i = ideas.length - 1; i >= 0; i--) {
     let thisIdea = ideas[i];
-    if (mouseX > thisIdea.pos.x && mouseX < thisIdea.pos.x + thisIdea.width && mouseY > thisIdea.pos.y && mouseY < thisIdea.pos.y + thisIdea.height) {
+    if (
+      mouseX > thisIdea.pos.x &&
+      mouseX < thisIdea.pos.x + thisIdea.width &&
+      mouseY > thisIdea.pos.y &&
+      mouseY < thisIdea.pos.y + thisIdea.height
+    ) {
       // thisIdea.status = "hovered";
       // console.log(`${thisIdea.text} is now ${thisIdea.status}`);
       return thisIdea;
       break;
-    } else {
-      // thisIdea.status = "passive";
     }
-    return null;
   }
-
+  return null;
 }

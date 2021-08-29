@@ -12,19 +12,9 @@ class Idea {
   bodyColor = "#996633";
   prevBodyColor = this.bodyColor;
   borderThickness = 4;
+  prevBorderThickness = this.borderThickness;
   borderColor = "#336699";
-
-  // Configure status
-
-  //   status = Object.freeze({
-  //     passive: 1,
-  //     hovered: 2,
-  //     targeted: 3,
-  //     moving: 4,
-  //     changing: 5,
-  //   });
-
-  // Runtime
+  prevBorderColor = this.borderColor;
 
   constructor(x, y) {
     this.pos = new Vector2D(x, y);
@@ -42,10 +32,14 @@ class Idea {
       case "passive":
         this.text = this.prevText;
         this.bodyColor = this.prevBodyColor;
+        this.borderColor = this.prevBorderColor;
+        this.borderThickness = this.prevBorderThickness;
         break;
       case "hovered":
-        this.text = "!";
-        this.bodyColor = "red";
+        // this.text = "!";
+        // this.bodyColor = "red";
+        this.borderColor = "white";
+        this.borderThickness = 10;
         break;
     case "active":
         this.text = ":)";
