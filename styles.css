@@ -11,6 +11,7 @@ body {
 }
 
 canvas {
+  position: relative;
   width: 90%;
   aspect-ratio: 1;
   border: solid black 1px;

@@ -8,12 +8,14 @@ let shapes = [];
 let anchor = {};
 
 let circleNum = 26;
-let ideaCount = 4;
+let ideaCount = 3;
 
 let secondsPassed = 0;
 let oldTimeStamp = 0;
 let offsetX = 0;
 let offsetY = 0;
+
+let isDebug = false;
 
 function setup() {
   canvas = $("canvas");
@@ -54,10 +56,12 @@ function setup() {
     newCircle.text = getLetter(circleNum - i - 1);
     shapes.push(newCircle);
   }
+
+  // Generate some ideas
   for (let i = 0; i < ideaCount; i++) {
     let newIdea = new Idea(
-      Math.random() * canvas.width,
-      Math.random() * canvas.height
+      Math.random() * canvas.width * 0.6 + canvas.width * 0.2,
+      Math.random() * canvas.height * 0.6 + canvas.height * 0.2 
     );
     ideas.push(newIdea);
   }
@@ -100,7 +104,7 @@ function draw() {
   shapes.forEach((shape) => {
     shape.draw(ctx);
   });
-
+  
   // Draw anchor
   ctx.beginPath();
   ctx.arc(anchor.x, anchor.y, 10, 0, 2 * Math.PI);
@@ -109,11 +113,18 @@ function draw() {
   ctx.fill();
   ctx.strokeStyle = "#999999";
   ctx.stroke();
-
+  
   // Draw ideas
   ideas.forEach((idea) => {
     idea.render(ctx);
   });
+
+  // Draw bounding box
+  if ( isDebug ) {
+    ctx.strokeStyle = "green"; 
+    ctx.lineWidth = 4;
+    ctx.strokeRect(canvas.width * 0.2, canvas.height * 0.2, canvas.width * 0.6, canvas.height * 0.6);
+  }
 }
 
 // ---------- EVENTS ----------
@@ -182,11 +193,11 @@ function getMouseTarget(e) {
   for (let i = ideas.length - 1; i >= 0; i--) {
     let thisIdea = ideas[i];
     if (
-      mouseX > thisIdea.pos.x &&
-      mouseX < thisIdea.pos.x + thisIdea.width &&
-      mouseY > thisIdea.pos.y &&
-      mouseY < thisIdea.pos.y + thisIdea.height
-    ) {
+      mouseX > thisIdea.pos.x - thisIdea.width / 2 &&
+      mouseX < thisIdea.pos.x + thisIdea.width / 2 &&
+      mouseY > thisIdea.pos.y - thisIdea.height / 2 &&
+      mouseY < thisIdea.pos.y + thisIdea.height / 2
+      ) {
       // thisIdea.status = "hovered";
       // console.log(`${thisIdea.text} is now ${thisIdea.status}`);
       return thisIdea;
@@ -194,4 +205,10 @@ function getMouseTarget(e) {
     }
   }
   return null;
+}
+
+// Toggle debug viewer (developer tools)
+function toggleDebug() {
+  isDebug = !isDebug;
+  ideas.forEach((idea) => {idea.isDebug = isDebug;})
 }

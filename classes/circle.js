@@ -4,6 +4,7 @@ class Circle {
   bounciness = 0.95;
   hasConnector = true;
   bodyColor = "#08aa00";
+  lineWidth = 4;
 
   // Constructor
   constructor(x, y) {
@@ -55,6 +56,7 @@ class Circle {
     // Connecting line
     if (this.hasConnector) {
       if (anchor) {
+        ctx.lineWidth = this.lineWidth;
         ctx.beginPath();
         ctx.moveTo(anchor.x, anchor.y);
         ctx.strokeStyle = "#999999";
