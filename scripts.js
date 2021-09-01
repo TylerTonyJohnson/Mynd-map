@@ -1,25 +1,34 @@
+
+// DOM stuff
 "use strict";
 let canvas;
 let ctx;
-
 window.onload = setup;
+
+// Global data variables
 let ideas = [];
 let shapes = [];
 let anchor = {};
-
-let circleNum = 26;
-let ideaCount = 3;
-
 let secondsPassed = 0;
 let oldTimeStamp = 0;
 let offsetX = 0;
 let offsetY = 0;
+let hoverTarget = null;
+let leftClickTarget = null;
+let rightClickTarget = null;
 
+// Config stuff
+let circleNum = 26;
+let ideaCount = 3;
 let isDebug = false;
 
+// Setup function
 function setup() {
   canvas = $("canvas");
   ctx = canvas.getContext("2d");
+
+  // Disable canvas context menu
+  canvas.addEventListener("contextmenu", event => event.preventDefault())
 
   // Size canvas
   canvas.width = canvas.clientWidth;
@@ -141,12 +150,45 @@ function onWindowResize(e) {
 }
 
 // Mouse down event
-function mouseDown(e) {}
+function mouseDown(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  switch (e.which) {
+    case 1:
+      console.log("Left mouse button down");
+      break;
+    case 2: 
+      console.log("Middle mouse button down");
+      break;
+    case 3:
+      console.log("Right mouse button down");
+      break;
+    default:
+      console.log("Unexpected mouse input");
+  }
+}
 
 // Mouse up event
 function mouseUp(e) {
   e.preventDefault();
   e.stopPropagation();
+
+  switch (e.which) {
+    case 1:
+      console.log("Left mouse button up");
+      break;
+    case 2: 
+      console.log("Middle mouse button up");
+      break;
+    case 3:
+      console.log("Right mouse button up");
+      break;
+    default:
+      console.log("Unexpected mouse input");
+  }
+
+
 
   let mouseTarget = getMouseTarget(e);
   if (mouseTarget === null) {
@@ -163,24 +205,31 @@ function mouseMove(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  let mouseTarget = getMouseTarget(e);
+  let newTarget = getMouseTarget(e);
+  if (newTarget === null) { 
+    return;
+   }
+
+  hoverTarget = newTarget;
+  hoverTarget.isHovered = true;
 
   // Test for first object that overlaps with mouse
-  if (mouseTarget !== null) {
-    if (mouseTarget.status !== "hovered" || mouseTarget.status !== "active") {
-      mouseTarget.status = "hovered";
-      console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
-    } else {
-      // ideas.forEach((idea) => {idea.status = "passive"});
-    }
-  }
+  // if (mouseTarget !== null) {
+  //   if (mouseTarget.status !== "hovered" || mouseTarget.status !== "active") {
+  //     mouseTarget.status = "hovered";
+  //     console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
+  //   } else {
+  //     // ideas.forEach((idea) => {idea.status = "passive"});
+  //   }
+  // }
+
   // Reset objects that aren't selected
-  ideas.forEach((idea) => {
-    if (idea !== mouseTarget && idea.status === "hovered") {
-      idea.status = "passive";
-      console.log("making passive");
-    }
-  });
+  // ideas.forEach((idea) => {
+  //   if (idea !== mouseTarget && idea.status === "hovered") {
+  //     idea.status = "passive";
+  //     console.log("making passive");
+  //   }
+  // });
 }
 
 // Get whatever the mouse is pointing at, just one object.
