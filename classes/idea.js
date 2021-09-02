@@ -9,8 +9,8 @@ class Idea {
 
   // Display stuff
   r = 20;
-  width = 200;
-  height = 250;
+  width = 160;
+  height = 200;
   
   // Body color
   bodyColor = "purple";
@@ -24,7 +24,7 @@ class Idea {
 
   // Border color
   borderColor = "purple";
-  borderColorDefault = "light gray";
+  borderColorDefault = "gray";
   borderColorHovered = "white";
 
   // Runtime
@@ -49,28 +49,11 @@ class Idea {
 
   // Update function
   update() {
+
     // Get status / coloring
     this.borderColor = (this.isHovered ? this.borderColorHovered : this.borderColorDefault);
-
-    // switch (this.status) {
-    //   case "passive":
-    //     this.text = this.defText;
-    //     this.bodyColor = this.bodyColorDefault;
-    //     this.borderColor = this.borderColorDefault;
-    //     this.borderWidth = this.borderWidthDefault;
-    //     break;
-    //   case "hovered":
-    //     this.borderColor = this.borderColorHovered;
-    //     this.borderWidth = this.borderWidthHovered;
-    //     break;
-    //   case "active":
-    //     // this.text = ":)";
-    //     this.bodyColor = this.bodyColorActive;
-    //     break;
-    //   default:
-    //     console.log("else");
-    //     break;
-    // }
+    this.borderWidth = (this.isHovered ? this.borderWidthHovered : this.borderWidthDefault);
+    this.bodyColor = (this.isActive ? this.bodyColorActive : this.bodyColorDefault);
   }
 
   // Render function
@@ -127,6 +110,7 @@ class Idea {
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
+    
 
     // Draw text
     ctx.font = "100px Arial";

@@ -13,9 +13,9 @@ let secondsPassed = 0;
 let oldTimeStamp = 0;
 let offsetX = 0;
 let offsetY = 0;
-let hoverTarget = null;
-let leftClickTarget = null;
-let rightClickTarget = null;
+let hoverTargets = [];
+let leftClickTarget = [];
+let rightClickTarget = [];
 
 // Config stuff
 let circleNum = 26;
@@ -92,6 +92,8 @@ function frameLoop(timeStamp) {
   ideas.forEach((idea) => {
     idea.update();
   });
+
+  // console.log(ideas[2].borderColor)
 
   // Call draw function
   draw();
@@ -205,13 +207,37 @@ function mouseMove(e) {
   e.preventDefault();
   e.stopPropagation();
 
+  // Notice / set stuff
   let newTarget = getMouseTarget(e);
-  if (newTarget === null) { 
-    return;
-   }
+  console.log("targeting " + newTarget?.text);
 
-  hoverTarget = newTarget;
-  hoverTarget.isHovered = true;
+  // loop through, clear stuff
+  if (newTarget !== null) {
+    hoverTargets.push(newTarget);
+  }
+
+  hoverTargets.forEach((target) => {
+    if (target === newTarget) { // Currently looking at hovered entity
+      if (!target.isHovered) {
+        target.isHovered = true;
+      }
+    } else {  
+      target.isHovered = false;
+      hoverTargets.splice(hoverTargets.indexOf(target), 1);
+    }
+  })
+
+  // // If targeting nothing, nothing should be hovered
+  // if (newTarget !== hoverTarget) { 
+  //   if (hoverTarget !== null) {
+  //     hoverTarget.isHovered = false;
+  //   }
+  //   hoverTarget = null;
+  //   return;
+  //  }
+
+  // hoverTarget = newTarget;
+  // hoverTarget.isHovered = true;
 
   // Test for first object that overlaps with mouse
   // if (mouseTarget !== null) {
