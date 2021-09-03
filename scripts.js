@@ -1,4 +1,3 @@
-
 // DOM stuff
 "use strict";
 let canvas;
@@ -14,8 +13,8 @@ let oldTimeStamp = 0;
 let offsetX = 0;
 let offsetY = 0;
 let hoverTargets = [];
-let leftClickTarget = [];
-let rightClickTarget = [];
+let leftClickTarget = null;
+let rightClickTarget = null;
 
 // Config stuff
 let circleNum = 26;
@@ -28,7 +27,7 @@ function setup() {
   ctx = canvas.getContext("2d");
 
   // Disable canvas context menu
-  canvas.addEventListener("contextmenu", event => event.preventDefault())
+  canvas.addEventListener("contextmenu", (event) => event.preventDefault());
 
   // Size canvas
   canvas.width = canvas.clientWidth;
@@ -70,7 +69,7 @@ function setup() {
   for (let i = 0; i < ideaCount; i++) {
     let newIdea = new Idea(
       Math.random() * canvas.width * 0.6 + canvas.width * 0.2,
-      Math.random() * canvas.height * 0.6 + canvas.height * 0.2 
+      Math.random() * canvas.height * 0.6 + canvas.height * 0.2
     );
     ideas.push(newIdea);
   }
@@ -115,7 +114,7 @@ function draw() {
   shapes.forEach((shape) => {
     shape.draw(ctx);
   });
-  
+
   // Draw anchor
   ctx.beginPath();
   ctx.arc(anchor.x, anchor.y, 10, 0, 2 * Math.PI);
@@ -124,17 +123,22 @@ function draw() {
   ctx.fill();
   ctx.strokeStyle = "#999999";
   ctx.stroke();
-  
+
   // Draw ideas
   ideas.forEach((idea) => {
     idea.render(ctx);
   });
 
   // Draw bounding box
-  if ( isDebug ) {
-    ctx.strokeStyle = "green"; 
+  if (isDebug) {
+    ctx.strokeStyle = "green";
     ctx.lineWidth = 4;
-    ctx.strokeRect(canvas.width * 0.2, canvas.height * 0.2, canvas.width * 0.6, canvas.height * 0.6);
+    ctx.strokeRect(
+      canvas.width * 0.2,
+      canvas.height * 0.2,
+      canvas.width * 0.6,
+      canvas.height * 0.6
+    );
   }
 }
 
@@ -158,9 +162,13 @@ function mouseDown(e) {
 
   switch (e.which) {
     case 1:
-      console.log("Left mouse button down");
+      leftClickTarget = getMouseTarget(e);
+      if (leftClickTarget !== null) {
+        leftClickTarget.startDrag(e);
+      }
+      console.log("Left mouse - " + leftClickTarget?.text);
       break;
-    case 2: 
+    case 2:
       console.log("Middle mouse button down");
       break;
     case 3:
@@ -178,9 +186,20 @@ function mouseUp(e) {
 
   switch (e.which) {
     case 1:
+      let currentTarget = getMouseTarget(e);  
+
+      // Dragging behavior
+      if ( currentTarget === leftClickTarget && currentTarget?.isDragging) {
+        currentTarget.stopDrag();
+      }
+
+      // Clicking behavior
+      if ( currentTarget === leftClickTarget && currentTarget !== null) {
+        leftClickTarget.isActive = true;
+      }
       console.log("Left mouse button up");
       break;
-    case 2: 
+    case 2:
       console.log("Middle mouse button up");
       break;
     case 3:
@@ -189,17 +208,6 @@ function mouseUp(e) {
     default:
       console.log("Unexpected mouse input");
   }
-
-
-
-  let mouseTarget = getMouseTarget(e);
-  if (mouseTarget === null) {
-    return null;
-  }
-  if (mouseTarget.status === "hovered") {
-    mouseTarget.status = "active";
-  }
-  console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
 }
 
 // Mouse move event
@@ -207,55 +215,32 @@ function mouseMove(e) {
   e.preventDefault();
   e.stopPropagation();
 
+  let currentTarget;
+
   // Notice / set stuff
-  let newTarget = getMouseTarget(e);
-  console.log("targeting " + newTarget?.text);
+  currentTarget = getMouseTarget(e);
+  // console.log("targeting " + newTarget?.text);
 
   // loop through, clear stuff
-  if (newTarget !== null) {
-    hoverTargets.push(newTarget);
+  if (currentTarget !== null) {
+    hoverTargets.push(currentTarget);
+    // Handle dragging
+    if (currentTarget.isDragging) {
+      currentTarget.drag(e);
+    }
   }
 
   hoverTargets.forEach((target) => {
-    if (target === newTarget) { // Currently looking at hovered entity
+    if (target === currentTarget) {
+      // Currently looking at hovered entity
       if (!target.isHovered) {
         target.isHovered = true;
       }
-    } else {  
+    } else {
       target.isHovered = false;
       hoverTargets.splice(hoverTargets.indexOf(target), 1);
     }
-  })
-
-  // // If targeting nothing, nothing should be hovered
-  // if (newTarget !== hoverTarget) { 
-  //   if (hoverTarget !== null) {
-  //     hoverTarget.isHovered = false;
-  //   }
-  //   hoverTarget = null;
-  //   return;
-  //  }
-
-  // hoverTarget = newTarget;
-  // hoverTarget.isHovered = true;
-
-  // Test for first object that overlaps with mouse
-  // if (mouseTarget !== null) {
-  //   if (mouseTarget.status !== "hovered" || mouseTarget.status !== "active") {
-  //     mouseTarget.status = "hovered";
-  //     console.log(`${mouseTarget.text} is now ${mouseTarget.status}`);
-  //   } else {
-  //     // ideas.forEach((idea) => {idea.status = "passive"});
-  //   }
-  // }
-
-  // Reset objects that aren't selected
-  // ideas.forEach((idea) => {
-  //   if (idea !== mouseTarget && idea.status === "hovered") {
-  //     idea.status = "passive";
-  //     console.log("making passive");
-  //   }
-  // });
+  });
 }
 
 // Get whatever the mouse is pointing at, just one object.
@@ -272,7 +257,7 @@ function getMouseTarget(e) {
       mouseX < thisIdea.pos.x + thisIdea.width / 2 &&
       mouseY > thisIdea.pos.y - thisIdea.height / 2 &&
       mouseY < thisIdea.pos.y + thisIdea.height / 2
-      ) {
+    ) {
       // thisIdea.status = "hovered";
       // console.log(`${thisIdea.text} is now ${thisIdea.status}`);
       return thisIdea;
@@ -285,5 +270,7 @@ function getMouseTarget(e) {
 // Toggle debug viewer (developer tools)
 function toggleDebug() {
   isDebug = !isDebug;
-  ideas.forEach((idea) => {idea.isDebug = isDebug;})
+  ideas.forEach((idea) => {
+    idea.isDebug = isDebug;
+  });
 }

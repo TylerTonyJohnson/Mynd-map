@@ -27,7 +27,7 @@ class Circle {
     if (this.pos.x < 0 + this.r) {
       this.pos.x = 0 + this.r;
       this.vel.x *= -1 * this.bounciness;
-      this.vel.y *= this.bouncinessbounciness;
+      this.vel.y *= this.bounciness;
     } else if (this.pos.x > canvas.width - this.r) {
       this.pos.x = canvas.width - this.r;
       this.vel.x *= -1 * this.bounciness;

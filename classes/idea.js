@@ -33,6 +33,8 @@ class Idea {
   isClicking = false;
   isDragging = false;
   isHovered = false;
+  dragOffsetX = 0;
+  dragOffsetY = 0;
 
   constructor(x, y) {
     this.pos = new Vector2D(x, y);
@@ -56,15 +58,25 @@ class Idea {
     this.bodyColor = (this.isActive ? this.bodyColorActive : this.bodyColorDefault);
   }
 
+  drag(e) {
+    this.pos.x = e.clientX - this.dragOffsetX;
+    this.pos.y = e.clientY - this.dragOffsetY;
+  }
+
   // Render function
   render(ctx) {
+
+    // Save previous context state
+    ctx.save();
+
     // Draw rounded rectangle
     ctx.fillStyle = this.bodyColor;
     ctx.lineWidth = this.borderWidth;
     ctx.strokeStyle = this.borderColor;
+    ctx.lineJoin = "";
     ctx.beginPath();
     ctx.moveTo(
-      this.pos.x - this.width / 2 + this.r / 2,
+      this.pos.x,
       this.pos.y - this.height / 2
     );
     ctx.lineTo(
@@ -119,6 +131,8 @@ class Idea {
     ctx.shadowOffsetX = 4;
     ctx.shadowOffsetY = 4;
     ctx.shadowBlur = 4;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.fillText(
       this.text,
       this.pos.x - this.width / 2 + this.width / 2,
@@ -133,5 +147,18 @@ class Idea {
       ctx.fillStyle = "red";
       ctx.fillRect(this.pos.x - 4, this.pos.y - 4, 9, 9);
     }
+
+    // Restore context to previous state
+    ctx.restore();
+  }
+
+  startDrag(e) {
+    this.dragOffsetX = e.clientX - this.pos.x;
+    this.dragOffsetY = e.clientY - this.pos.y;
+    this.isDragging = true;
+  }
+
+  stopDrag() {
+    this.isDragging = false;
   }
 }
