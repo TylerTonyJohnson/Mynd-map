@@ -15,6 +15,7 @@ let offsetY = 0;
 let hoverTargets = [];
 let leftClickTarget = null;
 let rightClickTarget = null;
+let dragTarget = null;
 
 // Config stuff
 let circleNum = 26;
@@ -41,9 +42,14 @@ function setup() {
   canvas.onmousedown = mouseDown;
   canvas.onmouseup = mouseUp;
   canvas.onmousemove = mouseMove;
+  
+  canvas.ontouchstart = mouseDown;
+  canvas.ontouchend = mouseUp;
+  canvas.onmouse
 
   // Window events
-  window.addEventListener("resize", onWindowResize);
+  window.addEventListener("resize", resizeScreen);
+  window.addEventListener("scroll", resizeScreen);
 
   // Generate anchor
   anchor.x = canvas.width / 2;
@@ -145,7 +151,7 @@ function draw() {
 // ---------- EVENTS ----------
 
 // Window resize event
-function onWindowResize(e) {
+function resizeScreen(e) {
   console.log("resizing");
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
@@ -164,7 +170,8 @@ function mouseDown(e) {
     case 1:
       leftClickTarget = getMouseTarget(e);
       if (leftClickTarget !== null) {
-        leftClickTarget.startDrag(e);
+        dragTarget = leftClickTarget;
+        dragTarget.startDrag(e);
       }
       console.log("Left mouse - " + leftClickTarget?.text);
       break;
@@ -190,7 +197,7 @@ function mouseUp(e) {
 
       // Dragging behavior
       if ( currentTarget === leftClickTarget && currentTarget?.isDragging) {
-        currentTarget.stopDrag();
+        dragTarget.stopDrag();
       }
 
       // Clicking behavior

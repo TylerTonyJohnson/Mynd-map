@@ -12,7 +12,8 @@ body {
 
 canvas {
   position: relative;
-  width: 90%;
+  width: 95%;
+  /* height: 83vh; */
   aspect-ratio: 1;
   border: solid black 1px;
   margin: auto;

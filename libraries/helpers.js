@@ -1,4 +1,4 @@
-// Helper Functions
+// -- Helper Functions --
 
 
 // Get sequential letter
@@ -8,9 +8,11 @@ function getLetter(ind) {
 }
 
 // Get random letter
-function getRandomLetter() {
+function getRandomLetter(num=1) {
   let alphabet = "abcdefghijklmnopqrstuvwxyz";
-  let letter = alphabet[Math.floor(Math.random() * alphabet.length)];
+  let letter = "";
+  for (let i = 0; i < num; i++)
+    letter = letter + alphabet[Math.floor(Math.random() * alphabet.length)];
   return letter;
 }
 
