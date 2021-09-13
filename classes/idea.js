@@ -9,7 +9,7 @@ class Idea {
 
   // Display stuff
   r = 20;
-  width = 160;
+  width = 200;
   height = 200;
   textMargin = 10;
   titleHeight = 24;

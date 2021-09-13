@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Canvas Tutorial</title>
     <link rel="stylesheet" href="styles.css" />
-    <script defer src="scripts.js"></script>ß
+    <script defer src="scripts.js"></script>
     <script defer src="libraries/helpers.js"></script>
     <script defer src="classes/circle.js"></script>
     <script defer src="libraries/vector.js"></script>
@@ -14,13 +14,15 @@
     <script defer src="libraries/lorem.js"></script>
   </head>
   <body>
-    <h1>Mynd Map</h1>
-    <div>
-      <button id="debug-button" onclick=toggleDebug()>Debug</button>
-    </div>
+    <header>
+      <h1>Mynd Map</h1>
+      <div>
+        <button id="debug-button" onclick="toggleDebug()">Debug</button>
+        <button id="save-button" onclick="save()">Save</button>
+      </div>
+    </header>
     <canvas id="canvas" width="300" height="300"
       >Your browser does not support HTML5</canvas
     >
   </body>
-
 </html>

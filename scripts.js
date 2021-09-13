@@ -1,6 +1,6 @@
 // DOM stuff
 "use strict";
-let canvas;
+let $canvas;
 let ctx;
 window.onload = setup;
 
@@ -24,42 +24,43 @@ let isDebug = false;
 
 // Setup function
 function setup() {
-  canvas = $("canvas");
-  ctx = canvas.getContext("2d");
+  $canvas = $("canvas");
+  ctx = $canvas.getContext("2d");
 
   // Disable canvas context menu
-  canvas.addEventListener("contextmenu", (event) => event.preventDefault());
+  $canvas.addEventListener("contextmenu", (event) => event.preventDefault());
 
   // Size canvas
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
+  $canvas.width = $canvas.clientWidth;
+  $canvas.height = $canvas.clientHeight;
 
-  let boundingBox = canvas.getBoundingClientRect();
+  let boundingBox = $canvas.getBoundingClientRect();
   offsetX = boundingBox.left;
   offsetY = boundingBox.top;
 
-  // Canvas events
-  canvas.onmousedown = mouseDown;
-  canvas.onmouseup = mouseUp;
-  canvas.onmousemove = mouseMove;
+  // Mouse / touch input events
+  $canvas.onmousedown = processTouchDown;
+  $canvas.onmouseup = processTouchUp;
+  $canvas.onmousemove = processMouseMove;
   
-  canvas.ontouchstart = mouseDown;
-  canvas.ontouchend = mouseUp;
-  canvas.onmouse
+  $canvas.ontouchstart = processTouchDown;
+  $canvas.ontouchend = processTouchUp;
+  $canvas.ontouchmove = processTouchMove;
+  $canvas.ontouchcancel = processTouchCancel;
 
   // Window events
-  window.addEventListener("resize", resizeScreen);
-  window.addEventListener("scroll", resizeScreen);
+  window.onresize = resizeScreen;
+  window.onscroll = resizeScreen;
 
   // Generate anchor
-  anchor.x = canvas.width / 2;
-  anchor.y = canvas.height / 2;
+  anchor.x = $canvas.width / 2;
+  anchor.y = $canvas.height / 2;
 
   // Generate shapes
   for (let i = 0; i < circleNum; i++) {
     let newCircle = new Circle(
-      Math.random() * canvas.width,
-      (Math.random() * canvas.height) / 2
+      Math.random() * $canvas.width,
+      (Math.random() * $canvas.height) / 2
     );
     newCircle.vel = new Vector2D(Math.random() * 1000, Math.random() * 1000);
     newCircle.bodyColor =
@@ -74,8 +75,8 @@ function setup() {
   // Generate some ideas
   for (let i = 0; i < ideaCount; i++) {
     let newIdea = new Idea(
-      Math.random() * canvas.width * 0.6 + canvas.width * 0.2,
-      Math.random() * canvas.height * 0.6 + canvas.height * 0.2
+      Math.random() * $canvas.width * 0.6 + $canvas.width * 0.2,
+      Math.random() * $canvas.height * 0.6 + $canvas.height * 0.2
     );
     ideas.push(newIdea);
   }
@@ -94,11 +95,10 @@ function frameLoop(timeStamp) {
     shape.update(secondsPassed);
   });
 
+  // Update the ideas each frame
   ideas.forEach((idea) => {
     idea.update();
   });
-
-  // console.log(ideas[2].borderColor)
 
   // Call draw function
   draw();
@@ -110,11 +110,11 @@ function frameLoop(timeStamp) {
 // Main draw function
 function draw() {
   // Clear the canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, $canvas.width, $canvas.height);
 
   // Draw background
   ctx.fillStyle = "rgb(50, 50, 50)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, $canvas.width, $canvas.height);
 
   // Draw circles
   shapes.forEach((shape) => {
@@ -140,10 +140,10 @@ function draw() {
     ctx.strokeStyle = "green";
     ctx.lineWidth = 4;
     ctx.strokeRect(
-      canvas.width * 0.2,
-      canvas.height * 0.2,
-      canvas.width * 0.6,
-      canvas.height * 0.6
+      $canvas.width * 0.2,
+      $canvas.height * 0.2,
+      $canvas.width * 0.6,
+      $canvas.height * 0.6
     );
   }
 }
@@ -153,18 +153,45 @@ function draw() {
 // Window resize event
 function resizeScreen(e) {
   console.log("resizing");
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
+  $canvas.width = $canvas.clientWidth;
+  $canvas.height = $canvas.clientHeight;
 
-  let boundingBox = canvas.getBoundingClientRect();
+  let boundingBox = $canvas.getBoundingClientRect();
   offsetX = boundingBox.left;
   offsetY = boundingBox.top;
 }
 
-// Mouse down event
-function mouseDown(e) {
+// Process click / touch release event
+function processTouchUp(e) {
+  console.log("Touch release event");
+}
+
+// Process mouse hover move event
+function processMouseMove(e) {
+  console.log("Mouse move event");
+}
+
+// Process mouse held down / touch move event
+function processTouchMove(e) {
+  console.log("Touch move event");
+}
+
+// Process touch cancel event
+function processTouchCancel(e) {
+  console.log("Touch cancel event");
+} 
+
+// Process mouse click / touch down event
+function processTouchDown(e) {
   e.preventDefault();
   e.stopPropagation();
+
+  // Figure out if the event is touch or mouse
+  if (e.touches) {
+    console.log("Touch down event");
+  }
+
+  console.log(e);
 
   switch (e.which) {
     case 1:
@@ -218,7 +245,7 @@ function mouseUp(e) {
 }
 
 // Mouse move event
-function mouseMove(e) {
+function processMouseMove(e) {
   e.preventDefault();
   e.stopPropagation();
 
@@ -226,9 +253,8 @@ function mouseMove(e) {
 
   // Notice / set stuff
   currentTarget = getMouseTarget(e);
-  // console.log("targeting " + newTarget?.text);
 
-  // loop through, clear stuff
+  // Set current target behavior
   if (currentTarget !== null) {
     hoverTargets.push(currentTarget);
     // Handle dragging
@@ -237,6 +263,7 @@ function mouseMove(e) {
     }
   }
 
+  // Clean up non-targeted objects
   hoverTargets.forEach((target) => {
     if (target === currentTarget) {
       // Currently looking at hovered entity
@@ -265,13 +292,16 @@ function getMouseTarget(e) {
       mouseY > thisIdea.pos.y - thisIdea.height / 2 &&
       mouseY < thisIdea.pos.y + thisIdea.height / 2
     ) {
-      // thisIdea.status = "hovered";
-      // console.log(`${thisIdea.text} is now ${thisIdea.status}`);
       return thisIdea;
       break;
     }
   }
   return null;
+}
+
+// Save document function
+function save() {
+  console.log("save document");
 }
 
 // Toggle debug viewer (developer tools)
