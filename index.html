@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Canvas Tutorial</title>
     <link rel="stylesheet" href="styles.css" />
-    <script defer src="scripts.js"></script>
-    <script defer src="libraries/helpers.js"></script>
+    <script defer src="app.js"></script>
+    <script defer src="classes/ideaLens.js"></script>
     <script defer src="classes/circle.js"></script>
-    <script defer src="libraries/vector.js"></script>
     <script defer src="classes/idea.js"></script>
+    <script defer src="classes/body.js"></script>
+    <script defer src="classes/text.js"></script>
+    <script defer src="libraries/helpers.js"></script>
+    <script defer src="libraries/vector.js"></script>
     <script defer src="libraries/lorem.js"></script>
   </head>
   <body>
@@ -19,10 +22,12 @@
       <div>
         <button id="debug-button" onclick="toggleDebug()">Debug</button>
         <button id="save-button" onclick="save()">Save</button>
+        <button id="add-button" onclick="add()">Add</button>
+        <button id="remove-button" onclick="remove()">Remove</button>
       </div>
     </header>
-    <canvas id="canvas" width="300" height="300"
-      >Your browser does not support HTML5</canvas
-    >
+    <div id="canvas-container">
+      <!-- All canvases will go here -->
+    </div>
   </body>
 </html>

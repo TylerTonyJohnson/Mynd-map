@@ -1,3 +1,5 @@
+// import { Idea } from './idea.js';
+
 class Circle {
   text = null;
   r = 30;
@@ -7,11 +9,12 @@ class Circle {
   lineWidth = 4;
 
   // Constructor
-  constructor(x, y) {
+  constructor(x, y, canvas) {
     this.pos = new Vector2D(x, y);
     this.vel = new Vector2D(100, 100);
-    this.acc = new Vector2D(0, 1000);
+    this.acc = new Vector2D(0, 0); // (0, 1000) for gravity
     this.text = getRandomLetter();
+    this.canvas = canvas;
   }
 
   // Update function
@@ -28,8 +31,8 @@ class Circle {
       this.pos.x = 0 + this.r;
       this.vel.x *= -1 * this.bounciness;
       this.vel.y *= this.bounciness;
-    } else if (this.pos.x > canvas.width - this.r) {
-      this.pos.x = canvas.width - this.r;
+    } else if (this.pos.x > this.canvas.width - this.r) {
+      this.pos.x = this.canvas.width - this.r;
       this.vel.x *= -1 * this.bounciness;
       this.vel.y *= this.bounciness;
     }
@@ -39,15 +42,13 @@ class Circle {
       this.pos.y = 0 + this.r;
       this.vel.y *= -1 * this.bounciness;
       this.vel.x *= this.bounciness;
-    } else if (this.pos.y > canvas.width - this.r) {
-      this.pos.y = canvas.width - this.r;
+    } else if (this.pos.y > this.canvas.width - this.r) {
+      this.pos.y = this.canvas.width - this.r;
       this.vel.y *= -1 * this.bounciness;
       this.vel.x *= this.bounciness;
     }
 
     // Ball collision check
-
-
 
   }
 

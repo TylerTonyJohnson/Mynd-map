@@ -6,6 +6,11 @@ class Idea {
   defText = this.text;
   dateCreated = null;
   dateUpdated = null;
+  contents = [];
+
+  // Components
+  body = null;
+
 
   // Display stuff
   r = 20;
@@ -31,6 +36,9 @@ class Idea {
   borderColorDefault = "gray";
   borderColorHovered = "white";
 
+  // Title color
+  titleColor = "white";
+
   // Runtime
   isDebug = false;
   isActive = false;
@@ -49,6 +57,15 @@ class Idea {
         .padStart(6, "0");
     this.title = lorem(1);
     this.text = lorem(Math.floor(Math.random() * 10 + 6));
+    this.contents.push(this.title);
+    this.contents.push(this.text);
+
+
+    this.body = new Body(this.pos.x, this.pos.y, this.r, this.width, this.height);
+    // this.body.isDebug = this.isDebug;
+    // this.body.updateColor(this.bodyColorDefault, this.borderColorDefault);
+    // this.body.updateBorder(this.borderWidthDefault);
+    console.log(this.body.color);
   }
 
   // Update function
@@ -63,6 +80,9 @@ class Idea {
     this.bodyColor = this.isActive
       ? this.bodyColorActive
       : this.bodyColorDefault;
+
+    // Update children
+    this.body.update();
   }
 
   drag(e) {
@@ -77,74 +97,34 @@ class Idea {
 
   // Render function
   render(ctx) {
-    // Save previous context state
+
+
+    // Render debug rectangle
+    // ctx.save();
+    // ctx.strokeRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
+    // ctx.restore();
+
+    // Render body
+    this.body.render(ctx);
+
+    // Render title
+
+    // Render title
     ctx.save();
-
-    // Draw rounded rectangle
-    ctx.fillStyle = this.bodyColor;
-    ctx.lineWidth = this.borderWidth;
-    ctx.strokeStyle = this.borderColor;
-    ctx.lineJoin = "";
-    ctx.beginPath();
-    ctx.moveTo(this.pos.x, this.pos.y - this.height / 2);
-    ctx.lineTo(
-      this.pos.x - this.width / 2 + this.width - this.r,
-      this.pos.y - this.height / 2
-    );
-    ctx.quadraticCurveTo(
-      this.pos.x - this.width / 2 + this.width,
-      this.pos.y - this.height / 2,
-      this.pos.x - this.width / 2 + this.width,
-      this.pos.y - this.height / 2 + this.r
-    );
-    ctx.lineTo(
-      this.pos.x - this.width / 2 + this.width,
-      this.pos.y - this.height / 2 + this.height - this.r
-    );
-    ctx.quadraticCurveTo(
-      this.pos.x - this.width / 2 + this.width,
-      this.pos.y - this.height / 2 + this.height,
-      this.pos.x - this.width / 2 + this.width - this.r,
-      this.pos.y - this.height / 2 + this.height
-    );
-    ctx.lineTo(
-      this.pos.x - this.width / 2 + this.r,
-      this.pos.y - this.height / 2 + this.height
-    );
-    ctx.quadraticCurveTo(
-      this.pos.x - this.width / 2,
-      this.pos.y - this.height / 2 + this.height,
-      this.pos.x - this.width / 2,
-      this.pos.y - this.height / 2 + this.height - this.r
-    );
-    ctx.lineTo(
-      this.pos.x - this.width / 2,
-      this.pos.y - this.height / 2 + this.r
-    );
-    ctx.quadraticCurveTo(
-      this.pos.x - this.width / 2,
-      this.pos.y - this.height / 2,
-      this.pos.x - this.width / 2 + this.r,
-      this.pos.y - this.height / 2
-    );
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-
-    // Draw title text
-    let titleY =
-      this.pos.y - this.height / 2 + this.titleHeight / 2 + this.textMargin;
-    ctx.font = `${this.titleHeight}px Arial`;
-    ctx.fillStyle = "white";
+    ctx.fillStyle = this.titleColor;
     ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
     ctx.shadowOffsetX = 4;
     ctx.shadowOffsetY = 4;
     ctx.shadowBlur = 4;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
+    let titleY =
+      this.pos.y - this.height / 2 + this.titleHeight / 2 + this.textMargin;
+    ctx.font = `${this.titleHeight}px Trebuchet MS`;
     ctx.fillText(this.title, this.pos.x, titleY);
+    ctx.restore();
 
-    // Draw body text
+    // Render text
     ctx.font = `${this.lineHeight}px Arial`;
     ctx.textAlign = "left";
     ctx.shadowOffsetX = 0;
@@ -177,15 +157,6 @@ class Idea {
           i * (this.lineHeight + this.lineSpacing)
       );
     }
-
-    // Debug centering dot
-    if (this.isDebug) {
-      ctx.fillStyle = "red";
-      ctx.fillRect(this.pos.x - 4, this.pos.y - 4, 9, 9);
-    }
-
-    // Restore context to previous state
-    ctx.restore();
   }
 
   startDrag(e) {
@@ -196,5 +167,9 @@ class Idea {
 
   stopDrag() {
     this.isDragging = false;
+  }
+
+  toggleDebug(bool) {
+    this.isDebug = bool;
   }
 }
