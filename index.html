@@ -22,7 +22,7 @@
       <div>
         <button id="debug-button" onclick="toggleDebug()">Debug</button>
         <button id="save-button" onclick="save()">Save</button>
-        <button id="add-button" onclick="add()">Add</button>
+        <button id="add-button">Add</button>
         <button id="remove-button" onclick="remove()">Remove</button>
       </div>
     </header>
@@ -30,4 +30,9 @@
       <!-- All canvases will go here -->
     </div>
   </body>
+  <div id="context-menu" class="context-menu" style="display: none">
+    <div id="add-idea-button">Add</div>
+    <div id="delete-idea-button">Delete</div>
+    <div>Options</div>
+  </div>
 </html>

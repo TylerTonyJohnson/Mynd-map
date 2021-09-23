@@ -17,6 +17,9 @@ class IdeaLens {
   offsetX = null;
   offsetY = null;
 
+  activeIdea = null;
+  hoveredIdea = null;
+
   constructor() {
     // Create a canvas
     let $canvasContainer = $("canvas-container");
@@ -31,7 +34,9 @@ class IdeaLens {
     this.ctx = this.$canvas.getContext("2d");
 
     // Disable canvas context menu
-    this.$canvas.addEventListener("contextmenu", (event) => event.preventDefault());
+    // this.$canvas.addEventListener("contextmenu", (event) => event.preventDefault());
+    this.$canvas.oncontextmenu = this.contextMenu;
+
 
     // Size canvas
     this.$canvas.width = this.$canvas.clientWidth;
@@ -53,19 +58,28 @@ class IdeaLens {
 
     // Generate some ideas
     for (let i = 0; i < this.ideaCount; i++) {
-      let newIdea = new Idea(
-        Math.random() * this.$canvas.width * 0.6 + this.$canvas.width * 0.2,
-        Math.random() * this.$canvas.height * 0.6 + this.$canvas.height * 0.2
-      );
-      this.ideas.push(newIdea);
+      this.add();
     }
+    
+  }
+ 
+  // Function to add a new idea to the canvas
+  add = (x, y) => {
+    if (!x || !y) {
+      x = Math.random() * this.$canvas.width * 0.6 + this.$canvas.width * 0.2;
+      y = Math.random() * this.$canvas.height * 0.6 + this.$canvas.height * 0.2;
+    }
+    console.log("Adding new idea at " + x + " - " + y);
+    let newIdea = new Idea(x, y);
+    this.ideas.push(newIdea);
   }
 
+  // Runtime update every frame (for position and display)
   update = (secondsPassed) => {
-    // Update the shapes each frame
-    this.shapes.forEach((shape) => {
-      shape.update(secondsPassed);
-    });
+    // // Update the shapes each frame
+    // this.shapes.forEach((shape) => {
+    //   shape.update(secondsPassed);
+    // });
 
     // Update the ideas each frame
     this.ideas.forEach((idea) => {
@@ -103,7 +117,9 @@ class IdeaLens {
     }
   }
 
+
   // ---------- EVENTS ----------
+
 
   // Window resize event
   resize = (e) => {
@@ -111,7 +127,7 @@ class IdeaLens {
     this.$canvas.width = this.$canvas.clientWidth;
     this.$canvas.height = this.$canvas.clientHeight;
 
-    let boundingBox = $canvas.getBoundingClientRect();
+    let boundingBox = this.$canvas.getBoundingClientRect();
     this.offsetX = boundingBox.left;
     this.offsetY = boundingBox.top;
   }
@@ -231,6 +247,15 @@ class IdeaLens {
     });
   }
 
+  contextMenu = (e) => {
+    e.preventDefault();
+    $("context-menu").style.display = "block";
+  }
+
+
+  // ---------- UTILITY FUNCTIONS ----------
+
+
   // Get whatever the mouse is pointing at, just one object.
   getMouseTarget = (e) => {
     // Get current mouse position
@@ -253,7 +278,8 @@ class IdeaLens {
     return null;
   }
 
-  toggleDebug = (bool = null) => {
+  // Set debug mode
+  setDebug = (bool = null) => {
     if (bool === null) {
       this.isDebug = !this.isDebug;
     } else {
@@ -261,7 +287,7 @@ class IdeaLens {
     }
 
     this.ideas.forEach((idea) => {
-      idea.toggleDebug(this.isDebug);
+      idea.setDebug(this.isDebug);
     })
   }
 }

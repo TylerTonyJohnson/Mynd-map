@@ -19,6 +19,7 @@ let isDebug = false;
 function setup() {
   // Create one idea lens
   let firstLens = new IdeaLens();
+  $("add-button").addEventListener("click",firstLens.add);
   ideaLenses.push(firstLens);
 
   // Window events
@@ -49,10 +50,10 @@ function frameLoop(timeStamp) {
 
 // Main draw function
 function draw() {
-    // Call draw function
-    ideaLenses.forEach((ideaLens) => {
-      ideaLens.render();
-    });
+  // Call draw function
+  ideaLenses.forEach((ideaLens) => {
+    ideaLens.render();
+  });
 }
 
 // ---------- EVENTS ----------
@@ -74,6 +75,6 @@ function save() {
 function toggleDebug() {
   isDebug = !isDebug;
   ideaLenses.forEach((ideaLens) => {
-    ideaLens.toggleDebug(isDebug);
+    ideaLens.setDebug(isDebug);
   });
 }

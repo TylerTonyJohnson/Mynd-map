@@ -11,6 +11,7 @@ body {
 }
 
 canvas {
+  display: flex;
   position: relative;
   width: 95%;
   /* height: 83vh; */
@@ -18,4 +19,5 @@ canvas {
   border: solid black 1px;
   margin: auto;
   border-radius: 20px;
+ 
 }

@@ -1,6 +1,6 @@
 class Body {
 
-  isDebug = true;
+  isDebug = false;
   constructor(x, y, r = 10, width = 100, height = 100) {
     this.x = x;
     this.y = y;
@@ -26,75 +26,71 @@ class Body {
     this.y = y;
   }
 
-  render(ctx) {
+  render = (ctx) => {
 
     // Set preferences
     ctx.save();
-    // ctx.fillStyle = this.color;
-    // ctx.lineWidth = this.borderThickness;
-    // ctx.strokeStyle = this.borderColor;
+    ctx.fillStyle = this.color;
+    ctx.lineWidth = this.borderThickness;
+    ctx.strokeStyle = this.borderColor;
 
-    // Draw debug rectangle
-    ctx.strokeStyle = "black";
-    ctx.strokeRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+    // Draw rounded rectangle
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y - this.height / 2);
+    ctx.lineTo(
+      this.x - this.width / 2 + this.width - this.r,
+      this.y - this.height / 2
+    );
+    ctx.quadraticCurveTo(
+      this.x - this.width / 2 + this.width,
+      this.y - this.height / 2,
+      this.x - this.width / 2 + this.width,
+      this.y - this.height / 2 + this.r
+    );
+    ctx.lineTo(
+      this.x - this.width / 2 + this.width,
+      this.y - this.height / 2 + this.height - this.r
+    );
+    ctx.quadraticCurveTo(
+      this.x - this.width / 2 + this.width,
+      this.y - this.height / 2 + this.height,
+      this.x - this.width / 2 + this.width - this.r,
+      this.y - this.height / 2 + this.height
+    );
+    ctx.lineTo(
+      this.x - this.width / 2 + this.r,
+      this.y - this.height / 2 + this.height
+    );
+    ctx.quadraticCurveTo(
+      this.x - this.width / 2,
+      this.y - this.height / 2 + this.height,
+      this.x - this.width / 2,
+      this.y - this.height / 2 + this.height - this.r
+    );
+    ctx.lineTo(
+      this.x - this.width / 2,
+      this.y - this.height / 2 + this.r
+    );
+    ctx.quadraticCurveTo(
+      this.x - this.width / 2,
+      this.y - this.height / 2,
+      this.x - this.width / 2 + this.r,
+      this.y - this.height / 2
+    );
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
 
-    // // Draw rounded rectangle
-    // ctx.beginPath();
-    // ctx.moveTo(this.x, this.y - this.height / 2);
-    // ctx.lineTo(
-    //   this.x - this.width / 2 + this.width - this.r,
-    //   this.y - this.height / 2
-    // );
-    // ctx.quadraticCurveTo(
-    //   this.x - this.width / 2 + this.width,
-    //   this.y - this.height / 2,
-    //   this.x - this.width / 2 + this.width,
-    //   this.y - this.height / 2 + this.r
-    // );
-    // ctx.lineTo(
-    //   this.x - this.width / 2 + this.width,
-    //   this.y - this.height / 2 + this.height - this.r
-    // );
-    // ctx.quadraticCurveTo(
-    //   this.x - this.width / 2 + this.width,
-    //   this.y - this.height / 2 + this.height,
-    //   this.x - this.width / 2 + this.width - this.r,
-    //   this.y - this.height / 2 + this.height
-    // );
-    // ctx.lineTo(
-    //   this.x - this.width / 2 + this.r,
-    //   this.y - this.height / 2 + this.height
-    // );
-    // ctx.quadraticCurveTo(
-    //   this.x - this.width / 2,
-    //   this.y - this.height / 2 + this.height,
-    //   this.x - this.width / 2,
-    //   this.y - this.height / 2 + this.height - this.r
-    // );
-    // ctx.lineTo(
-    //   this.x - this.width / 2,
-    //   this.y - this.height / 2 + this.r
-    // );
-    // ctx.quadraticCurveTo(
-    //   this.x - this.width / 2,
-    //   this.y - this.height / 2,
-    //   this.x - this.width / 2 + this.r,
-    //   this.y - this.height / 2
-    // );
-    // ctx.closePath();
-    // ctx.fill();
-    // ctx.stroke();
+    // Draw debug stuff if it's in debug mode
+    if (this.isDebug) {
+      // Draw center dot in red
+      ctx.fillStyle = "red";
+      ctx.fillRect(this.x - 4, this.y - 4, 9, 9);
 
-    // // Draw debug stuff if it's in debug mode
-    // if (this.isDebug) {
-    //   // Draw center dot in red
-    //   ctx.fillStyle = "red";
-    //   ctx.fillRect(this.x - 4, this.y - 4, 9, 9);
-
-    //   // Draw bounding box in red
-    //   ctx.strokeStyle = "red";
-    //   ctx.strokeRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
-    // }
+      // Draw bounding box in red
+      ctx.strokeStyle = "red";
+      ctx.strokeRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+    }
 
     ctx.restore();
   }

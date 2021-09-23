@@ -8,10 +8,6 @@ class Idea {
   dateUpdated = null;
   contents = [];
 
-  // Components
-  body = null;
-
-
   // Display stuff
   r = 20;
   width = 200;
@@ -60,12 +56,12 @@ class Idea {
     this.contents.push(this.title);
     this.contents.push(this.text);
 
-
+    // Generate body
     this.body = new Body(this.pos.x, this.pos.y, this.r, this.width, this.height);
-    // this.body.isDebug = this.isDebug;
-    // this.body.updateColor(this.bodyColorDefault, this.borderColorDefault);
-    // this.body.updateBorder(this.borderWidthDefault);
-    console.log(this.body.color);
+    this.body.isDebug = this.isDebug;
+    this.body.updateColor(this.bodyColorDefault, this.borderColorDefault);
+    this.body.updateBorder(this.borderWidthDefault);
+    this.contents.push(this.body);
   }
 
   // Update function
@@ -82,7 +78,7 @@ class Idea {
       : this.bodyColorDefault;
 
     // Update children
-    this.body.update();
+    this.body.update(this.pos.x, this.pos.y);
   }
 
   drag(e) {
@@ -96,18 +92,10 @@ class Idea {
   }
 
   // Render function
-  render(ctx) {
-
-
-    // Render debug rectangle
-    // ctx.save();
-    // ctx.strokeRect(this.pos.x - this.width / 2, this.pos.y - this.height / 2, this.width, this.height);
-    // ctx.restore();
+  render = (ctx) => {
 
     // Render body
     this.body.render(ctx);
-
-    // Render title
 
     // Render title
     ctx.save();
@@ -169,7 +157,8 @@ class Idea {
     this.isDragging = false;
   }
 
-  toggleDebug(bool) {
+  setDebug(bool) {
     this.isDebug = bool;
+    this.body.isDebug = bool;
   }
 }
