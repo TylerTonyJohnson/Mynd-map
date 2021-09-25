@@ -10,12 +10,18 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik&display=swap"
+      rel="stylesheet"
+    />
     <script defer src="app.js"></script>
     <script defer src="classes/ideaLens.js"></script>
     <script defer src="classes/circle.js"></script>
     <script defer src="classes/idea.js"></script>
     <script defer src="classes/body.js"></script>
-    <script defer src="classes/text.js"></script>
+    <script defer src="classes/textBox.js"></script>
     <script defer src="libraries/helpers.js"></script>
     <script defer src="libraries/vector.js"></script>
     <script defer src="libraries/lorem.js"></script>
@@ -37,9 +43,18 @@
 
   <!-- Copyable structures -->
   <div id="context-menu" class="context-menu" style="display: none"></div>
-  <div id="context-menu-add-button" class="context-menu-button">
-    <span class="material-icons"> add </span>
+  <div
+    id="context-menu-add-button"
+    class="context-menu-item"
+  >
+    <span class="material-icons icon"> add </span>
     <div>Add</div>
   </div>
-  <div id="context-menu-delete-button">Delete</div>
+  <div
+    id="context-menu-delete-button"
+    class="context-menu-item"
+  >
+    <span class="material-icons icon"> delete </span>
+    <div>Delete</div>
+  </div>
 </html>

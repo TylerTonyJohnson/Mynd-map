@@ -265,7 +265,7 @@ class IdeaLens {
     }
     // console.log(currentTarget);
 
-    this.$contextMenu.style.display = "block";
+    this.$contextMenu.style.display = "flex";
     this.$contextMenu.style.left = e.clientX - this.offsetX + "px";
     this.$contextMenu.style.top = e.clientY - this.offsetY + "px";
 
@@ -315,23 +315,17 @@ class IdeaLens {
     // Create a context menu from template
     this.$contextMenu = $("context-menu").cloneNode(true);
 
-    this.$addButton = $("context-menu-add-button");
-    this.$deleteButton = $("context-menu-delete-button");
+    // Add button
+    this.$addButton = $("context-menu-add-button").cloneNode(true);
+    this.$addButton.style.display = "inherit";
+    this.$addButton.addEventListener("click",this.add);
 
-    //
+    // Delete button
+    this.$deleteButton = $("context-menu-delete-button").cloneNode(true);
+    this.$deleteButton.style.display = "inherit";
+    this.$deleteButton.addEventListener("click",this.delete);
 
-    // // Add button
-    // this.$addButtonContainer = document.createElement("div");
-    // this.$addButtonContainer.innerHTML = "Add";
-    // this.$addButtonContainer.className = "context-menu-item";
-    // this.$addButtonContainer.onclick = this.add;
-
-    // // Delete button
-    // this.$deleteButton = document.createElement("div");
-    // this.$deleteButton.innerHTML = "Delete";
-    // this.$deleteButton.className = "context-menu-item";
-    // this.$deleteButton.onclick = this.delete;
-
+    // Append buttons to context menu
     this.$contextMenu.appendChild(this.$addButton);
     this.$contextMenu.appendChild(this.$deleteButton);
     $("canvas-container").appendChild(this.$contextMenu);

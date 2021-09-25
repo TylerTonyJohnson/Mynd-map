@@ -3,10 +3,12 @@ html {
   background: rgb(100,100,125);
   color: white;
   text-align: center;
+  font-family: "Rubik", sans-serif;
+  font-size: 30px;
 }
 
 body {
-  display: flex;
+  display: flex; 
   flex-direction: column;
 }
 
@@ -28,8 +30,30 @@ canvas {
 
 .context-menu {
   position: absolute;
+  display: none;
+  flex-direction: column;
   z-index: 10;
-  padding: 5px;
+  /* padding: 4px; */
   color: #DDD;
-  background-color: #555;
+  background: rgba(32, 32, 32, 0.9);
+  font-size: 20px;
+  user-select: none;
+  /* border: solid red 1px; */
+  /* backdrop-filter: blur(2px); */
+}
+
+.context-menu-item {
+  display: none;
+  flex-direction: row;
+  /* margin: 2px; */
+  padding: 5px;
+  /* border: solid green 1px; */
+}
+
+.context-menu-item:hover {
+  backdrop-filter:brightness(2);
+}
+
+.icon {
+  padding-right: 5px;
 }
