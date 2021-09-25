@@ -1,5 +1,4 @@
 class IdeaLens {
-
   ideas = [];
   shapes = [];
 
@@ -35,8 +34,7 @@ class IdeaLens {
 
     // Disable canvas context menu
     // this.$canvas.addEventListener("contextmenu", (event) => event.preventDefault());
-    this.$canvas.oncontextmenu = this.contextMenu;
-
+    this.$canvas.oncontextmenu = this.showContextMenu;
 
     // Size canvas
     this.$canvas.width = this.$canvas.clientWidth;
@@ -60,9 +58,11 @@ class IdeaLens {
     for (let i = 0; i < this.ideaCount; i++) {
       this.add();
     }
-    
+
+    // Create context menu
+    this.createContextMenu();
   }
- 
+
   // Function to add a new idea to the canvas
   add = (x, y) => {
     if (!x || !y) {
@@ -72,7 +72,17 @@ class IdeaLens {
     console.log("Adding new idea at " + x + " - " + y);
     let newIdea = new Idea(x, y);
     this.ideas.push(newIdea);
-  }
+  };
+
+  // Function to delete an existing idea from the canvas
+  delete = (idea) => {
+    if (idea) {
+      let ind = this.ideas.indexOf(idea);
+      this.ideas.splice(ind, 1);
+    } else {
+      this.ideas.pop();
+    }
+  };
 
   // Runtime update every frame (for position and display)
   update = (secondsPassed) => {
@@ -85,7 +95,7 @@ class IdeaLens {
     this.ideas.forEach((idea) => {
       idea.update(secondsPassed);
     });
-  }
+  };
 
   render = () => {
     // Clear the canvas
@@ -115,11 +125,9 @@ class IdeaLens {
       );
       this.ctx.restore();
     }
-  }
-
+  };
 
   // ---------- EVENTS ----------
-
 
   // Window resize event
   resize = (e) => {
@@ -130,31 +138,31 @@ class IdeaLens {
     let boundingBox = this.$canvas.getBoundingClientRect();
     this.offsetX = boundingBox.left;
     this.offsetY = boundingBox.top;
-  }
+  };
 
   processTouchDown = (e) => {
     console.log("Touch down event");
-  }
+  };
 
   // Process click / touch release event
   processTouchUp = (e) => {
     console.log("Touch release event");
-  }
+  };
 
   // Process mouse hover move event
   processMouseMove = (e) => {
     console.log("Mouse move event");
-  }
+  };
 
   // Process mouse held down / touch move event
   processTouchMove = (e) => {
     console.log("Touch move event");
-  }
+  };
 
   // Process touch cancel event
   processTouchCancel = (e) => {
     console.log("Touch cancel event");
-  }
+  };
 
   // Process mouse click / touch down event
   processTouchDown = (e) => {
@@ -181,7 +189,7 @@ class IdeaLens {
       default:
         console.log("Unexpected mouse input");
     }
-  }
+  };
 
   // Mouse up event
   processTouchUp = (e) => {
@@ -212,7 +220,7 @@ class IdeaLens {
       default:
         console.log("Unexpected mouse input");
     }
-  }
+  };
 
   // Mouse move event
   processMouseMove = (e) => {
@@ -245,23 +253,34 @@ class IdeaLens {
         hoverTargets.splice(hoverTargets.indexOf(target), 1);
       }
     });
-  }
+  };
 
-  contextMenu = (e) => {
+  showContextMenu = (e) => {
     e.preventDefault();
-    $("context-menu").style.display = "block";
-  }
 
+    // See if we're targeting anything
+    let currentTarget = this.getMouseTarget(e);
+    if (currentTarget) {
+      this.activeIdea = currentTarget;
+    }
+    // console.log(currentTarget);
+
+    this.$contextMenu.style.display = "block";
+    this.$contextMenu.style.left = e.clientX - this.offsetX + "px";
+    this.$contextMenu.style.top = e.clientY - this.offsetY + "px";
+
+    // console.log(this.$contextMenu.style.left)
+    // console.log(this.$contextMenu.style.top)
+  };
 
   // ---------- UTILITY FUNCTIONS ----------
-
 
   // Get whatever the mouse is pointing at, just one object.
   getMouseTarget = (e) => {
     // Get current mouse position
     let mouseX = parseInt(e.clientX - this.offsetX);
     let mouseY = parseInt(e.clientY - this.offsetY);
-  
+
     // Test for first object that overlaps with mouse (only accepts rectangles)
     for (let i = this.ideas.length - 1; i >= 0; i--) {
       let thisIdea = this.ideas[i];
@@ -276,7 +295,7 @@ class IdeaLens {
       }
     }
     return null;
-  }
+  };
 
   // Set debug mode
   setDebug = (bool = null) => {
@@ -288,7 +307,33 @@ class IdeaLens {
 
     this.ideas.forEach((idea) => {
       idea.setDebug(this.isDebug);
-    })
-  }
-}
+    });
+  };
 
+  // Create context menu
+  createContextMenu = () => {
+    // Create a context menu from template
+    this.$contextMenu = $("context-menu").cloneNode(true);
+
+    this.$addButton = $("context-menu-add-button");
+    this.$deleteButton = $("context-menu-delete-button");
+
+    //
+
+    // // Add button
+    // this.$addButtonContainer = document.createElement("div");
+    // this.$addButtonContainer.innerHTML = "Add";
+    // this.$addButtonContainer.className = "context-menu-item";
+    // this.$addButtonContainer.onclick = this.add;
+
+    // // Delete button
+    // this.$deleteButton = document.createElement("div");
+    // this.$deleteButton.innerHTML = "Delete";
+    // this.$deleteButton.className = "context-menu-item";
+    // this.$deleteButton.onclick = this.delete;
+
+    this.$contextMenu.appendChild(this.$addButton);
+    this.$contextMenu.appendChild(this.$deleteButton);
+    $("canvas-container").appendChild(this.$contextMenu);
+  };
+}

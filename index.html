@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Canvas Tutorial</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
     <script defer src="app.js"></script>
     <script defer src="classes/ideaLens.js"></script>
     <script defer src="classes/circle.js"></script>
@@ -26,13 +30,16 @@
         <button id="remove-button" onclick="remove()">Remove</button>
       </div>
     </header>
-    <div id="canvas-container">
+    <div id="canvas-container" class="canvas-container">
       <!-- All canvases will go here -->
     </div>
   </body>
-  <div id="context-menu" class="context-menu" style="display: none">
-    <div id="add-idea-button">Add</div>
-    <div id="delete-idea-button">Delete</div>
-    <div>Options</div>
+
+  <!-- Copyable structures -->
+  <div id="context-menu" class="context-menu" style="display: none"></div>
+  <div id="context-menu-add-button" class="context-menu-button">
+    <span class="material-icons"> add </span>
+    <div>Add</div>
   </div>
+  <div id="context-menu-delete-button">Delete</div>
 </html>

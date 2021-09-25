@@ -10,6 +10,10 @@ body {
   flex-direction: column;
 }
 
+.canvas-container {
+  position: relative;
+}
+
 canvas {
   display: flex;
   position: relative;
@@ -20,4 +24,12 @@ canvas {
   margin: auto;
   border-radius: 20px;
  
+}
+
+.context-menu {
+  position: absolute;
+  z-index: 10;
+  padding: 5px;
+  color: #DDD;
+  background-color: #555;
 }
