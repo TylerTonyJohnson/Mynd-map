@@ -30,6 +30,12 @@ function setup() {
   window.requestAnimationFrame(frameLoop);
 }
 
+// WebFont.load({
+//   google: {
+//     families: ["Rubik"]
+//   }
+// });
+
 // Main frame function
 function frameLoop(timeStamp) {
   // Calculate how much time has passed

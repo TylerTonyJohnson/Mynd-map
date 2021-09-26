@@ -13,7 +13,8 @@ class Idea {
   width = 200;
   height = 200;
   textMargin = 10;
-  titleHeight = 24;
+  titleHeight = 30;
+  textHeight = 12;
   lineHeight = 16;
   lineSpacing = 9;
 
@@ -62,6 +63,19 @@ class Idea {
     this.body.updateColor(this.bodyColorDefault, this.borderColorDefault);
     this.body.updateBorder(this.borderWidthDefault);
     this.contents.push(this.body);
+
+    //Generate title
+    let titleX = this.pos.x - this.width / 2 + this.textMargin;
+    let titleY = this.pos.y - this.height / 2 + this.textMargin;
+    let titleWidth = this.width - 2 * this.textMargin;
+    this.titleBox = new TextBox(this.title, titleX, titleY, titleWidth, this.titleHeight);
+
+    // Generate text
+    let textX = this.pos.x - this.width / 2 + this.textMargin;
+    let textY = titleY + this.titleHeight + this.textMargin;
+    let textWidth = this.width - 2 * this.textMargin;
+    let textHeight = this.height - 3 * this.textMargin - this.titleHeight;
+    this.textBox = new TextBox(this.text, textX, textY, textWidth, textHeight);
   }
 
   // Update function
@@ -79,6 +93,14 @@ class Idea {
 
     // Update children
     this.body.update(this.pos.x, this.pos.y);
+
+    let titleX = this.pos.x - this.width / 2 + this.textMargin;
+    let titleY = this.pos.y - this.height / 2 + this.textMargin;
+    this.titleBox.update(titleX, titleY);
+
+    let textX = this.pos.x - this.width / 2 + this.textMargin;
+    let textY = titleY + this.titleHeight + this.textMargin;
+    this.textBox.update(textX, textY);
   }
 
   drag(e) {
@@ -98,53 +120,10 @@ class Idea {
     this.body.render(ctx);
 
     // Render title
-    ctx.save();
-    ctx.fillStyle = this.titleColor;
-    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-    ctx.shadowOffsetX = 4;
-    ctx.shadowOffsetY = 4;
-    ctx.shadowBlur = 4;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    let titleY =
-      this.pos.y - this.height / 2 + this.titleHeight / 2 + this.textMargin;
-    ctx.font = `${this.titleHeight}px Trebuchet MS`;
-    ctx.fillText(this.title, this.pos.x, titleY);
-    ctx.restore();
+    this.titleBox.render(ctx);
 
     // Render text
-    ctx.font = `${this.lineHeight}px Arial`;
-    ctx.textAlign = "left";
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.shadowBlur = 0;
-
-    // Multi-line support
-    let words = this.text.split(" ");
-    let lines = [];
-    let currentLine = words[0];
-
-    for (let i = 1; i < words.length; i++) {
-      let word = words[i];
-      let wordWidth = ctx.measureText(currentLine + " " + word).width;
-      if (wordWidth < this.width - this.textMargin * 2) {
-        currentLine += " " + word;
-      } else {
-        lines.push(currentLine);
-        currentLine = word;
-      }
-    }
-
-    for (let i = 0; i < lines.length; i++) {
-      ctx.fillText(
-        lines[i],
-        this.pos.x - this.width / 2 + this.textMargin,
-        titleY +
-          this.lineSpacing +
-          this.lineHeight +
-          i * (this.lineHeight + this.lineSpacing)
-      );
-    }
+    this.textBox.render(ctx);
   }
 
   startDrag(e) {
@@ -160,5 +139,7 @@ class Idea {
   setDebug(bool) {
     this.isDebug = bool;
     this.body.isDebug = bool;
+    this.titleBox.isDebug = bool;
+    this.textBox.isDebug = bool;
   }
 }
