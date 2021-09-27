@@ -7,6 +7,15 @@ html {
   font-size: 30px;
 }
 
+header {
+  /* border: solid green 1px; */
+}
+
+h1 {
+  /* border: solid red 1px; */
+  margin: 5px;
+}
+
 body {
   display: flex; 
   flex-direction: column;
