@@ -17,9 +17,12 @@ let isDebug = false;
 
 // Setup function
 function setup() {
+  // Try to load an existing ideaLens array
+  load();
+
   // Create one idea lens
   let firstLens = new IdeaLens();
-  $("add-button").addEventListener("click",firstLens.add);
+  $("add-button").addEventListener("click", firstLens.add);
   ideaLenses.push(firstLens);
 
   // Window events
@@ -72,9 +75,16 @@ function resizeScreen(e) {
   });
 }
 
+// ---------- UTILITY FUNCTIONS ----------
+
 // Save document function
 function save() {
   console.log("save document");
+  localStorage.ideaLenses = JSON.stringify(ideaLenses);
+}
+
+function load() {
+
 }
 
 // Toggle debug viewer (developer tools)

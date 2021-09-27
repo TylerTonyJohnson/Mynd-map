@@ -15,8 +15,6 @@ class Idea {
   textMargin = 10;
   titleHeight = 30;
   textHeight = 12;
-  lineHeight = 16;
-  lineSpacing = 9;
 
   // Body color
   bodyColor = "purple";
@@ -53,22 +51,24 @@ class Idea {
         .toString(16)
         .padStart(6, "0");
     this.title = lorem(1);
-    this.text = lorem(Math.floor(Math.random() * 10 + 6));
-    this.contents.push(this.title);
-    this.contents.push(this.text);
+    this.text = lorem(Math.floor(Math.random() * 10 + 20));
+    // this.contents.push(this.title);
+    // this.contents.push(this.text);
 
     // Generate body
     this.body = new Body(this.pos.x, this.pos.y, this.r, this.width, this.height);
     this.body.isDebug = this.isDebug;
     this.body.updateColor(this.bodyColorDefault, this.borderColorDefault);
     this.body.updateBorder(this.borderWidthDefault);
-    this.contents.push(this.body);
+    // this.contents.push(this.body);
 
     //Generate title
     let titleX = this.pos.x - this.width / 2 + this.textMargin;
     let titleY = this.pos.y - this.height / 2 + this.textMargin;
     let titleWidth = this.width - 2 * this.textMargin;
     this.titleBox = new TextBox(this.title, titleX, titleY, titleWidth, this.titleHeight);
+    this.titleBox.isDebug = this.isDebug;
+    this.titleBox.isShadow = true;
 
     // Generate text
     let textX = this.pos.x - this.width / 2 + this.textMargin;
@@ -76,10 +76,14 @@ class Idea {
     let textWidth = this.width - 2 * this.textMargin;
     let textHeight = this.height - 3 * this.textMargin - this.titleHeight;
     this.textBox = new TextBox(this.text, textX, textY, textWidth, textHeight);
+    this.textBox.isDebug = this.isDebug;
+    this.textBox.fontSize = this.textHeight;
+    this.textBox.isShadow = false;
   }
 
   // Update function
   update() {
+    
     // Get status / coloring
     this.borderColor = this.isHovered
       ? this.borderColorHovered
