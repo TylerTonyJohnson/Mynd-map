@@ -169,6 +169,8 @@ class IdeaLens {
     e.preventDefault();
     e.stopPropagation();
 
+    this.hideContextMenu();
+
     // console.log(e);
 
     switch (e.which) {
@@ -255,9 +257,11 @@ class IdeaLens {
     });
   };
 
+  // Context menu
   showContextMenu = (e) => {
     e.preventDefault();
 
+    console.log("Showing context menu");
     // See if we're targeting anything
     let currentTarget = this.getMouseTarget(e);
     if (currentTarget) {
@@ -265,6 +269,7 @@ class IdeaLens {
     }
     // console.log(currentTarget);
 
+    // $("overlay").style.display = "block";
     this.$contextMenu.style.display = "flex";
     this.$contextMenu.style.left = e.clientX - this.offsetX + "px";
     this.$contextMenu.style.top = e.clientY - this.offsetY + "px";
@@ -272,6 +277,10 @@ class IdeaLens {
     // console.log(this.$contextMenu.style.left)
     // console.log(this.$contextMenu.style.top)
   };
+
+  hideContextMenu = (e) => {
+    this.$contextMenu.style.display = "none";
+  }
 
   // ---------- UTILITY FUNCTIONS ----------
 
@@ -318,7 +327,7 @@ class IdeaLens {
     // Add button
     this.$addButton = $("context-menu-add-button").cloneNode(true);
     this.$addButton.style.display = "inherit";
-    this.$addButton.addEventListener("click",this.add);
+    this.$addButton.addEventListener("click", this.add);
 
     // Delete button
     this.$deleteButton = $("context-menu-delete-button").cloneNode(true);

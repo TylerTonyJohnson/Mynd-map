@@ -7,6 +7,17 @@ html {
   font-size: 30px;
 }
 
+/* overlay {
+  position:fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  cursor: crosshair;
+} */
+
 header {
   /* border: solid green 1px; */
 }
@@ -42,7 +53,6 @@ canvas {
   display: none;
   flex-direction: column;
   z-index: 10;
-  /* padding: 4px; */
   color: #DDD;
   background: rgba(32, 32, 32, 0.9);
   font-size: 20px;
@@ -51,18 +61,19 @@ canvas {
   /* backdrop-filter: blur(2px); */
 }
 
-.context-menu-item {
+.context-menu-button {
   display: none;
   flex-direction: row;
   /* margin: 2px; */
-  padding: 5px;
+  /* padding: 5px; */
   /* border: solid green 1px; */
 }
 
-.context-menu-item:hover {
+.context-menu-button:hover {
   backdrop-filter:brightness(2);
 }
 
-.icon {
-  padding-right: 5px;
+.context-menu-button-component {
+  margin: 5px;
+  pointer-events: none;
 }

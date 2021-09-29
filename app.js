@@ -28,6 +28,7 @@ function setup() {
   // Window events
   window.onresize = resizeScreen;
   window.onscroll = resizeScreen;
+  window.onblur = handleBlur;
 
   // Call frame loop (about 60 fps)
   window.requestAnimationFrame(frameLoop);
@@ -75,17 +76,23 @@ function resizeScreen(e) {
   });
 }
 
+// Triggered when user leaves the window (or alt-tabs)
+function handleBlur() {
+  // alert("Left the screen");
+  // TODO
+}
+
 // ---------- UTILITY FUNCTIONS ----------
 
 // Save document function
 function save() {
   console.log("save document");
-  localStorage.ideaLenses = JSON.stringify(ideaLenses);
 }
 
-function load() {
-
+function load() { 
+  console.log("load document");
 }
+
 
 // Toggle debug viewer (developer tools)
 function toggleDebug() {
