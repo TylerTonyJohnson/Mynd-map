@@ -1,7 +1,7 @@
 class Body {
 
   isDebug = false;
-  constructor(x, y, r = 10, width = 100, height = 100) {
+  constructor(x = 0, y = 0, r = 10, width = 100, height = 100) {
     this.x = x;
     this.y = y;
     this.r = r;

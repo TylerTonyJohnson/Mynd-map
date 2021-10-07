@@ -18,11 +18,11 @@ let isDebug = false;
 // Setup function
 function setup() {
   // Try to load an existing ideaLens array
-  load();
+  // load();
 
   // Create one idea lens
   let firstLens = new IdeaLens();
-  $("add-button").addEventListener("click", firstLens.add);
+  // $("add-button").addEventListener("click", firstLens.add);
   ideaLenses.push(firstLens);
 
   // Window events
@@ -66,7 +66,7 @@ function draw() {
   });
 }
 
-// ---------- EVENTS ----------
+// ---------- WINDOW EVENTS ----------
 
 // Window resize event
 function resizeScreen(e) {
@@ -87,12 +87,41 @@ function handleBlur() {
 // Save document function
 function save() {
   console.log("save document");
+  localStorage.ideaLenses = JSON.stringify(ideaLenses);
 }
 
 function load() { 
   console.log("load document");
-}
+  let parsedLenses = JSON.parse(localStorage.ideaLenses);
+  // console.log(parsedIdeas)
 
+  // Handle lenses
+  let newLenses = [];
+  parsedLenses.forEach((lens) => {
+    // console.log(lens.ideas);
+    let newLens = new IdeaLens();
+    let oldLens = lens;
+    let fullLens = Object.assign(newLens, oldLens);
+
+    // Handle ideas
+    let newIdeas = [];
+    fullLens.ideas.forEach((idea) => {
+      // console.log(idea);
+      let newIdea = new Idea();
+      let oldIdea = idea;
+      let fullIdea = Object.assign(newIdea, oldIdea);
+      
+
+      newIdeas.push(fullIdea);
+    })
+
+    fullLens.ideas = newIdeas;
+
+    newLenses.push(fullLens);
+    
+  })
+  ideaLenses = newLenses;
+}
 
 // Toggle debug viewer (developer tools)
 function toggleDebug() {

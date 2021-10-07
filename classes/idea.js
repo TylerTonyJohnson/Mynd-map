@@ -43,7 +43,7 @@ class Idea {
   dragOffsetX = 0;
   dragOffsetY = 0;
 
-  constructor(x, y) {
+  constructor(x = 0, y = 0) {
     this.pos = new Vector2D(x, y);
     this.bodyColorDefault =
       "#" +
