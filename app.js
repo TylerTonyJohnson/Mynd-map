@@ -92,35 +92,41 @@ function save() {
 
 function load() { 
   console.log("load document");
-  let parsedLenses = JSON.parse(localStorage.ideaLenses);
-  // console.log(parsedIdeas)
 
-  // Handle lenses
-  let newLenses = [];
-  parsedLenses.forEach((lens) => {
-    // console.log(lens.ideas);
-    let newLens = new IdeaLens();
-    let oldLens = lens;
-    let fullLens = Object.assign(newLens, oldLens);
+  // Create a structured object to save
+  let loadObject = {};
 
-    // Handle ideas
-    let newIdeas = [];
-    fullLens.ideas.forEach((idea) => {
-      // console.log(idea);
-      let newIdea = new Idea();
-      let oldIdea = idea;
-      let fullIdea = Object.assign(newIdea, oldIdea);
+
+
+  // let parsedLenses = JSON.parse(localStorage.ideaLenses);
+  // // console.log(parsedIdeas)
+
+  // // Handle lenses
+  // let newLenses = [];
+  // parsedLenses.forEach((lens) => {
+  //   // console.log(lens.ideas);
+  //   let newLens = new IdeaLens();
+  //   let oldLens = lens;
+  //   let fullLens = Object.assign(newLens, oldLens);
+
+  //   // Handle ideas
+  //   let newIdeas = [];
+  //   fullLens.ideas.forEach((idea) => {
+  //     // console.log(idea);
+  //     let newIdea = new Idea();
+  //     let oldIdea = idea;
+  //     let fullIdea = Object.assign(newIdea, oldIdea);
       
 
-      newIdeas.push(fullIdea);
-    })
+  //     newIdeas.push(fullIdea);
+  //   })
 
-    fullLens.ideas = newIdeas;
+  //   fullLens.ideas = newIdeas;
 
-    newLenses.push(fullLens);
+  //   newLenses.push(fullLens);
     
-  })
-  ideaLenses = newLenses;
+  // })
+  // ideaLenses = newLenses;
 }
 
 // Toggle debug viewer (developer tools)
