@@ -1,5 +1,6 @@
 class Body {
 
+  path = null;
   isDebug = false;
   constructor(x = 0, y = 0, r = 10, width = 100, height = 100) {
     this.x = x;
@@ -12,7 +13,7 @@ class Body {
     this.borderThickness = 10;
   }
 
-  updateColor = (color, borderColor = "white") => {
+  updateColor = (color = "white", borderColor = "white") => {
     this.color = color;
     this.borderColor = borderColor;
   }
@@ -35,6 +36,7 @@ class Body {
     ctx.strokeStyle = this.borderColor;
 
     // Draw rounded rectangle
+    this.path = new Path2D();
     ctx.beginPath();
     ctx.moveTo(this.x, this.y - this.height / 2);
     ctx.lineTo(

@@ -130,6 +130,11 @@ class Idea {
     this.textBox.render(ctx);
   }
 
+  setHovered(bool) {
+    this.isHovered = bool;
+    this.body.borderColor = bool ? this.borderColorHovered : this.borderColorDefault;
+  }
+
   startDrag(e) {
     this.dragOffsetX = e.clientX - this.pos.x;
     this.dragOffsetY = e.clientY - this.pos.y;

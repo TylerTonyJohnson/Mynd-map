@@ -1,0 +1,3 @@
+I think I can rework shape hover detection using a smoother shape handler from this website: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/isPointInPath
+
+I think things are going alright so far, so this is nice.

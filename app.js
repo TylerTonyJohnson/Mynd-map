@@ -4,7 +4,7 @@ window.onload = setup;
 
 let secondsPassed = 0;
 let oldTimeStamp = 0;
-let hoverTargets = [];
+// let hoverTargets = [];
 let leftClickTarget = null;
 let rightClickTarget = null;
 let dragTarget = null;
@@ -52,18 +52,12 @@ function frameLoop(timeStamp) {
   });
 
   // Call main draw function
-  draw();
-
-  // The loop has reached its end. Keep requesting frames
-  window.requestAnimationFrame(frameLoop);
-}
-
-// Main draw function
-function draw() {
-  // Call draw function
   ideaLenses.forEach((ideaLens) => {
     ideaLens.render();
   });
+
+  // The loop has reached its end. Keep requesting frames
+  window.requestAnimationFrame(frameLoop);
 }
 
 // ---------- WINDOW EVENTS ----------

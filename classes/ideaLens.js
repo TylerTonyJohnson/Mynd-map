@@ -3,21 +3,29 @@ class IdeaLens {
   shapes = [];
 
   // Display stuff
-  backgroundColor = "rgb(50, 50, 50)";
+  backgroundColorDefault = "rgb(50, 50, 50)";
+  borderColorDefault = "rgb(0,0,0)";
+  borderColorHovered = "rgb(255,255,255)";
+  borderColor = this.borderColorDefault;
   width = 300;
   height = 300;
+
+  borderWidth = 4;
+  // borderWidthDefault = 4;
+  // borderWidthHovered = 8;
 
   // Config stuff
   circleNum = 26;
   ideaCount = 3;
-  isDebug = false;
-
+  
   // Runtime stuff
   offsetX = null;
   offsetY = null;
-
+  
   activeIdea = null;
-  hoveredIdea = null;
+  hoverTargets = [];
+  isDebug = false;
+  isActive = false;
 
   constructor() {
     // Create a canvas
@@ -33,7 +41,6 @@ class IdeaLens {
     this.ctx = this.$canvas.getContext("2d");
 
     // Disable canvas context menu
-    // this.$canvas.addEventListener("contextmenu", (event) => event.preventDefault());
     this.$canvas.oncontextmenu = this.showContextMenu;
 
     // Size canvas
@@ -45,6 +52,10 @@ class IdeaLens {
     this.offsetY = boundingBox.top;
 
     // Mouse / touch input events
+    // this.$canvas.onmouseover = this.processMouseOver;
+    this.$canvas.onmouseenter = this.processMouseEnter;
+    this.$canvas.onmouseleave = this.processMouseLeave;
+
     this.$canvas.onmousedown = this.processTouchDown;
     this.$canvas.onmouseup = this.processTouchUp;
     this.$canvas.onmousemove = this.processMouseMove;
@@ -91,6 +102,14 @@ class IdeaLens {
     //   shape.update(secondsPassed);
     // });
 
+    this.borderColor = this.isHovered
+    ? this.borderColorHovered
+    : this.borderColorDefault;
+
+    this.borderWidth = this.isHovered
+    ? this.borderWidthHovered
+    : this.borderWidthDefault;
+
     // Update the ideas each frame
     this.ideas.forEach((idea) => {
       idea.update(secondsPassed);
@@ -98,13 +117,16 @@ class IdeaLens {
   };
 
   render = () => {
+
     // Clear the canvas
     this.ctx.save();
     this.ctx.clearRect(0, 0, this.width, this.height);
 
     // Draw background
-    this.ctx.fillStyle = this.backgroundColor;
+    this.ctx.fillStyle = this.backgroundColorDefault;
+    // this.ctx.strokeStyle = this.borderColor;
     this.ctx.fillRect(0, 0, this.$canvas.width, this.$canvas.height);
+    // this.ctx.stroke();
     this.ctx.restore();
 
     // Draw ideas
@@ -129,16 +151,19 @@ class IdeaLens {
 
   // ---------- EVENTS ----------
 
-  // Window resize event
-  resize = (e) => {
-    console.log("resizing");
-    this.$canvas.width = this.$canvas.clientWidth;
-    this.$canvas.height = this.$canvas.clientHeight;
-
-    let boundingBox = this.$canvas.getBoundingClientRect();
-    this.offsetX = boundingBox.left;
-    this.offsetY = boundingBox.top;
-  };
+  processMouseEnter = (e) => {
+    console.log("Mouse Enter");
+    this.isHovered = true;
+    this.$canvas.style.borderColor = this.borderColorHovered;
+    // this.$canvas.style.borderWidth = this.borderWidthHovered + "px";
+  }
+  
+  processMouseLeave = (e) => {
+    console.log("Mouse Leave");
+    this.isHovered = false;
+    this.$canvas.style.borderColor = this.borderColorDefault;
+    // this.$canvas.style.borderWidth = this.borderWidthDefault + "px";
+  }
 
   processTouchDown = (e) => {
     console.log("Touch down event");
@@ -229,6 +254,8 @@ class IdeaLens {
     e.preventDefault();
     e.stopPropagation();
 
+    console.log("Moving");
+
     let currentTarget;
 
     // Notice / set stuff
@@ -236,7 +263,8 @@ class IdeaLens {
 
     // Set current target behavior
     if (currentTarget !== null) {
-      hoverTargets.push(currentTarget);
+      if (!this.hoverTargets.includes(currentTarget))
+        this.hoverTargets.push(currentTarget);
       // Handle dragging
       if (currentTarget.isDragging) {
         currentTarget.drag(e);
@@ -244,15 +272,15 @@ class IdeaLens {
     }
 
     // Clean up non-targeted objects
-    hoverTargets.forEach((target) => {
+    this.hoverTargets.forEach((target) => {
       if (target === currentTarget) {
         // Currently looking at hovered entity
         if (!target.isHovered) {
-          target.isHovered = true;
+          target.setHovered(true);
         }
       } else {
-        target.isHovered = false;
-        hoverTargets.splice(hoverTargets.indexOf(target), 1);
+        target.setHovered(false);
+        this.hoverTargets.splice(this.hoverTargets.indexOf(target), 1);
       }
     });
   };
@@ -280,9 +308,20 @@ class IdeaLens {
 
   hideContextMenu = (e) => {
     this.$contextMenu.style.display = "none";
-  }
+  };
 
   // ---------- UTILITY FUNCTIONS ----------
+
+  // Window resize event
+  resize = (e) => {
+    console.log("resizing");
+    this.$canvas.width = this.$canvas.clientWidth;
+    this.$canvas.height = this.$canvas.clientHeight;
+
+    let boundingBox = this.$canvas.getBoundingClientRect();
+    this.offsetX = boundingBox.left;
+    this.offsetY = boundingBox.top;
+  };
 
   // Get whatever the mouse is pointing at, just one object.
   getMouseTarget = (e) => {
@@ -293,7 +332,7 @@ class IdeaLens {
     // Test for first object that overlaps with mouse (only accepts rectangles)
     for (let i = this.ideas.length - 1; i >= 0; i--) {
       let thisIdea = this.ideas[i];
-      if (
+      if (                                              // I can maybe use ctx.isPointInPath() for hover detection.
         mouseX > thisIdea.pos.x - thisIdea.width / 2 &&
         mouseX < thisIdea.pos.x + thisIdea.width / 2 &&
         mouseY > thisIdea.pos.y - thisIdea.height / 2 &&
@@ -332,7 +371,7 @@ class IdeaLens {
     // Delete button
     this.$deleteButton = $("context-menu-delete-button").cloneNode(true);
     this.$deleteButton.style.display = "inherit";
-    this.$deleteButton.addEventListener("click",this.delete);
+    this.$deleteButton.addEventListener("click", this.delete);
 
     // Append buttons to context menu
     this.$contextMenu.appendChild(this.$addButton);
