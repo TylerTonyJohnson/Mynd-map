@@ -4,6 +4,8 @@ class IdeaLens {
 
   // Display stuff
   backgroundColorDefault = "rgb(50, 50, 50)";
+  backgroundColorOther = "rgb(100, 100, 100)";
+  backgroundColor = this.backgroundColorDefault;
   borderColorDefault = "rgb(0,0,0)";
   borderColorHovered = "rgb(255,255,255)";
   borderColor = this.borderColorDefault;
@@ -51,7 +53,7 @@ class IdeaLens {
     this.offsetX = boundingBox.left;
     this.offsetY = boundingBox.top;
 
-    // Mouse / touch input events
+    // Mouse input events
     // this.$canvas.onmouseover = this.processMouseOver;
     this.$canvas.onmouseenter = this.processMouseEnter;
     this.$canvas.onmouseleave = this.processMouseLeave;
@@ -59,7 +61,9 @@ class IdeaLens {
     this.$canvas.onmousedown = this.processTouchDown;
     this.$canvas.onmouseup = this.processTouchUp;
     this.$canvas.onmousemove = this.processMouseMove;
+    this.$canvas.ondblclick = this.processDoubleCLick;
 
+    // Touch input events
     this.$canvas.ontouchstart = this.processTouchDown;
     this.$canvas.ontouchend = this.processTouchUp;
     this.$canvas.ontouchmove = this.processTouchMove;
@@ -123,7 +127,7 @@ class IdeaLens {
     this.ctx.clearRect(0, 0, this.width, this.height);
 
     // Draw background
-    this.ctx.fillStyle = this.backgroundColorDefault;
+    this.ctx.fillStyle = this.backgroundColor;
     // this.ctx.strokeStyle = this.borderColor;
     this.ctx.fillRect(0, 0, this.$canvas.width, this.$canvas.height);
     // this.ctx.stroke();
@@ -284,6 +288,15 @@ class IdeaLens {
       }
     });
   };
+
+  processDoubleCLick = (e) => {
+    console.log("Double click");
+    if (this.backgroundColor === this.backgroundColorDefault) {
+      this.backgroundColor = this.backgroundColorOther;
+    } else {
+      this.backgroundColor = this.backgroundColorDefault;
+    }
+  }
 
   // Context menu
   showContextMenu = (e) => {

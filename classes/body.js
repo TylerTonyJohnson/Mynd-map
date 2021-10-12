@@ -82,9 +82,11 @@ class Body {
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
+    ctx.restore();
 
     // Draw debug stuff if it's in debug mode
     if (this.isDebug) {
+      ctx.save();
       // Draw center dot in red
       ctx.fillStyle = "red";
       ctx.fillRect(this.x - 4, this.y - 4, 9, 9);
@@ -92,8 +94,8 @@ class Body {
       // Draw bounding box in red
       ctx.strokeStyle = "red";
       ctx.strokeRect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+      ctx.restore();
     }
 
-    ctx.restore();
   }
 }
