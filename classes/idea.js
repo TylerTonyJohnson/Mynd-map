@@ -34,6 +34,9 @@ class Idea {
   // Title color
   titleColor = "white";
 
+  // Relationships
+  lens = null;
+
   // Runtime
   isDebug = false;
   isActive = false;
@@ -83,17 +86,19 @@ class Idea {
 
   // Update function
   update() {
-    
-    // Get status / coloring
-    this.borderColor = this.isHovered
-      ? this.borderColorHovered
-      : this.borderColorDefault;
-    this.borderWidth = this.isHovered
-      ? this.borderWidthHovered
-      : this.borderWidthDefault;
-    this.bodyColor = this.isActive
-      ? this.bodyColorActive
-      : this.bodyColorDefault;
+
+    // Boundary detection
+    if (this.pos.x - this.width / 2 < 10) {
+      this.pos.x = this.width / 2 + 10;
+    } else if (this.pos.x + this.width / 2 > this.lens.$canvas.width - 10) {
+      this.pos.x = this.lens.$canvas.width - this.width / 2 - 10;
+    }
+
+    if (this.pos.y - this.height / 2 < 10) {
+      this.pos.y = this.height / 2 + 10;
+    } else if (this.pos.y + this.height / 2 > this.lens.$canvas.height - 10) {
+      this.pos.y = this.lens.$canvas.height - this.height / 2 - 10;
+    }
 
     // Update children
     this.body.update(this.pos.x, this.pos.y);

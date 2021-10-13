@@ -86,6 +86,7 @@ class IdeaLens {
     }
     console.log("Adding new idea at " + x + " - " + y);
     let newIdea = new Idea(x, y);
+    newIdea.lens = this;
     this.ideas.push(newIdea);
   };
 
@@ -297,6 +298,8 @@ class IdeaLens {
       this.backgroundColor = this.backgroundColorDefault;
     }
   }
+  
+  // ---------- UTILITY FUNCTIONS ----------
 
   // Context menu
   showContextMenu = (e) => {
@@ -323,13 +326,14 @@ class IdeaLens {
     this.$contextMenu.style.display = "none";
   };
 
-  // ---------- UTILITY FUNCTIONS ----------
 
   // Window resize event
   resize = (e) => {
     console.log("resizing");
     this.$canvas.width = this.$canvas.clientWidth;
     this.$canvas.height = this.$canvas.clientHeight;
+    this.width = this.$canvas.width;
+    this.height = this.$canvas.height;
 
     let boundingBox = this.$canvas.getBoundingClientRect();
     this.offsetX = boundingBox.left;
