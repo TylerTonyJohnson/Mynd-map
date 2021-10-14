@@ -23,6 +23,7 @@ class IdeaLens {
   // Runtime stuff
   offsetX = null;
   offsetY = null;
+  zoomScale = 1;
   
   activeIdea = null;
   hoverTargets = [];
@@ -292,11 +293,17 @@ class IdeaLens {
 
   processDoubleCLick = (e) => {
     console.log("Double click");
+
+    // Toggle color
     if (this.backgroundColor === this.backgroundColorDefault) {
       this.backgroundColor = this.backgroundColorOther;
     } else {
       this.backgroundColor = this.backgroundColorDefault;
     }
+
+    // Toggle scale
+    this.ctx.scale(0.5, 0.5)
+
   }
   
   // ---------- UTILITY FUNCTIONS ----------
