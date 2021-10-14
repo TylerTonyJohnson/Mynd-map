@@ -40,7 +40,7 @@ canvas {
 
 .context-menu {
   position: absolute;
-  /* display: none; */
+  display: nosne;
   flex-direction: column;
   z-index: 10;
   color: #DDD;

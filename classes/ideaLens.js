@@ -386,11 +386,13 @@ class IdeaLens {
   createContextMenu = () => {
     // Create a context menu from template
     this.$contextMenu = $("context-menu").cloneNode(true);
-
+    this.$contextMenu.oncontextmenu = event => event.preventDefault();
+    
     // Add button
     this.$addButton = $("context-menu-add-button").cloneNode(true);
     this.$addButton.style.display = "inherit";
     this.$addButton.addEventListener("click", this.add);
+    // this.$addButton.oncontextmenu = false;
 
     // Delete button
     this.$deleteButton = $("context-menu-delete-button").cloneNode(true);
