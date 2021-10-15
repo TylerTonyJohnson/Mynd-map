@@ -6,7 +6,7 @@ class Idea {
   defText = this.text;
   dateCreated = null;
   dateUpdated = null;
-  contents = [];
+  // contents = [];
 
   // Display stuff
   r = 20;
@@ -84,6 +84,8 @@ class Idea {
     this.textBox.isShadow = false;
   }
 
+  // ---------- Main Methods ----------
+
   // Update function
   update() {
 
@@ -112,6 +114,26 @@ class Idea {
     this.textBox.update(textX, textY);
   }
 
+  // Render function
+  render = (ctx) => {
+    
+    // Render body
+    this.body.render(ctx);
+    
+    // Render title
+    this.titleBox.render(ctx);
+    
+    // Render text
+    this.textBox.render(ctx);
+  }
+  
+  // Save function
+  save = () => {
+    
+  }
+
+  // ---------- EVENTS ----------
+
   drag(e) {
     if (e.touches) {
       this.pos.x = e.touches[0].clientX - this.dragOffsetX;
@@ -120,19 +142,6 @@ class Idea {
       this.pos.x = e.clientX - this.dragOffsetX;
       this.pos.y = e.clientY - this.dragOffsetY;
     }
-  }
-
-  // Render function
-  render = (ctx) => {
-
-    // Render body
-    this.body.render(ctx);
-
-    // Render title
-    this.titleBox.render(ctx);
-
-    // Render text
-    this.textBox.render(ctx);
   }
 
   setHovered(bool) {
