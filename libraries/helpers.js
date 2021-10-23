@@ -1,6 +1,5 @@
 // -- Helper Functions --
 
-
 // Get sequential letter
 function getLetter(ind) {
   let alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -8,12 +7,22 @@ function getLetter(ind) {
 }
 
 // Get random letter
-function getRandomLetter(num=1) {
+function getRandomLetter(num = 1) {
   let alphabet = "abcdefghijklmnopqrstuvwxyz";
   let letter = "";
   for (let i = 0; i < num; i++)
     letter = letter + alphabet[Math.floor(Math.random() * alphabet.length)];
   return letter;
+}
+
+// Get random color
+function getRandomColor() {
+  return (
+    "#" +
+    Math.floor(Math.random() * 16777216)
+      .toString(16)
+      .padStart(6, "0")
+  );
 }
 
 //  -- DOM Helpers --

@@ -16,6 +16,10 @@ class Idea {
   titleHeight = 30;
   textHeight = 12;
 
+  // Physics stuff
+  bounciness = 0.8;
+  friction = 0.9;
+
   // Body color
   bodyColor = "purple";
   bodyColorDefault = "gray";
@@ -35,31 +39,40 @@ class Idea {
   titleColor = "white";
 
   // Relationships
-  lens = null;
+  lens = null; // Parent
 
   // Runtime
+  pos = null;
+  vel = null;
+  accel = null;
+  dragOffsetX = 0;
+  dragOffsetY = 0;
+
+  // Config
   isDebug = false;
   isActive = false;
   isClicking = false;
   isDragging = false;
   isHovered = false;
-  dragOffsetX = 0;
-  dragOffsetY = 0;
 
   constructor(x = 0, y = 0) {
     this.pos = new Vector2D(x, y);
-    this.bodyColorDefault =
-      "#" +
-      Math.floor(Math.random() * 16777216)
-        .toString(16)
-        .padStart(6, "0");
+    this.vel = new Vector2D(100, 100);
+    this.accel = new Vector2D(0, 1000);
+    this.bodyColorDefault = getRandomColor();
     this.title = lorem(1);
     this.text = lorem(Math.floor(Math.random() * 10 + 20));
     // this.contents.push(this.title);
     // this.contents.push(this.text);
 
     // Generate body
-    this.body = new Body(this.pos.x, this.pos.y, this.r, this.width, this.height);
+    this.body = new Body(
+      this.pos.x,
+      this.pos.y,
+      this.r,
+      this.width,
+      this.height
+    );
     this.body.isDebug = this.isDebug;
     this.body.updateColor(this.bodyColorDefault, this.borderColorDefault);
     this.body.updateBorder(this.borderWidthDefault);
@@ -69,7 +82,13 @@ class Idea {
     let titleX = this.pos.x - this.width / 2 + this.textMargin;
     let titleY = this.pos.y - this.height / 2 + this.textMargin;
     let titleWidth = this.width - 2 * this.textMargin;
-    this.titleBox = new TextBox(this.title, titleX, titleY, titleWidth, this.titleHeight);
+    this.titleBox = new TextBox(
+      this.title,
+      titleX,
+      titleY,
+      titleWidth,
+      this.titleHeight
+    );
     this.titleBox.isDebug = this.isDebug;
     this.titleBox.isShadow = true;
 
@@ -87,19 +106,33 @@ class Idea {
   // ---------- Main Methods ----------
 
   // Update function
-  update() {
+  update(secondsPassed) {
+    // Update velocity
+    this.vel = this.vel.add(this.accel.multiply(secondsPassed));
+
+    // Update position
+    this.pos = this.pos.add(this.vel.multiply(secondsPassed));
 
     // Boundary detection
     if (this.pos.x - this.width / 2 < 10) {
+      // Left Boundary
       this.pos.x = this.width / 2 + 10;
+      this.vel.x *= -1 * this.bounciness;
+      this.vel.y *= this.friction;
     } else if (this.pos.x + this.width / 2 > this.lens.$canvas.width - 10) {
       this.pos.x = this.lens.$canvas.width - this.width / 2 - 10;
+      this.vel.x *= -1 * this.bounciness;
+      this.vel.y *= this.friction;
     }
-
+    
     if (this.pos.y - this.height / 2 < 10) {
       this.pos.y = this.height / 2 + 10;
+      this.vel.y *= -1 * this.bounciness;
+      this.vel.x *= this.friction;
     } else if (this.pos.y + this.height / 2 > this.lens.$canvas.height - 10) {
       this.pos.y = this.lens.$canvas.height - this.height / 2 - 10;
+      this.vel.y *= -1 * this.bounciness;
+      this.vel.x *= this.friction;
     }
 
     // Update children
@@ -116,21 +149,18 @@ class Idea {
 
   // Render function
   render = (ctx) => {
-    
     // Render body
     this.body.render(ctx);
-    
+
     // Render title
     this.titleBox.render(ctx);
-    
+
     // Render text
     this.textBox.render(ctx);
-  }
-  
+  };
+
   // Save function
-  save = () => {
-    
-  }
+  save = () => {};
 
   // ---------- EVENTS ----------
 
@@ -146,7 +176,9 @@ class Idea {
 
   setHovered(bool) {
     this.isHovered = bool;
-    this.body.borderColor = bool ? this.borderColorHovered : this.borderColorDefault;
+    this.body.borderColor = bool
+      ? this.borderColorHovered
+      : this.borderColorDefault;
   }
 
   startDrag(e) {
