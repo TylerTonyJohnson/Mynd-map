@@ -15,10 +15,6 @@ class IdeaLens {
   borderWidth = 4;
   // borderWidthDefault = 4;
   // borderWidthHovered = 8;
-
-  // Config stuff
-  circleNum = 26;
-  ideaCount = 3;
   
   // Runtime stuff
   offsetX = null;
@@ -69,11 +65,6 @@ class IdeaLens {
     this.$canvas.ontouchend = this.processTouchUp;
     this.$canvas.ontouchmove = this.processTouchMove;
     this.$canvas.ontouchcancel = this.processTouchCancel;
-
-    // Generate some ideas
-    for (let i = 0; i < this.ideaCount; i++) {
-      this.add();
-    }
 
     // Create context menu
     this.createContextMenu();

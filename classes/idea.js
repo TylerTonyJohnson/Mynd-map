@@ -57,7 +57,7 @@ class Idea {
 
   constructor(x = 0, y = 0) {
     this.pos = new Vector2D(x, y);
-    this.vel = new Vector2D(100, 100);
+    this.vel = new Vector2D((Math.random()-.5)*1000, Math.random()*-500);
     this.accel = new Vector2D(0, 1000);
     this.bodyColorDefault = getRandomColor();
     this.title = lorem(1);
@@ -114,23 +114,42 @@ class Idea {
     this.pos = this.pos.add(this.vel.multiply(secondsPassed));
 
     // Boundary detection
-    if (this.pos.x - this.width / 2 < 10) {
-      // Left Boundary
-      this.pos.x = this.width / 2 + 10;
+    let boundLeft = 0;
+    let boundRight = this.lens.$canvas.width;
+    let boundTop = 0;
+    let boundBot = this.lens.$canvas.height;
+
+    let ideaBoundLeft = this.pos.x - this.width / 2;
+    let ideaBoundRight = this.pos.x + this.width / 2;
+    let ideaBoundTop = this.pos.y - this.height / 2;
+    let ideaBoundBot = this.pos.y + this.height / 2;
+
+    let overlap;
+
+    if (ideaBoundLeft < boundLeft) {
+      // overlap = boundLeft - ideaBoundLeft;
+      // this.pos.x = boundLeft - overlap + this.width / 2;
+      this.pos.x = boundLeft + this.width / 2;
       this.vel.x *= -1 * this.bounciness;
       this.vel.y *= this.friction;
-    } else if (this.pos.x + this.width / 2 > this.lens.$canvas.width - 10) {
-      this.pos.x = this.lens.$canvas.width - this.width / 2 - 10;
+    } else if (ideaBoundRight > boundRight) {
+      // overlap = boundRight - ideaBoundRight;
+      // this.pos.x = boundRight - overlap - this.width / 2;
+      this.pos.x = boundRight - this.width / 2;
       this.vel.x *= -1 * this.bounciness;
       this.vel.y *= this.friction;
     }
     
-    if (this.pos.y - this.height / 2 < 10) {
-      this.pos.y = this.height / 2 + 10;
+    if (ideaBoundTop < boundTop) {
+      // overlap = boundTop - ideaBoundTop;
+      // this.pos.y = boundTop - overlap + this.height / 2;
+      this.pos.y = boundTop + this.height / 2;
       this.vel.y *= -1 * this.bounciness;
       this.vel.x *= this.friction;
-    } else if (this.pos.y + this.height / 2 > this.lens.$canvas.height - 10) {
-      this.pos.y = this.lens.$canvas.height - this.height / 2 - 10;
+    } else if (ideaBoundBot > boundBot) {
+      // overlap = boundBot - ideaBoundBot;
+      // this.pos.y = boundBot - overlap - this.height / 2;
+      this.pos.y = boundBot - this.height / 2;
       this.vel.y *= -1 * this.bounciness;
       this.vel.x *= this.friction;
     }

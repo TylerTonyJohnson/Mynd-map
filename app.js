@@ -11,6 +11,7 @@ let dragTarget = null;
 
 // Runtime stuff
 let ideaLenses = [];
+let initialIdeas = 20;
 
 // Config stuff
 let isDebug = false;
@@ -22,6 +23,12 @@ function setup() {
 
   // Create one idea lens
   let firstLens = new IdeaLens();
+
+      // Generate some ideas
+  for (let i = 0; i < initialIdeas; i++) {
+    firstLens.add();
+  }
+
   // $("add-button").addEventListener("click", firstLens.add);
   ideaLenses.push(firstLens);
 
