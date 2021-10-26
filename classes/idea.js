@@ -18,7 +18,8 @@ class Idea {
 
   // Physics stuff
   bounciness = 0.8;
-  friction = 0.9;
+  bounceFriction = 0.9;
+  friction = 0.999;
 
   // Body color
   bodyColor = "purple";
@@ -58,7 +59,7 @@ class Idea {
   constructor(x = 0, y = 0) {
     this.pos = new Vector2D(x, y);
     this.vel = new Vector2D((Math.random()-.5)*1000, Math.random()*-500);
-    this.accel = new Vector2D(0, 1000);
+    this.accel = new Vector2D(0, 0);
     this.bodyColorDefault = getRandomColor();
     this.title = lorem(1);
     this.text = lorem(Math.floor(Math.random() * 10 + 20));
@@ -109,6 +110,7 @@ class Idea {
   update(secondsPassed) {
     // Update velocity
     this.vel = this.vel.add(this.accel.multiply(secondsPassed));
+    this.vel = this.vel.multiply(this.friction);
 
     // Update position
     this.pos = this.pos.add(this.vel.multiply(secondsPassed));
@@ -131,13 +133,13 @@ class Idea {
       // this.pos.x = boundLeft - overlap + this.width / 2;
       this.pos.x = boundLeft + this.width / 2;
       this.vel.x *= -1 * this.bounciness;
-      this.vel.y *= this.friction;
+      this.vel.y *= this.bounceFriction;
     } else if (ideaBoundRight > boundRight) {
       // overlap = boundRight - ideaBoundRight;
       // this.pos.x = boundRight - overlap - this.width / 2;
       this.pos.x = boundRight - this.width / 2;
       this.vel.x *= -1 * this.bounciness;
-      this.vel.y *= this.friction;
+      this.vel.y *= this.bounceFriction;
     }
     
     if (ideaBoundTop < boundTop) {
@@ -145,13 +147,13 @@ class Idea {
       // this.pos.y = boundTop - overlap + this.height / 2;
       this.pos.y = boundTop + this.height / 2;
       this.vel.y *= -1 * this.bounciness;
-      this.vel.x *= this.friction;
+      this.vel.x *= this.bounceFriction;
     } else if (ideaBoundBot > boundBot) {
       // overlap = boundBot - ideaBoundBot;
       // this.pos.y = boundBot - overlap - this.height / 2;
       this.pos.y = boundBot - this.height / 2;
       this.vel.y *= -1 * this.bounciness;
-      this.vel.x *= this.friction;
+      this.vel.x *= this.bounceFriction;
     }
 
     // Update children

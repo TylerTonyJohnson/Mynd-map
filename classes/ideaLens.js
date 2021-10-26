@@ -73,8 +73,8 @@ class IdeaLens {
   // Function to add a new idea to the canvas
   add = (x, y) => {
     if (!x || !y) {
-      x = Math.random() * this.$canvas.width * 0.6 + this.$canvas.width * 0.2;
-      y = Math.random() * this.$canvas.height * 0.6 + this.$canvas.height * 0.2;
+      x = Math.random() * this.$canvas.width;
+      y = Math.random() * this.$canvas.height;
     }
     console.log("Adding new idea at " + x + " - " + y);
     let newIdea = new Idea(x, y);
