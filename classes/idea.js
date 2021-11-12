@@ -19,7 +19,7 @@ class Idea {
   // Physics stuff
   bounciness = 0.8;
   bounceFriction = 0.9;
-  friction = 0.999;
+  friction = 0.99;
 
   // Body color
   bodyColor = "purple";

@@ -11,7 +11,7 @@ let dragTarget = null;
 
 // Runtime stuff
 let ideaLenses = [];
-let initialIdeas = 20;
+let initialIdeas = 10;
 
 // Config stuff
 let isDebug = false;
