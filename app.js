@@ -26,7 +26,12 @@ function setup() {
 
       // Generate some ideas
   for (let i = 0; i < initialIdeas; i++) {
-    firstLens.add();
+    firstLens.addIdea();
+  }
+
+  // Add a strand to the first lens
+  for (let i = 0; i < initialIdeas-1; i++) {
+    firstLens.addStrand(firstLens.ideas[i], firstLens.ideas[i+1]);
   }
 
   // $("add-button").addEventListener("click", firstLens.add);
@@ -81,6 +86,8 @@ function resizeScreen(e) {
 function handleBlur() {
   // alert("Left the screen");
   // TODO
+
+  // Deactivate any dragging or moving functionality.
 }
 
 // ---------- UTILITY FUNCTIONS ----------

@@ -1,6 +1,6 @@
 class IdeaLens {
   ideas = [];
-  shapes = [];
+  strands = [];
 
   // Display stuff
   backgroundColorDefault = "rgb(50, 50, 50)";
@@ -9,8 +9,8 @@ class IdeaLens {
   borderColorDefault = "rgb(0,0,0)";
   borderColorHovered = "rgb(255,255,255)";
   borderColor = this.borderColorDefault;
-  width = 300;
-  height = 300;
+  width = 300;    // Default/debug value
+  height = 300;   // Default/debug value
 
   borderWidth = 4;
   // borderWidthDefault = 4;
@@ -33,8 +33,8 @@ class IdeaLens {
     $canvasContainer.appendChild(this.$canvas);
 
     // Configure canvas
-    this.$canvas.width = this.width;
-    this.$canvas.height = this.height;
+    this.width = this.$canvas.width;
+    this.height = this.$canvas.height;
 
     // Get context
     this.ctx = this.$canvas.getContext("2d");
@@ -71,7 +71,7 @@ class IdeaLens {
   }
 
   // Function to add a new idea to the canvas
-  add = (x, y) => {
+  addIdea = (x, y) => {
     if (!x || !y) {
       x = Math.random() * this.$canvas.width;
       y = Math.random() * this.$canvas.height;
@@ -83,7 +83,7 @@ class IdeaLens {
   };
 
   // Function to delete an existing idea from the canvas
-  delete = (idea) => {
+  deleteIdea = (idea) => {
     if (idea) {
       let ind = this.ideas.indexOf(idea);
       this.ideas.splice(ind, 1);
@@ -91,6 +91,19 @@ class IdeaLens {
       this.ideas.pop();
     }
   };
+
+  addStrand = (idea1, idea2) => {
+    let newStrand = new Strand();
+    console.log("Adding new strand");
+    newStrand.lens = this;
+    newStrand.addNode(idea1);
+    newStrand.addNode(idea2);
+    this.strands.push(newStrand);
+  }
+
+  deleteStrand = () => {
+
+  }
 
   // Runtime update every frame (for position and display)
   update = (secondsPassed) => {
@@ -107,10 +120,15 @@ class IdeaLens {
     ? this.borderWidthHovered
     : this.borderWidthDefault;
 
-    // Update the ideas each frame
+    // Update children each frame
     this.ideas.forEach((idea) => {
       idea.update(secondsPassed);
     });
+
+    this.strands.forEach((strand) => {
+      strand.update(secondsPassed);
+    } );
+
   };
 
   render = () => {
@@ -125,7 +143,12 @@ class IdeaLens {
     this.ctx.fillRect(0, 0, this.$canvas.width, this.$canvas.height);
     // this.ctx.stroke();
     this.ctx.restore();
-
+    
+    // Draw strands
+    this.strands.forEach((strand) => {
+      strand.render(this.ctx);
+    });
+    
     // Draw ideas
     this.ideas.forEach((idea) => {
       idea.render(this.ctx);
@@ -382,13 +405,13 @@ class IdeaLens {
     // Add button
     this.$addButton = $("context-menu-add-button").cloneNode(true);
     this.$addButton.style.display = "inherit";
-    this.$addButton.addEventListener("click", this.add);
+    this.$addButton.addEventListener("click", this.addIdea);
     // this.$addButton.oncontextmenu = false;
 
     // Delete button
     this.$deleteButton = $("context-menu-delete-button").cloneNode(true);
     this.$deleteButton.style.display = "inherit";
-    this.$deleteButton.addEventListener("click", this.delete);
+    this.$deleteButton.addEventListener("click", this.deleteIdea);
 
     // Append buttons to context menu
     this.$contextMenu.appendChild(this.$addButton);

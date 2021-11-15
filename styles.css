@@ -29,9 +29,9 @@ canvas {
   display: flex;
   position: relative;
   box-sizing: border-box;
-  width: 95%;
-  /* height: 83vh; */
-  aspect-ratio: 1;
+  width: 95vw;
+  height: 83vh;
+  /* aspect-ratio: 1; */
   border: solid black 4px;
   margin: auto;
   border-radius: 30px;

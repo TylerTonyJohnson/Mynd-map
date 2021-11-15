@@ -12,7 +12,7 @@ class Idea {
   r = 20;
   width = 200;
   height = 200;
-  textMargin = 10;
+  textMargin = 16;
   titleHeight = 30;
   textHeight = 12;
 
@@ -56,7 +56,7 @@ class Idea {
   isDragging = false;
   isHovered = false;
 
-  constructor(x = 0, y = 0) {
+  constructor (x = 0, y = 0) {
     this.pos = new Vector2D(x, y);
     this.vel = new Vector2D((Math.random()-.5)*1000, Math.random()*-500);
     this.accel = new Vector2D(0, 0);
@@ -107,7 +107,7 @@ class Idea {
   // ---------- Main Methods ----------
 
   // Update function
-  update(secondsPassed) {
+  update = (secondsPassed) => {
     // Update velocity
     this.vel = this.vel.add(this.accel.multiply(secondsPassed));
     this.vel = this.vel.multiply(this.friction);
@@ -185,7 +185,7 @@ class Idea {
 
   // ---------- EVENTS ----------
 
-  drag(e) {
+  drag = (e) => {
     if (e.touches) {
       this.pos.x = e.touches[0].clientX - this.dragOffsetX;
       this.pos.y = e.touches[0].clientY - this.dragOffsetY;
@@ -195,24 +195,24 @@ class Idea {
     }
   }
 
-  setHovered(bool) {
+  setHovered = (bool) => {
     this.isHovered = bool;
     this.body.borderColor = bool
       ? this.borderColorHovered
       : this.borderColorDefault;
   }
 
-  startDrag(e) {
+  startDrag = (e) => {
     this.dragOffsetX = e.clientX - this.pos.x;
     this.dragOffsetY = e.clientY - this.pos.y;
     this.isDragging = true;
   }
 
-  stopDrag() {
+  stopDrag = () => {
     this.isDragging = false;
   }
 
-  setDebug(bool) {
+  setDebug = (bool) => {
     this.isDebug = bool;
     this.body.isDebug = bool;
     this.titleBox.isDebug = bool;
