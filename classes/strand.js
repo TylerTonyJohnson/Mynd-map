@@ -13,6 +13,7 @@ class Strand {
     thicknessHovered = 8;
 
     // Relationships
+    path = null;
     lens = null;            // Parent
     nodes = [];             // Nodes to attach to
 
@@ -51,16 +52,19 @@ class Strand {
 
     // Render function
     render = (ctx) => {
+        
+        // Set up styling
         ctx.save();
         ctx.strokeStyle = this.color;
         ctx.lineWidth = this.thickness;
+        
+        // Calculate path of line
+        this.path = new Path2D();
+        this.path.moveTo(this.x1, this.y1);
+        this.path.lineTo(this.x2, this.y2);
 
-        // this.path = new Path2D();        // Need to figure out how to use paths.
-        ctx.beginPath();
-        ctx.moveTo(this.x1, this.y1);
-        ctx.lineTo(this.x2, this.y2);
-        ctx.stroke();
-    
+        // Apply line to context
+        ctx.stroke(this.path);
         ctx.restore();
     }
 

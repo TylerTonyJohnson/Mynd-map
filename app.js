@@ -10,7 +10,7 @@ let rightClickTarget = null;
 let dragTarget = null;
 
 // Runtime stuff
-let ideaLenses = [];
+let ideaLens = null;
 let initialIdeas = 10;
 
 // Config stuff
@@ -35,7 +35,8 @@ function setup() {
   }
 
   // $("add-button").addEventListener("click", firstLens.add);
-  ideaLenses.push(firstLens);
+  // ideaLens.push(firstLens);
+  ideaLens = firstLens;
 
   // Window events
   window.onresize = resizeScreen;
@@ -59,14 +60,14 @@ function frameLoop(timeStamp) {
   oldTimeStamp = timeStamp;
 
   // Pass the time to the update
-  ideaLenses.forEach((ideaLens) => {
-    ideaLens.update(secondsPassed);
-  });
+  // ideaLens.forEach((ideaLens) => {
+  ideaLens.update(secondsPassed);
+  // });
 
   // Call main draw function
-  ideaLenses.forEach((ideaLens) => {
-    ideaLens.render();
-  });
+  // ideaLens.forEach((ideaLens) => {
+  ideaLens.render();
+  // });
 
   // The loop has reached its end. Keep requesting frames
   window.requestAnimationFrame(frameLoop);
@@ -77,9 +78,9 @@ function frameLoop(timeStamp) {
 // Window resize event
 function resizeScreen(e) {
   console.log("resizing");
-  ideaLenses.forEach((ideaLens) => {
-    ideaLens.resize();
-  });
+  // ideaLens.forEach((ideaLens) => {
+  ideaLens.resize();
+  // });
 }
 
 // Triggered when user leaves the window (or alt-tabs)
@@ -95,7 +96,7 @@ function handleBlur() {
 // Save document function
 function save() {
   console.log("save document");
-  localStorage.ideaLenses = JSON.stringify(ideaLenses);
+  localStorage.ideaLenses = JSON.stringify(ideaLens);
 }
 
 function load() { 
@@ -140,7 +141,7 @@ function load() {
 // Toggle debug viewer (developer tools)
 function toggleDebug() {
   isDebug = !isDebug;
-  ideaLenses.forEach((ideaLens) => {
-    ideaLens.setDebug(isDebug);
-  });
+  // ideaLens.forEach((ideaLens) => {
+  ideaLens.setDebug(isDebug);
+  // });
 }

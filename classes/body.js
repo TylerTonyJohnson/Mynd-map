@@ -36,52 +36,53 @@ class Body {
     ctx.strokeStyle = this.borderColor;
 
     // Draw rounded rectangle
-    // this.path = new Path2D();  // Need to figure out how to use this.
-    ctx.beginPath();
-    ctx.moveTo(this.x, this.y - this.height / 2);
-    ctx.lineTo(
+    this.path = new Path2D();  // Need to figure out how to use this.
+    this.path.moveTo(this.x, this.y - this.height / 2);
+    this.path.lineTo(
       this.x - this.width / 2 + this.width - this.r,
       this.y - this.height / 2
     );
-    ctx.quadraticCurveTo(
+    this.path.quadraticCurveTo(
       this.x - this.width / 2 + this.width,
       this.y - this.height / 2,
       this.x - this.width / 2 + this.width,
       this.y - this.height / 2 + this.r
     );
-    ctx.lineTo(
+    this.path.lineTo(
       this.x - this.width / 2 + this.width,
       this.y - this.height / 2 + this.height - this.r
     );
-    ctx.quadraticCurveTo(
+    this.path.quadraticCurveTo(
       this.x - this.width / 2 + this.width,
       this.y - this.height / 2 + this.height,
       this.x - this.width / 2 + this.width - this.r,
       this.y - this.height / 2 + this.height
     );
-    ctx.lineTo(
+    this.path.lineTo(
       this.x - this.width / 2 + this.r,
       this.y - this.height / 2 + this.height
     );
-    ctx.quadraticCurveTo(
+    this.path.quadraticCurveTo(
       this.x - this.width / 2,
       this.y - this.height / 2 + this.height,
       this.x - this.width / 2,
       this.y - this.height / 2 + this.height - this.r
     );
-    ctx.lineTo(
+    this.path.lineTo(
       this.x - this.width / 2,
       this.y - this.height / 2 + this.r
     );
-    ctx.quadraticCurveTo(
+    this.path.quadraticCurveTo(
       this.x - this.width / 2,
       this.y - this.height / 2,
       this.x - this.width / 2 + this.r,
       this.y - this.height / 2
     );
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+    this.path.closePath();
+
+    // Apply path to context
+    ctx.fill(this.path);
+    ctx.stroke(this.path);
     ctx.restore();
 
     // Draw debug stuff if it's in debug mode

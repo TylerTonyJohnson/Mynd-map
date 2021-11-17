@@ -370,12 +370,8 @@ class IdeaLens {
     // Test for first object that overlaps with mouse (only accepts rectangles)
     for (let i = this.ideas.length - 1; i >= 0; i--) {
       let thisIdea = this.ideas[i];
-      if (                                              // I can maybe use ctx.isPointInPath() for hover detection.
-        mouseX > thisIdea.pos.x - thisIdea.width / 2 &&
-        mouseX < thisIdea.pos.x + thisIdea.width / 2 &&
-        mouseY > thisIdea.pos.y - thisIdea.height / 2 &&
-        mouseY < thisIdea.pos.y + thisIdea.height / 2
-      ) {
+
+      if (this.ctx.isPointInPath(thisIdea.body.path, mouseX, mouseY)) {
         return thisIdea;
         break;
       }
