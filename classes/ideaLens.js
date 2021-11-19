@@ -20,6 +20,7 @@ class IdeaLens {
   offsetX = null;
   offsetY = null;
   zoomScale = 1;
+  hand = null;
   
   activeIdea = null;
   hoverTargets = [];
@@ -32,23 +33,26 @@ class IdeaLens {
     this.$canvas = document.createElement("canvas");
     $canvasContainer.appendChild(this.$canvas);
 
-    // Configure canvas
-    this.width = this.$canvas.width;
-    this.height = this.$canvas.height;
-
+    
     // Get context
     this.ctx = this.$canvas.getContext("2d");
-
+    
     // Disable canvas context menu
     this.$canvas.oncontextmenu = this.showContextMenu;
-
+    
     // Size canvas
-    this.$canvas.width = this.$canvas.clientWidth;
-    this.$canvas.height = this.$canvas.clientHeight;
+    this.width = this.$canvas.width = this.$canvas.clientWidth;
+    this.height = this.$canvas.height = this.$canvas.clientHeight;
+
+    // Configure canvas
+    // this.width = this.$canvas.width;
+    // this.height = this.$canvas.height;
 
     let boundingBox = this.$canvas.getBoundingClientRect();
     this.offsetX = boundingBox.left;
     this.offsetY = boundingBox.top;
+
+    this.hand = new Hand(this);
 
     // Mouse input events
     // this.$canvas.onmouseover = this.processMouseOver;
