@@ -168,6 +168,11 @@ class Idea {
     this.textBox.update(textX, textY);
   }
 
+  // Move function (called by update)
+  move = () => {
+
+  }
+
   // Render function
   render = (ctx) => {
     // Render body

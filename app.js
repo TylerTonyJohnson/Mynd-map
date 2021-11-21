@@ -1,6 +1,15 @@
+
+
+
 // DOM stuff
 "use strict";
-window.onload = setup;
+
+let pearl = new Pearl();
+let lens = new Lens();
+let hand = new Hand();
+
+
+// window.onload = setup;
 
 let secondsPassed = 0;
 let oldTimeStamp = 0;
