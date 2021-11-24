@@ -40,9 +40,10 @@ function surface(text) {
       tempText = text;
       break;
     case "object":
-      tempText = JSON.stringify(text, undefined, 4);
+      tempText = JSON.stringify(text, null, 4);
+      // tempText = JSON.stringify(text);
       break;
   }
 
-  $("surface").innerHTML = tempText;
+  $("surface").textContent= tempText;
 }

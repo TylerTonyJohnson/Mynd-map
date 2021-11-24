@@ -18,6 +18,8 @@ function setup() {
   // Initialize MVC engine
   hand.setPearl(pearl);
   hand.addGrain("Hi");
+  hand.addGrain(new Idea());
+  hand.addGrain(new Idea());
 
   surface(pearl);
   
