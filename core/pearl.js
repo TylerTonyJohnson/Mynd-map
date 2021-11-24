@@ -2,17 +2,9 @@
 
 class Pearl {
 
-    contents = [];
+    grains = [];
 
     constructor () {
 
-    }
-
-    add = () => {
-
-    }
-
-    remove = () => {
-        
     }
 }

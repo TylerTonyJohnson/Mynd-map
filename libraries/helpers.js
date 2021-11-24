@@ -31,3 +31,18 @@ function getRandomColor() {
 function $(name) {
   return document.getElementById(name);
 }
+
+function surface(text) {
+
+  let tempText;
+  switch(typeof(text)) {
+    case "string":
+      tempText = text;
+      break;
+    case "object":
+      tempText = JSON.stringify(text, undefined, 4);
+      break;
+  }
+
+  $("surface").innerHTML = tempText;
+}

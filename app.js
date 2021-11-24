@@ -1,15 +1,29 @@
-
-
-
 // DOM stuff
 "use strict";
 
-let pearl = new Pearl();
-let lens = new Lens();
-let hand = new Hand();
+window.onload = setup;
 
+let hand;
+let lens;
+let pearl;
 
-// window.onload = setup;
+// Setup function
+function setup() {
+
+  // Create core MVC engine
+  hand = new Hand();
+  lens = new Lens();
+  pearl = new Pearl();
+
+  // Initialize MVC engine
+  hand.setPearl(pearl);
+  hand.addGrain("Hi");
+
+  surface(pearl);
+  
+  // Start MVC engine
+
+}
 
 let secondsPassed = 0;
 let oldTimeStamp = 0;
@@ -25,11 +39,8 @@ let initialIdeas = 10;
 // Config stuff
 let isDebug = false;
 
-// Setup function
-function setup() {
-  // Try to load an existing ideaLens array
-  // load();
 
+function setup2() {
   // Create one idea lens
   let firstLens = new IdeaLens();
 
@@ -64,6 +75,7 @@ function setup() {
 
 // Main frame function
 function frameLoop(timeStamp) {
+
   // Calculate how much time has passed
   secondsPassed = (timeStamp - oldTimeStamp) / 1000;
   oldTimeStamp = timeStamp;
@@ -116,7 +128,7 @@ function load() {
 
 
 
-  // let parsedLenses = JSON.parse(localStorage.ideaLenses);
+  let parsedLenses = JSON.parse(localStorage.ideaLenses);
   // // console.log(parsedIdeas)
 
   // // Handle lenses
