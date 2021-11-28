@@ -1,31 +1,35 @@
 // DOM stuff
 "use strict";
-
-window.onload = setup;
-
 let hand;
-let lens;
-let pearl;
+window.onload = setup;
 
 // Setup function
 function setup() {
 
   // Create core MVC engine
-  hand = new Hand();
-  lens = new Lens();
-  pearl = new Pearl();
-
-  // Initialize MVC engine
-  hand.setPearl(pearl);
-  hand.addGrain("Hi");
-  hand.addGrain(new Idea());
-  hand.addGrain(new Idea());
-
-  surface(pearl);
-  
-  // Start MVC engine
-
+  hand = new Hand(new Pearl(), null);
+  hand.loadPearl();
+  hand.render();
 }
+
+// ---------- Defaults ----------
+
+function createDefaultPearl() {
+
+  let defaultPearl = [];
+  for (let i = 0; i < 3; i++) {
+    defaultPearl.push(new Idea());
+  }
+  return defaultPearl; 
+}
+
+
+
+  
+
+
+
+
 
 let secondsPassed = 0;
 let oldTimeStamp = 0;
@@ -115,51 +119,6 @@ function handleBlur() {
 }
 
 // ---------- UTILITY FUNCTIONS ----------
-
-// Save document function
-function save() {
-  console.log("save document");
-  localStorage.ideaLenses = JSON.stringify(ideaLens);
-}
-
-function load() { 
-  console.log("load document");
-
-  // Create a structured object to save
-  let loadObject = {};
-
-
-
-  let parsedLenses = JSON.parse(localStorage.ideaLenses);
-  // // console.log(parsedIdeas)
-
-  // // Handle lenses
-  // let newLenses = [];
-  // parsedLenses.forEach((lens) => {
-  //   // console.log(lens.ideas);
-  //   let newLens = new IdeaLens();
-  //   let oldLens = lens;
-  //   let fullLens = Object.assign(newLens, oldLens);
-
-  //   // Handle ideas
-  //   let newIdeas = [];
-  //   fullLens.ideas.forEach((idea) => {
-  //     // console.log(idea);
-  //     let newIdea = new Idea();
-  //     let oldIdea = idea;
-  //     let fullIdea = Object.assign(newIdea, oldIdea);
-      
-
-  //     newIdeas.push(fullIdea);
-  //   })
-
-  //   fullLens.ideas = newIdeas;
-
-  //   newLenses.push(fullLens);
-    
-  // })
-  // ideaLenses = newLenses;
-}
 
 // Toggle debug viewer (developer tools)
 function toggleDebug() {

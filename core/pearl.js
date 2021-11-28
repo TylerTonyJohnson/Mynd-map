@@ -5,6 +5,11 @@ class Pearl {
     grains = [];
 
     constructor () {
-
+        console.log("Creating new pearl");
+        if (localStorage.pearl) {
+            this.grains = localStorage.pearl;
+        } else {
+            this.grains = createDefaultPearl();
+        }
     }
 }

@@ -40,10 +40,12 @@ function surface(text) {
       tempText = text;
       break;
     case "object":
-      tempText = JSON.stringify(text, null, 4);
+      let tree = JsonView.createTree(text);
+      JsonView.render(tree, $("surface"));
       // tempText = JSON.stringify(text);
       break;
   }
 
-  $("surface").textContent= tempText;
+  // $("surface").textContent= tempText;
 }
+    
