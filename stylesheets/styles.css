@@ -28,13 +28,12 @@ body {
   flex-direction: column;
 }
 
-/* Works on Firefox */
-* {
+/* Custom scrollbar \/ */
+/* * {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0) rgba(0, 0, 0, 0);
 }
 
-/* Works on Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 12px;
   background-image: linear-gradient(hsl(227, 25%, 30%), hsl(227, 35%, 15%));
@@ -48,8 +47,8 @@ body {
   background-color: rgb(255, 255, 255);
   border-radius: 20px;
   border: 3px solid rgba(0,0,0,0);
-
-}
+} */
+/* Custom scrollbar /\ */
 
 
 .canvas-container {
@@ -93,3 +92,4 @@ canvas {
   margin: 5px;
   pointer-events: none;
 }
+

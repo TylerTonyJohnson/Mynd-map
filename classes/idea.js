@@ -104,123 +104,123 @@ class Idea {
     this.textBox.isShadow = false;
   }
 
-  // ---------- Main Methods ----------
+  // // ---------- Main Methods ----------
 
-  // Update function
-  update = (secondsPassed) => {
-    // Update velocity
-    this.vel = this.vel.add(this.accel.multiply(secondsPassed));
-    this.vel = this.vel.multiply(this.friction);
+  // // Update function
+  // update = (secondsPassed) => {
+  //   // Update velocity
+  //   this.vel = this.vel.add(this.accel.multiply(secondsPassed));
+  //   this.vel = this.vel.multiply(this.friction);
 
-    // Update position
-    this.pos = this.pos.add(this.vel.multiply(secondsPassed));
+  //   // Update position
+  //   this.pos = this.pos.add(this.vel.multiply(secondsPassed));
 
-    // Boundary detection
-    let boundLeft = 0;
-    let boundRight = this.lens.$canvas.width;
-    let boundTop = 0;
-    let boundBot = this.lens.$canvas.height;
+  //   // Boundary detection
+  //   let boundLeft = 0;
+  //   let boundRight = this.lens.$canvas.width;
+  //   let boundTop = 0;
+  //   let boundBot = this.lens.$canvas.height;
 
-    let ideaBoundLeft = this.pos.x - this.width / 2;
-    let ideaBoundRight = this.pos.x + this.width / 2;
-    let ideaBoundTop = this.pos.y - this.height / 2;
-    let ideaBoundBot = this.pos.y + this.height / 2;
+  //   let ideaBoundLeft = this.pos.x - this.width / 2;
+  //   let ideaBoundRight = this.pos.x + this.width / 2;
+  //   let ideaBoundTop = this.pos.y - this.height / 2;
+  //   let ideaBoundBot = this.pos.y + this.height / 2;
 
-    let overlap;
+  //   let overlap;
 
-    if (ideaBoundLeft < boundLeft) {
-      // overlap = boundLeft - ideaBoundLeft;
-      // this.pos.x = boundLeft - overlap + this.width / 2;
-      this.pos.x = boundLeft + this.width / 2;
-      this.vel.x *= -1 * this.bounciness;
-      this.vel.y *= this.bounceFriction;
-    } else if (ideaBoundRight > boundRight) {
-      // overlap = boundRight - ideaBoundRight;
-      // this.pos.x = boundRight - overlap - this.width / 2;
-      this.pos.x = boundRight - this.width / 2;
-      this.vel.x *= -1 * this.bounciness;
-      this.vel.y *= this.bounceFriction;
-    }
+  //   if (ideaBoundLeft < boundLeft) {
+  //     // overlap = boundLeft - ideaBoundLeft;
+  //     // this.pos.x = boundLeft - overlap + this.width / 2;
+  //     this.pos.x = boundLeft + this.width / 2;
+  //     this.vel.x *= -1 * this.bounciness;
+  //     this.vel.y *= this.bounceFriction;
+  //   } else if (ideaBoundRight > boundRight) {
+  //     // overlap = boundRight - ideaBoundRight;
+  //     // this.pos.x = boundRight - overlap - this.width / 2;
+  //     this.pos.x = boundRight - this.width / 2;
+  //     this.vel.x *= -1 * this.bounciness;
+  //     this.vel.y *= this.bounceFriction;
+  //   }
     
-    if (ideaBoundTop < boundTop) {
-      // overlap = boundTop - ideaBoundTop;
-      // this.pos.y = boundTop - overlap + this.height / 2;
-      this.pos.y = boundTop + this.height / 2;
-      this.vel.y *= -1 * this.bounciness;
-      this.vel.x *= this.bounceFriction;
-    } else if (ideaBoundBot > boundBot) {
-      // overlap = boundBot - ideaBoundBot;
-      // this.pos.y = boundBot - overlap - this.height / 2;
-      this.pos.y = boundBot - this.height / 2;
-      this.vel.y *= -1 * this.bounciness;
-      this.vel.x *= this.bounceFriction;
-    }
+  //   if (ideaBoundTop < boundTop) {
+  //     // overlap = boundTop - ideaBoundTop;
+  //     // this.pos.y = boundTop - overlap + this.height / 2;
+  //     this.pos.y = boundTop + this.height / 2;
+  //     this.vel.y *= -1 * this.bounciness;
+  //     this.vel.x *= this.bounceFriction;
+  //   } else if (ideaBoundBot > boundBot) {
+  //     // overlap = boundBot - ideaBoundBot;
+  //     // this.pos.y = boundBot - overlap - this.height / 2;
+  //     this.pos.y = boundBot - this.height / 2;
+  //     this.vel.y *= -1 * this.bounciness;
+  //     this.vel.x *= this.bounceFriction;
+  //   }
 
-    // Update children
-    this.body.update(this.pos.x, this.pos.y);
+  //   // Update children
+  //   this.body.update(this.pos.x, this.pos.y);
 
-    let titleX = this.pos.x - this.width / 2 + this.textMargin;
-    let titleY = this.pos.y - this.height / 2 + this.textMargin;
-    this.titleBox.update(titleX, titleY);
+  //   let titleX = this.pos.x - this.width / 2 + this.textMargin;
+  //   let titleY = this.pos.y - this.height / 2 + this.textMargin;
+  //   this.titleBox.update(titleX, titleY);
 
-    let textX = this.pos.x - this.width / 2 + this.textMargin;
-    let textY = titleY + this.titleHeight + this.textMargin;
-    this.textBox.update(textX, textY);
-  }
+  //   let textX = this.pos.x - this.width / 2 + this.textMargin;
+  //   let textY = titleY + this.titleHeight + this.textMargin;
+  //   this.textBox.update(textX, textY);
+  // }
 
-  // Move function (called by update)
-  move = () => {
+  // // Move function (called by update)
+  // move = () => {
 
-  }
+  // }
 
-  // Render function
-  render = (ctx) => {
-    // Render body
-    this.body.render(ctx);
+  // // Render function
+  // render = (ctx) => {
+  //   // Render body
+  //   this.body.render(ctx);
 
-    // Render title
-    this.titleBox.render(ctx);
+  //   // Render title
+  //   this.titleBox.render(ctx);
 
-    // Render text
-    this.textBox.render(ctx);
-  };
+  //   // Render text
+  //   this.textBox.render(ctx);
+  // };
 
-  // Save function
-  save = () => {};
+  // // Save function
+  // save = () => {};
 
-  // ---------- EVENTS ----------
+  // // ---------- EVENTS ----------
 
-  drag = (e) => {
-    if (e.touches) {
-      this.pos.x = e.touches[0].clientX - this.dragOffsetX;
-      this.pos.y = e.touches[0].clientY - this.dragOffsetY;
-    } else {
-      this.pos.x = e.clientX - this.dragOffsetX;
-      this.pos.y = e.clientY - this.dragOffsetY;
-    }
-  }
+  // drag = (e) => {
+  //   if (e.touches) {
+  //     this.pos.x = e.touches[0].clientX - this.dragOffsetX;
+  //     this.pos.y = e.touches[0].clientY - this.dragOffsetY;
+  //   } else {
+  //     this.pos.x = e.clientX - this.dragOffsetX;
+  //     this.pos.y = e.clientY - this.dragOffsetY;
+  //   }
+  // }
 
-  setHovered = (bool) => {
-    this.isHovered = bool;
-    this.body.borderColor = bool
-      ? this.borderColorHovered
-      : this.borderColorDefault;
-  }
+  // setHovered = (bool) => {
+  //   this.isHovered = bool;
+  //   this.body.borderColor = bool
+  //     ? this.borderColorHovered
+  //     : this.borderColorDefault;
+  // }
 
-  startDrag = (e) => {
-    this.dragOffsetX = e.clientX - this.pos.x;
-    this.dragOffsetY = e.clientY - this.pos.y;
-    this.isDragging = true;
-  }
+  // startDrag = (e) => {
+  //   this.dragOffsetX = e.clientX - this.pos.x;
+  //   this.dragOffsetY = e.clientY - this.pos.y;
+  //   this.isDragging = true;
+  // }
 
-  stopDrag = () => {
-    this.isDragging = false;
-  }
+  // stopDrag = () => {
+  //   this.isDragging = false;
+  // }
 
-  setDebug = (bool) => {
-    this.isDebug = bool;
-    this.body.isDebug = bool;
-    this.titleBox.isDebug = bool;
-    this.textBox.isDebug = bool;
-  }
+  // setDebug = (bool) => {
+  //   this.isDebug = bool;
+  //   this.body.isDebug = bool;
+  //   this.titleBox.isDebug = bool;
+  //   this.textBox.isDebug = bool;
+  // }
 }
