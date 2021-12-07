@@ -7,7 +7,9 @@ window.onload = setup;
 function setup() {
 
   // Create core MVC engine
-  hand = new Hand(new Pearl(), null);
+  hand = new Hand(new Pearl(), new Surface(null, $("surface3")));
+  hand.lens.hand = hand;  // Create two-way reference
+  
   hand.loadPearl();
   hand.render();
 }

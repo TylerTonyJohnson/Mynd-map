@@ -8,101 +8,101 @@ class Idea {
   dateUpdated = null;
   // contents = [];
 
-  // Display stuff
-  r = 20;
-  width = 200;
-  height = 200;
-  textMargin = 16;
-  titleHeight = 30;
-  textHeight = 12;
+  // // Display stuff
+  // r = 20;
+  // width = 200;
+  // height = 200;
+  // textMargin = 16;
+  // titleHeight = 30;
+  // textHeight = 12;
 
-  // Physics stuff
-  bounciness = 0.8;
-  bounceFriction = 0.9;
-  friction = 0.99;
+  // // Physics stuff
+  // bounciness = 0.8;
+  // bounceFriction = 0.9;
+  // friction = 0.99;
 
-  // Body color
-  bodyColor = "purple";
-  bodyColorDefault = "gray";
-  bodyColorActive = "green";
+  // // Body color
+  // bodyColor = "purple";
+  // bodyColorDefault = "gray";
+  // bodyColorActive = "green";
 
-  // Border width
-  borderWidth = 20;
-  borderWidthDefault = 4;
-  borderWidthHovered = 8;
+  // // Border width
+  // borderWidth = 20;
+  // borderWidthDefault = 4;
+  // borderWidthHovered = 8;
 
-  // Border color
-  borderColor = "purple";
-  borderColorDefault = "gray";
-  borderColorHovered = "white";
+  // // Border color
+  // borderColor = "purple";
+  // borderColorDefault = "gray";
+  // borderColorHovered = "white";
 
-  // Title color
-  titleColor = "white";
+  // // Title color
+  // titleColor = "white";
 
-  // Relationships
-  lens = null; // Parent
+  // // Relationships
+  // lens = null; // Parent
 
-  // Runtime
-  pos = null;
-  vel = null;
-  accel = null;
-  dragOffsetX = 0;
-  dragOffsetY = 0;
+  // // Runtime
+  // pos = null;
+  // vel = null;
+  // accel = null;
+  // dragOffsetX = 0;
+  // dragOffsetY = 0;
 
-  // Config
-  isDebug = false;
-  isActive = false;
-  isClicking = false;
-  isDragging = false;
-  isHovered = false;
+  // // Config
+  // isDebug = false;
+  // isActive = false;
+  // isClicking = false;
+  // isDragging = false;
+  // isHovered = false;
 
-  constructor (x = 0, y = 0) {
-    this.pos = new Vector2D(x, y);
-    this.vel = new Vector2D((Math.random()-.5)*1000, Math.random()*-500);
-    this.accel = new Vector2D(0, 0);
-    this.bodyColorDefault = getRandomColor();
-    this.title = lorem(1);
-    this.text = lorem(Math.floor(Math.random() * 10 + 20));
-    // this.contents.push(this.title);
-    // this.contents.push(this.text);
+  // constructor (x = 0, y = 0) {
+  //   this.pos = new Vector2D(x, y);
+  //   this.vel = new Vector2D((Math.random()-.5)*1000, Math.random()*-500);
+  //   this.accel = new Vector2D(0, 0);
+  //   this.bodyColorDefault = getRandomColor();
+  //   this.title = lorem(1);
+  //   this.text = lorem(Math.floor(Math.random() * 10 + 20));
+  //   // this.contents.push(this.title);
+  //   // this.contents.push(this.text);
 
-    // Generate body
-    this.body = new Body(
-      this.pos.x,
-      this.pos.y,
-      this.r,
-      this.width,
-      this.height
-    );
-    this.body.isDebug = this.isDebug;
-    this.body.updateColor(this.bodyColorDefault, this.borderColorDefault);
-    this.body.updateBorder(this.borderWidthDefault);
-    // this.contents.push(this.body);
+  //   // Generate body
+  //   this.body = new Body(
+  //     this.pos.x,
+  //     this.pos.y,
+  //     this.r,
+  //     this.width,
+  //     this.height
+  //   );
+  //   this.body.isDebug = this.isDebug;
+  //   this.body.updateColor(this.bodyColorDefault, this.borderColorDefault);
+  //   this.body.updateBorder(this.borderWidthDefault);
+  //   // this.contents.push(this.body);
 
-    //Generate title
-    let titleX = this.pos.x - this.width / 2 + this.textMargin;
-    let titleY = this.pos.y - this.height / 2 + this.textMargin;
-    let titleWidth = this.width - 2 * this.textMargin;
-    this.titleBox = new TextBox(
-      this.title,
-      titleX,
-      titleY,
-      titleWidth,
-      this.titleHeight
-    );
-    this.titleBox.isDebug = this.isDebug;
-    this.titleBox.isShadow = true;
+  //   //Generate title
+  //   let titleX = this.pos.x - this.width / 2 + this.textMargin;
+  //   let titleY = this.pos.y - this.height / 2 + this.textMargin;
+  //   let titleWidth = this.width - 2 * this.textMargin;
+  //   this.titleBox = new TextBox(
+  //     this.title,
+  //     titleX,
+  //     titleY,
+  //     titleWidth,
+  //     this.titleHeight
+  //   );
+  //   this.titleBox.isDebug = this.isDebug;
+  //   this.titleBox.isShadow = true;
 
-    // Generate text
-    let textX = this.pos.x - this.width / 2 + this.textMargin;
-    let textY = titleY + this.titleHeight + this.textMargin;
-    let textWidth = this.width - 2 * this.textMargin;
-    let textHeight = this.height - 3 * this.textMargin - this.titleHeight;
-    this.textBox = new TextBox(this.text, textX, textY, textWidth, textHeight);
-    this.textBox.isDebug = this.isDebug;
-    this.textBox.fontSize = this.textHeight;
-    this.textBox.isShadow = false;
-  }
+  //   // Generate text
+  //   let textX = this.pos.x - this.width / 2 + this.textMargin;
+  //   let textY = titleY + this.titleHeight + this.textMargin;
+  //   let textWidth = this.width - 2 * this.textMargin;
+  //   let textHeight = this.height - 3 * this.textMargin - this.titleHeight;
+  //   this.textBox = new TextBox(this.text, textX, textY, textWidth, textHeight);
+  //   this.textBox.isDebug = this.isDebug;
+  //   this.textBox.fontSize = this.textHeight;
+  //   this.textBox.isShadow = false;
+  // }
 
   // // ---------- Main Methods ----------
 

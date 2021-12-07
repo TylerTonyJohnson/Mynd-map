@@ -5,9 +5,8 @@ class Hand {
   lens = null;
 
   constructor (pearl, lens) {
-    console.log("Making hand");
-    this.pearl = pearl;
-    this.lens = lens;
+    this.pearl = pearl || null;
+    this.lens = lens || null;
   }
 
   // ---------- Pearl CRUD functions ----------  
@@ -18,7 +17,7 @@ class Hand {
     if (grain) {
       this.pearl.grains.push(grain);
     } else {
-      this.pearl.grains.push("Tootles");
+      this.pearl.grains.push(new Idea());
     }
     this.render();
   }
@@ -60,13 +59,16 @@ class Hand {
 
   // Render the pearl to be visible to the user
   render = () => {
-    // If there's no render lens, just display the pearl as a JSON object on the screen.
-  if (this.lens) {
-      console.log("hand is sending render request");
-    } else {
-      console.log("hand is rendering in debug");
-      surface(this.pearl);
-    }
+
+    // Renderer 1
+    let tree = JsonView.createTree(this.pearl);
+    JsonView.render(tree, $("surface1"));
+
+    // Renderer 2
+    $("surface2").textContent = JSON.stringify(this.pearl,null,2);
+    
+    // Renderer 3
+    this.lens.render();
   }
 
   toggleDebug = () => {

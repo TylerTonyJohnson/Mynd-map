@@ -48,7 +48,8 @@ function surface(text) {
       // Render with method 2
       let tree2 = Tree2.CreateTree(text);
       let jsonView2 = new JsonView2(tree2);
-      jsonView2.render($("surface2"));
+      // jsonView2.render($("surface2"));
+      main($("surface2"));
 
       // Render with method 3
 

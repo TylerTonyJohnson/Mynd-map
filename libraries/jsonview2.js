@@ -111,7 +111,7 @@ class JsonView2 {
     const divFlag = document
       .createRange()
       .createContextualFragment(
-        `<div style="margin-left:${node.depth * 18}px">${arrowIcon}</div>`
+        `<div style="margin-left:${node.depth * 9}px">${arrowIcon}</div>`
       );
     const divElem = divFlag.querySelector("div");
 
