@@ -10,7 +10,8 @@ class Surface {
     this.hand = hand || null;
     this.element = element || null;
 
-    this.root = new Node();
+    this.root = new Node(element);
+    console.log(this.root);
   }
 
   // Render function
@@ -29,9 +30,9 @@ class Surface {
 
 class Node {
 
-  constructor() {
-    this.key = null;
-    this.value = null;
+  constructor(object) {
+    this.key = object.key || null;
+    this.value = object.value || null;
     this.parent = null;
     this.children = null;
     this.isExpanded = false;
@@ -42,19 +43,19 @@ class Node {
   // ---------- Change ----------
 
   // Expand
-  expand = () => {
+  static expand = () => {
 
     this.isExpanded = true;
   }
 
   // Collapse
-  collapse = () => {
+  static collapse = () => {
 
     this.isExpanded = false;
   }
 
   // Toggle expand/collapse
-  toggle = () => {
+  static toggle = () => {
     if (this.isExpanded === false) {
       this.expand();
     } else {
@@ -65,7 +66,7 @@ class Node {
   // ---------- Rendering ----------
 
   // Render to HTML
-  render = () => {
+   static render = () => {
 
   }
 
