@@ -61,11 +61,11 @@ class Hand {
   render = () => {
 
     // Renderer 1
-    let tree = JsonView.createTree(this.pearl);
+    let tree = JsonView.createTree(this.pearl.grains);
     JsonView.render(tree, $("surface1"));
 
-    // Renderer 2
-    $("surface2").textContent = JSON.stringify(this.pearl,null,2);
+    // // Renderer 2
+    // $("surface2").textContent = JSON.stringify(this.pearl,null,2);
     
     // Renderer 3
     this.lens.render();

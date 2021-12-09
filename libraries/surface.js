@@ -9,15 +9,22 @@ class Surface {
   constructor(hand, element) {
     this.hand = hand || null;
     this.element = element || null;
-    
+
+    this.root = new Node();
   }
 
   // Render function
   render = () => {
 
-    // this.element.textContent = JSON.stringify(this.root,null,2);
-    this.element.textContent = JSON.stringify(this.hand.pearl,null,2);
+    // Prepare for rendering
+
+    // Render
+    this.element.textContent = JSON.stringify(this.hand.pearl.grains,null,2);
   }
+
+  
+
+  // Convert to HTML
 }
 
 class Node {

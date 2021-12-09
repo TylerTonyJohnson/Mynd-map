@@ -6,7 +6,7 @@ class Idea {
   defText = this.text;
   dateCreated = null;
   dateUpdated = null;
-  // contents = [];
+  strands = ["Toot", "Nunce", 123];
 
   // // Display stuff
   // r = 20;

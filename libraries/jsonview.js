@@ -249,3 +249,9 @@ var JsonView = (function (exports) {
 
   return exports;
 })({});
+
+function main (data) {
+  const tree = JsonView.createTree(data);
+  JsonView.render(tree, document.querySelector(".root"));
+  JsonView.expandChildren(tree);
+}
