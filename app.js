@@ -8,7 +8,9 @@ function setup() {
 
   // Create core MVC engine
   hand = new Hand(new Pearl(), new Surface(null, $("surface")));
-  hand.lens.hand = hand;  // Create two-way reference
+  hand.lens.target = hand.pearl.grains;  // Create two-way reference
+  console.log(typeof(hand.lens.target));
+  console.log(typeof(hand.pearl.grains));
 
   hand.loadPearl();
   hand.render();
@@ -27,7 +29,11 @@ function createDefaultPearl() {
 
 
 
-  
+
+
+
+
+
 
 
 

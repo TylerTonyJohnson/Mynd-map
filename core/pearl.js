@@ -2,7 +2,6 @@
 
 class Pearl {
     name = "Pearly";
-    grains = [];
 
     constructor () {
         console.log("Creating new pearl");

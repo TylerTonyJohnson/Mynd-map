@@ -1,26 +1,23 @@
 class Surface {
   /**
-  * @description Add more attributes to the item.
-  * @param {*} item
-  * @param {*} key
-  * @param {Node} parent
+  * @description A primitive pearl renderer - JSON format
   * */
 
-  constructor(hand, element) {
-    this.hand = hand || null;
+  constructor(target, element) {
+    this.target = target || null;
     this.element = element || null;
-
-    this.root = new Node(element);
-    console.log(this.root);
   }
 
   // Render function
   render = () => {
 
     // Prepare for rendering
+    let lattice = new Lattice(this.target);
+    
 
     // Render
-    this.element.textContent = JSON.stringify(this.hand.pearl.grains,null,2);
+    this.element.textContent = typeof(this.target);
+    // this.element.textContent = JSON.stringify(this.hand.pearl.grains,null,2);
   }
 
   
@@ -28,7 +25,26 @@ class Surface {
   // Convert to HTML
 }
 
-class Node {
+class Lattice {
+    /**
+  * @description A collection of structured crystals
+  * @param {*} item
+  * @param {*} key
+  * @param {Node} parent
+  * */
+  constructor (target) {
+    this.nucleus = null;
+  }
+
+}
+
+class Crystal {
+    /**
+  * @description A single node in an information system viewer
+  * @param {*} item
+  * @param {*} key
+  * @param {Node} parent
+  * */
 
   constructor(object) {
     this.key = object.key || null;
@@ -43,19 +59,19 @@ class Node {
   // ---------- Change ----------
 
   // Expand
-  static expand = () => {
+  expand = () => {
 
     this.isExpanded = true;
   }
 
   // Collapse
-  static collapse = () => {
+  collapse = () => {
 
     this.isExpanded = false;
   }
 
   // Toggle expand/collapse
-  static toggle = () => {
+  toggle = () => {
     if (this.isExpanded === false) {
       this.expand();
     } else {
@@ -66,7 +82,7 @@ class Node {
   // ---------- Rendering ----------
 
   // Render to HTML
-   static render = () => {
+  render = () => {
 
   }
 

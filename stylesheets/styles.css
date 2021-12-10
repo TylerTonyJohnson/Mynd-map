@@ -13,13 +13,20 @@ header {
   /* border: solid green 1px; */
 }
 
+.logo-bar {
+  display: flex;
+  margin: auto;
+  align-items: center;
+  width:fit-content;
+  /* border: solid red 1px; */
+}
+
 .surface {
   font-size: 50%;
   text-align: left;
 }
 
 h1 {
-  /* border: solid red 1px; */
   margin: 5px;
 }
 
