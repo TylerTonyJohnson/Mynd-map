@@ -1,19 +1,21 @@
 // DOM stuff
 "use strict";
-let hand;
 window.onload = setup;
+let pearl, lens, hand;
+
 
 // Setup function
 function setup() {
 
   // Create core MVC engine
-  hand = new Hand(new Pearl(), new Surface(null, $("surface")));
-  hand.lens.target = hand.pearl.grains;  // Create two-way reference
-  console.log(typeof(hand.lens.target));
-  console.log(typeof(hand.pearl.grains));
+  pearl = new Pearl();
+  lens = new Surface(pearl, $("surface"));
+  hand = new Hand(pearl, lens);
+
+  lens.target = hand.pearl.grains;  // Create two-way reference
 
   hand.loadPearl();
-  hand.render();
+  // hand.render();
 }
 
 // ---------- Defaults ----------
