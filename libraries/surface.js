@@ -1,7 +1,18 @@
+const expandedCaretName = "arrow_drop_down";
+const collapsedCaretName = "arrow_right";
+
 class Surface {
   /**
   * @description A primitive pearl renderer - JSON format
   * */
+
+  static get expandedCaret() {
+    return expandedCaretName;
+  }
+
+  static get collapsedCaret() {
+    return collapsedCaretName;
+  }
 
   constructor(target, element) {
     this.target = target || null;
@@ -11,9 +22,9 @@ class Surface {
 
   // Render function
   render = () => {
-
+    this.element.innerHTML = "";
     // Render
-    this.element.innerHTML = this.lattice.render();
+    this.element.appendChild(this.lattice.render());
     // this.element.textContent = JSON.stringify(this.hand.pearl.grains,null,2);
   }
 
@@ -70,6 +81,7 @@ class Crystal {
 
   // Toggle expand/collapse
   toggle = () => {
+    console.log("Tooty");
     if (this.isExpanded === false) {
       this.expand();
     } else {
@@ -79,22 +91,36 @@ class Crystal {
 
   // ---------- Rendering ----------
 
+  static $create = (html) => {
+    let template = document.createElement("template");
+    html = html.trim();
+    template.innerHTML = html;
+    return template.content.firstChild;
+  } 
+
   // Render to HTML
   render = () => {
-    let element = `
-    <div class="node-line">
+    let $main = Crystal.$create(`<div class="node-line"></div>`);
+    let $caret = Crystal.$create(`
       <div class="caret-icon">
-        <i class="material-icons">arrow_drop_down</i>
+      <i class="material-icons">${
+        this.isExpanded ? Surface.expandedCaret : Surface.collapsedCaret
+      }</i>
       </div>
+    `)
+    $main.appendChild($caret);
+    let $label = Crystal.$create(`
       <div class="node-container">
         <div class="node-key">${this.key}</div>
         <div class="node-spacer">:</div>
         <div class="node-value">${this.value}</div>
         <div class="node-size">${"{4}"}</div>
       </div>
-    </div>`;
+    `);
+      $main.appendChild($label);
 
-    return element;
+    this.element = $main;
+    console.log($main);
+    return this.element;
   }
-
 }

@@ -1,5 +1,5 @@
 * {
-  box-sizing: border-box; /* moved this rule outside of body to affect all elements */
+  /* box-sizing: border-box; */
 }
 
 html {
@@ -81,9 +81,13 @@ body {
   display: inline-block;
   position: relative;
   box-sizing: border-box;
-  width: 26px;
-  height: 26px;
+  justify-items: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
   color: rgba(255, 255, 255, 0.5);
+  transition: transform;
+  transition-duration: 100ms;
   /* border: solid green 1px; */
 }
 
@@ -91,6 +95,7 @@ body {
   content: "";
   position:absolute;
   inset: 0;
+  border-radius: 5px;
   /* border: solid red 1px; */
 }
 
@@ -108,6 +113,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: 5px;
   /* border: solid red 1px; */
 }
 
@@ -134,19 +140,18 @@ body {
   border: solid green 1px;
 }
 
-.caret-icon:hover::before {
-  background-color: rgba(255,255,255,0.25);
-  border: solid white 2px;
+.caret-icon:hover::before,
+.node-container:hover::before,
+.highlight {
+  background-color: rgba(255,255,255,0.1);
+  border: solid rgba(255,255,255,0.75) 2px;
   transition: background-color border;
   transition-duration: 100ms;
   cursor: pointer;
 }
-.node-container:hover::before {
-  background-color: rgba(255,255,255,0.25);
-  background-color: rgba(255,255,255,0.25);
-  border: solid white 2px;
-  transition: background-color border;
-  transition-duration: 100ms;
+
+.expanded {
+  transform: rotate(90deg);
 }
 
 canvas {
