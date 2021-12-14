@@ -31,4 +31,11 @@ function getRandomColor() {
 function $(name) {
   return document.getElementById(name);
 }
-    
+  
+// Create element with HTML in javascript
+$create = (html) => {
+  let template = document.createElement("template");
+  html = html.trim();
+  template.innerHTML = html;
+  return template.content.firstChild;
+} 

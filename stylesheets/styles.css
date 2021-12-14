@@ -88,6 +88,7 @@ body {
   color: rgba(255, 255, 255, 0.5);
   transition: transform;
   transition-duration: 100ms;
+  user-select: none;
   /* border: solid green 1px; */
 }
 
@@ -124,11 +125,14 @@ body {
 
 .node-value {
   margin-right: 5px;
+  color: darkseagreen;
 }
 
 .node-spacer {
   margin-right: 5px;
+  color: white;
 }
+
 .node-size {
   margin-right: 5px;
   color: tan;
@@ -150,8 +154,18 @@ body {
   cursor: pointer;
 }
 
-.expanded {
+/* Handles rotating the caret on expand/collapse */
+
+.expanded .caret-icon {
   transform: rotate(90deg);
+}
+
+.collapsed .caret-icon {
+  transform: rotate(0deg);
+}
+
+.hide {
+  display: none;
 }
 
 canvas {

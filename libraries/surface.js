@@ -16,30 +16,49 @@ class Surface {
 
   constructor(target, element) {
     this.target = target || null;
-    this.element = element || null;
+    this.$element = element || null;
     this.lattice = new Lattice(this.target);
   }
 
   // Render function
   render = () => {
-    this.element.innerHTML = "";
+    // Make a title to go above the surface
+    this.$element.innerHTML = `<div class="surface-container">PEARL</div>`;
+    
     // Render
-    this.element.appendChild(this.lattice.render());
-    // this.element.textContent = JSON.stringify(this.hand.pearl.grains,null,2);
+    this.$element.appendChild(this.lattice.render());
   }
-
-  // Convert to HTML
 }
 
 class Lattice {
   /**
   * @description A collection of structured crystals
   * */
+
   constructor (target) {
-    console.log(target)
+    // console.log(typeof(target));
     this.nucleus = new Crystal(target);
+
+    switch (this.nucleus.type) {
+      case "object":
+        for (let [key, value] of Object.entries(target)) {
+
+          //FIXME: Need to figure out how I'm going to iterate through my objects without including the functions.
+          console.log(key + " - " + value);
+        }
+        break;
+      case "array":
+        for (let crystal of target) {
+          console.log(crystal + " - " + typeof(crystal));
+        }
+        break;
+      default:
+        break;
+    }
     this.name = "Charles";
+    this.crystals = [];
   }
+
 
   render = () => {
     // Recursively go through child nodes and render to complete whole render
@@ -54,34 +73,48 @@ class Crystal {
   * @description A single node in an information system viewer
   * */
 
-  constructor(target) {
-    this.key = Object.keys(target)[0] || null;
-    this.value = Object.values(target)[0] || null;
-    this.name = target.name;
-    this.isExpanded = false;
-    this.parent = null;
-    this.children = null;
+  constructor(target, parent = null) {
+
+    switch (typeof(target)) {
+      case "object":
+        console.log("I am an object");
+        this.key = Object.keys(target)[0] || null;
+        this.value = Object.values(target)[0] || null;
+        break;
+      case "array":
+        console.log("I am an array");
+        break;
+      default:
+        console.log("I am something else, a " + typeof(target))
+        break;
+    }
     this.type = typeof(target);
-    this.element = null;
+    this.isExpanded = false;
+    this.parent = parent;
+    this.depth = (this.parent) ? this.parent.depth + 1 : 0;
+    this.children = [];
+    this.$Element = null;
+    this.class = this.constructor.name;
   }
 
   // ---------- Change ----------
 
   // Expand
   expand = () => {
-
     this.isExpanded = true;
+    this.$Element.classList.add("expanded");
+    this.$Element.classList.remove("collapsed");
   }
 
   // Collapse
   collapse = () => {
-
     this.isExpanded = false;
+    this.$Element.classList.add("collapsed");
+    this.$Element.classList.remove("expanded");
   }
 
   // Toggle expand/collapse
   toggle = () => {
-    console.log("Tooty");
     if (this.isExpanded === false) {
       this.expand();
     } else {
@@ -91,25 +124,23 @@ class Crystal {
 
   // ---------- Rendering ----------
 
-  static $create = (html) => {
-    let template = document.createElement("template");
-    html = html.trim();
-    template.innerHTML = html;
-    return template.content.firstChild;
-  } 
-
-  // Render to HTML
+  // Create HTML node with events for this node line
   render = () => {
-    let $main = Crystal.$create(`<div class="node-line"></div>`);
-    let $caret = Crystal.$create(`
+
+    // Create main contaner for node line
+    let $Container = $create(`<div class="node-line"></div>`);
+
+    // Create caret element in node line
+    let $Caret = $create(`
       <div class="caret-icon">
       <i class="material-icons">${
         this.isExpanded ? Surface.expandedCaret : Surface.collapsedCaret
       }</i>
-      </div>
-    `)
-    $main.appendChild($caret);
-    let $label = Crystal.$create(`
+      </div>`)
+    $Caret.onclick = this.toggle;
+
+    //  Create label in node-line
+    let $Label = $create(`
       <div class="node-container">
         <div class="node-key">${this.key}</div>
         <div class="node-spacer">:</div>
@@ -117,10 +148,13 @@ class Crystal {
         <div class="node-size">${"{4}"}</div>
       </div>
     `);
-      $main.appendChild($label);
+    $Label.onclick = function() {alert("Clicked!")};
 
-    this.element = $main;
-    console.log($main);
-    return this.element;
+    // Create the node line out of elements
+    $Container.appendChild($Caret);
+    $Container.appendChild($Label);
+
+    this.$Element = $Container;
+    return this.$Element;
   }
 }

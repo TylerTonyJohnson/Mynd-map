@@ -5,7 +5,7 @@ class Pearl {
     name = "Pearly";
 
     constructor () {
-        console.log("Creating new pearl");
+        // console.log("Creating new pearl");
 
         // Load pearl data
         if (localStorage.pearl) {
