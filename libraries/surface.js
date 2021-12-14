@@ -41,10 +41,10 @@ class Lattice {
 
     switch (this.nucleus.type) {
       case "object":
-        for (let [key, value] of Object.entries(target)) {
+        for (let key of Object.keys(target)) {
 
           //FIXME: Need to figure out how I'm going to iterate through my objects without including the functions.
-          console.log(key + " - " + value);
+          console.log(key + " - " + typeof key);
         }
         break;
       case "array":
