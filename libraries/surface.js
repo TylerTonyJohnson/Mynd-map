@@ -26,7 +26,7 @@ class Surface {
     this.$element.innerHTML = `<div class="surface-container">PEARL</div>`;
     
     // Render
-    this.$element.appendChild(this.lattice.render());
+    this.$element.appendChild(this.lattice.$render());
   }
 }
 
@@ -60,10 +60,10 @@ class Lattice {
   }
 
 
-  render = () => {
+  $render = () => {
     // Recursively go through child nodes and render to complete whole render
     
-    let result = this.nucleus.render();
+    let result = this.nucleus.$render();
     return result;
   } 
 }
@@ -89,12 +89,15 @@ class Crystal {
         break;
     }
     this.type = typeof(target);
-    this.isExpanded = false;
     this.parent = parent;
     this.depth = (this.parent) ? this.parent.depth + 1 : 0;
     this.children = [];
     this.$Element = null;
     this.class = this.constructor.name;
+    this.isExpanded = false;
+
+    // Context menu configuration
+    this.contextMenu = ["Add", function() {console.log("Addy time")}];
   }
 
   // ---------- Change ----------
@@ -125,7 +128,7 @@ class Crystal {
   // ---------- Rendering ----------
 
   // Create HTML node with events for this node line
-  render = () => {
+  $render = () => {
 
     // Create main contaner for node line
     let $Container = $create(`<div class="node-line"></div>`);
@@ -138,6 +141,7 @@ class Crystal {
       }</i>
       </div>`)
     $Caret.onclick = this.toggle;
+    $Caret.oncontextmenu = event => event.preventDefault();
 
     //  Create label in node-line
     let $Label = $create(`
@@ -148,7 +152,10 @@ class Crystal {
         <div class="node-size">${"{4}"}</div>
       </div>
     `);
-    $Label.onclick = function() {alert("Clicked!")};
+    $Label.onclick = function() {hand.addGrain()};
+    $Label.oncontextmenu = function(e) {
+      hand.createContextMenu(e, this.contextMenu);
+    };
 
     // Create the node line out of elements
     $Container.appendChild($Caret);

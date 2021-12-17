@@ -13,7 +13,7 @@ class Hand {
 
   // Add grain to pearl
   addGrain = (grain = null) => {
-
+    console.log("adding grain");
     if (grain) {
       this.pearl.grains.push(grain);
     } else {
@@ -63,6 +63,7 @@ class Hand {
     // Renderer 1
     let tree = JsonView.createTree(this.pearl.grains);
     JsonView.render(tree, $("surface1"));
+    // JsonView.expandChildren(tree);
 
     // // Renderer 2
     // $("surface2").textContent = JSON.stringify(this.pearl,null,2);
@@ -82,5 +83,79 @@ class Hand {
 
 
   // ---------- Interaction Events ----------
+
+  // Create context menu
+  createContextMenu = (e) => {
+
+    e.preventDefault();
+    $("context-menu-container").innerHTML = "";
+    
+    let mouseX = e.clientX;
+    let mouseY = e.clientY;
+
+
+    let $contextMenu = $create(`
+      <div id="context-menu" class="context-menu"></div>
+    `);
+
+    let $addButton = $create(`
+    <div id="context-menu-add-button" class="context-menu-button">
+      <span class="material-icons context-menu-button-component"> add </span>
+      <div class="context-menu-button-component">Add</div>
+    </div>
+    `);
+    $addButton.style.display = "inherit";
+    $addButton.onclick = function(e) {
+      hand.addGrain();
+      $("context-menu-container").innerHTML = "";
+    }
+
+    let $deleteButton = $create(`
+    <div id="context-menu-delete-button" class="context-menu-button">
+      <span class="material-icons context-menu-button-component"> delete </span>
+      <div class="context-menu-button-component">Delete</div>
+    </div>
+    `);
+    $deleteButton.style.display = "inherit";
+    $deleteButton.onclick = this.removeGrain();
+
+
+    // Construct menu
+    $contextMenu.appendChild($addButton);
+    $contextMenu.appendChild($deleteButton);
+    $("context-menu-container").appendChild($contextMenu);
+
+    // Configure
+    $contextMenu.style.left = mouseX + "px";
+    $contextMenu.style.top = mouseY + "px";
+
+    $contextMenu.style.display = "flex";
+    console.log($contextMenu);
+
+    // // Create a context menu from template
+    // let $contextMenu = $("context-menu").cloneNode(true);
+    // $contextMenu.oncontextmenu = event => event.preventDefault();
+    
+    // // Add button
+    // let $addButton = $("context-menu-add-button").cloneNode(true);
+    // $addButton.style.display = "inherit";
+    // $addButton.addEventListener("click", function() {console.log("add")});
+    // // this.$addButton.oncontextmenu = false;
+
+    // // Delete button
+    // let $deleteButton = $("context-menu-delete-button").cloneNode(true);
+    // $deleteButton.style.display = "inherit";
+    // $deleteButton.addEventListener("click", function() {console.log("delete")});
+
+    // // Append buttons to context menu
+    // $contextMenu.appendChild($addButton);
+    // $contextMenu.appendChild($deleteButton);
+    // $("context-menu-container").appendChild($contextMenu);
+
+    // $contextMenu.style.left = e.clientX - this.offsetX + "px";
+    // $contextMenu.style.top = e.clientY - this.offsetY + "px";
+    // $contextMenu.style.display = "flex";
+  };
+
 
 }

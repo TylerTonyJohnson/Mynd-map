@@ -183,7 +183,7 @@ canvas {
 
 .context-menu {
   position: absolute;
-  display: nosne;
+  /* display: none; */
   flex-direction: column;
   z-index: 10;
   color: #DDD;
