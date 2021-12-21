@@ -16,9 +16,25 @@ class Surface {
 
   constructor(target, element) {
     this.target = target || null;
+    this.lattice = new Lattice(this.target, this);
+    this.highlighted = [];
+    this.selected = [];
+    this.$ContextMenu = null;
     this.$element = element || null;
-    this.lattice = new Lattice(this.target);
+
+    // Page document setup
+    document.oncontextmenu = e => e.preventDefault();
+    document.onclick = e => {
+      if (this.highlighted.length > 0) {
+        this.clearHighlightList();
+      }
+      if (this.$ContextMenu) {
+        this.clearContextMenu();
+      }
+    }
   }
+
+// ---------- RENDERING ----------
 
   // Render function
   render = () => {
@@ -28,6 +44,107 @@ class Surface {
     // Render
     this.$element.appendChild(this.lattice.$render());
   }
+
+// ---------- HIGHLIGHTING ----------
+
+  // Add a node to the list to keep highlighted
+  addToHighlightList = (element) => {
+    // Add this node to the list
+    this.highlighted.push(element);
+    // Make the style highlighted
+    if (!element.classList.contains("highlighted")) {
+      element.classList.add("highlighted");
+    }
+  }
+
+  removeFromHighlightList = (element) => {
+
+    // Find and remove element from the highlight list
+    let index = this.highlighted.indexOf(element);
+    if (index) {
+      this.highlighted.splice(index, 1);
+    }
+
+    // Remove the highlighting from the element
+    element.classList.remove("highlighted");
+  
+  }
+
+  clearHighlightList = () => {
+    this.highlighted.forEach(element => {
+      element.classList.remove("highlighted");
+    });
+    this.highlighted = [];
+  }
+
+// // ---------- CONTEXT MENU ----------
+//   // Create context menu
+//   createContextMenu = (e, target) => {
+//     console.log(target.constructor.name)
+
+//     // Setup
+//     e.preventDefault();
+//     $("context-menu-container").innerHTML = "";
+    
+//     // Build container for context menu
+//     let $ContextMenu = $create(`
+//       <div id="context-menu" class="context-menu"></div>
+//     `);
+
+//     // Construct items inside context menu
+//     let $AddButton = $create(`
+//     <div id="context-menu-add-button" class="context-menu-button">
+//       <span class="material-icons context-menu-button-component"> add </span>
+//       <div class="context-menu-button-component">Add</div>
+//     </div>
+//     `);
+//     $AddButton.style.display = "inherit";
+//     $AddButton.onclick = function(e) {
+//       hand.addGrain();
+//       $("context-menu-container").innerHTML = "";
+//     }
+
+//     let $DeleteButton = $create(`
+//     <div id="context-menu-delete-button" class="context-menu-button">
+//       <span class="material-icons context-menu-button-component"> delete </span>
+//       <div class="context-menu-button-component">Delete</div>
+//     </div>
+//     `);
+//     $DeleteButton.style.display = "inherit";
+//     // $deleteButton.onclick = this.removeGrain();
+
+//     // Construct menu heirarchy
+//     $ContextMenu.appendChild($AddButton);
+//     $ContextMenu.appendChild($DeleteButton);
+//     $("context-menu-container").appendChild($ContextMenu);
+//     $ContextMenu.style.visibility = "visible";
+
+//     // Configure
+//     switch (target.constructor.name) {
+//       case "Crystal":
+//       case "Grain":
+//       default:
+//         $ContextMenu.style.left = e.clientX + "px";
+//         $ContextMenu.style.top = e.clientY + "px";
+//         break;
+//     }
+
+//     document.addEventListener("mousemove", this.track);
+
+//     return $ContextMenu;
+//   };
+
+  clearContextMenu = () => {
+    console.log("clearing context menu");
+    document.removeEventListener("mousemove", this.track);
+    this.$ContextMenu.clear();
+    this.$ContextMenu = null;
+  }
+
+  track = (e) => {
+    console.log(getDistFromElem(e, this.$ContextMenu));
+  }
+
 }
 
 class Lattice {
@@ -35,9 +152,13 @@ class Lattice {
   * @description A collection of structured crystals
   * */
 
-  constructor (target) {
+  constructor (target, surface) {
     // console.log(typeof(target));
-    this.nucleus = new Crystal(target);
+    this.target = target;
+    this.surface = surface;                 // Get parent
+    this.nucleus = new Crystal(this.target, this);
+    this.nucleus.lattice = this;            // Two-way binding to parent
+    this.nucleus.surface = this.surface;    // Two-way binding to surface
 
     switch (this.nucleus.type) {
       case "object":
@@ -59,7 +180,6 @@ class Lattice {
     this.crystals = [];
   }
 
-
   $render = () => {
     // Recursively go through child nodes and render to complete whole render
     
@@ -74,7 +194,8 @@ class Crystal {
   * */
 
   constructor(target, parent = null) {
-
+    this.parent = parent;
+    // this.lattice = ?
     switch (typeof(target)) {
       case "object":
         console.log("I am an object");
@@ -89,7 +210,6 @@ class Crystal {
         break;
     }
     this.type = typeof(target);
-    this.parent = parent;
     this.depth = (this.parent) ? this.parent.depth + 1 : 0;
     this.children = [];
     this.$Element = null;
@@ -97,7 +217,17 @@ class Crystal {
     this.isExpanded = false;
 
     // Context menu configuration
-    this.contextMenu = ["Add", function() {console.log("Addy time")}];
+    this.contextMenuLayout = [
+      {
+        name: "Add",
+        icon: "add",
+        // function: this.surface.hand.addGrain
+      },{
+        name: "Delete",
+        icon: "delete",
+        // function: this.surface.hand.removeGrain
+      }
+    ];
   }
 
   // ---------- Change ----------
@@ -117,7 +247,8 @@ class Crystal {
   }
 
   // Toggle expand/collapse
-  toggle = () => {
+  toggle = (e) => {
+    console.log("toggling");
     if (this.isExpanded === false) {
       this.expand();
     } else {
@@ -140,27 +271,47 @@ class Crystal {
         this.isExpanded ? Surface.expandedCaret : Surface.collapsedCaret
       }</i>
       </div>`)
-    $Caret.onclick = this.toggle;
-    $Caret.oncontextmenu = event => event.preventDefault();
+
+    // Left click caret function
+    $Caret.onclick = e => {
+      e.stopPropagation();
+      this.toggle(e);
+      // this.surface.addToHighlightList($Caret);
+    };
+
+    // Right click caret function 
+    $Caret.oncontextmenu = e => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.surface.removeFromHighlightList($Caret);
+    };
 
     //  Create label in node-line
     let $Label = $create(`
-      <div class="node-container">
+      <div id="toaster" class="node-container">
         <div class="node-key">${this.key}</div>
         <div class="node-spacer">:</div>
         <div class="node-value">${this.value}</div>
         <div class="node-size">${"{4}"}</div>
       </div>
     `);
-    $Label.onclick = function() {hand.addGrain()};
-    $Label.oncontextmenu = function(e) {
-      hand.createContextMenu(e, this.contextMenu);
+
+    // Left click label function
+    $Label.onclick = e => {
+      console.log("Left clicked node label")
+      this.surface.addToHighlightList($Label);
     };
 
-    // Create the node line out of elements
+    // Right click label function
+    $Label.oncontextmenu = e => {
+      console.log("Right clicked node label")
+      this.surface.addToHighlightList($Label);
+      this.surface.$ContextMenu = new ContextMenu(e, this);
+    };
+
+    // Build element out of parts and return
     $Container.appendChild($Caret);
     $Container.appendChild($Label);
-
     this.$Element = $Container;
     return this.$Element;
   }

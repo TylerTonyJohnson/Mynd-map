@@ -13,7 +13,7 @@ function setup() {
   hand = new Hand(pearl, lens);
 
   lens.target = hand.pearl.grains;  // Create two-way reference
-
+  lens.hand = hand;
   hand.loadPearl();
   // hand.render();
 }

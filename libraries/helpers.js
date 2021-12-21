@@ -28,7 +28,7 @@ function getRandomColor() {
 //  -- DOM Helpers --
 
 // ID shortcut
-function $(name) {
+$ = (name) => {
   return document.getElementById(name);
 }
   
@@ -38,4 +38,42 @@ $create = (html) => {
   html = html.trim();
   template.innerHTML = html;
   return template.content.firstChild;
-} 
+}
+
+getDistFromElem = (mouseEvent, element) => {
+  let mouseLoc = {x: mouseEvent.clientX, y: mouseEvent.clientY};
+  let elemLoc = element.getBoundingClientRect();
+  let distX, distY;
+
+  switch (true) {
+    case (mouseLoc.x < elemLoc.left):
+      distX = elemLoc.left - mouseLoc.x;
+      break;
+    case (mouseLoc.x > elemLoc.right):
+      distX = mouseLoc.x - elemLoc.right;
+      break;
+    case (mouseLoc.x >= elemLoc.left && mouseLoc.x <= elemLoc.right):
+      distX = 0;
+      break;
+    default:
+      distX = -1;
+      break;
+  }
+
+  switch (true) {
+    case (mouseLoc.y < elemLoc.top):
+      distY = elemLoc.top - mouseLoc.y;
+      break;
+    case (mouseLoc.y > elemLoc.bottom):
+      distY = mouseLoc.y - elemLoc.bottom;
+      break;
+    case (mouseLoc.y >= elemLoc.top && mouseLoc.y <= elemLoc.bottom):
+      distY = 0;
+      break;
+    default:
+      distY = -1;
+      break;
+  }
+
+  return Math.hypot(distX, distY);
+}
