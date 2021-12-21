@@ -6,21 +6,13 @@ class Surface {
   * @description A primitive pearl renderer - JSON format
   * */
 
-  static get expandedCaret() {
-    return expandedCaretName;
-  }
-
-  static get collapsedCaret() {
-    return collapsedCaretName;
-  }
-
   constructor(target, element) {
     this.target = target || null;
     this.lattice = new Lattice(this.target, this);
     this.highlighted = [];
     this.selected = [];
     this.$ContextMenu = null;
-    this.$element = element || null;
+    this.$Element = element || null;
 
     // Page document setup
     document.oncontextmenu = e => e.preventDefault();
@@ -38,16 +30,17 @@ class Surface {
 
   // Render function
   render = () => {
-    // Make a title to go above the surface
-    this.$element.innerHTML = `<div class="surface-container">PEARL</div>`;
+
+    // Clear the element to be rendered into
+    this.$Element.innerHTML = "";
     
     // Render
-    this.$element.appendChild(this.lattice.$render());
+    this.$Element.appendChild(this.lattice.$render());
   }
 
 // ---------- HIGHLIGHTING ----------
 
-  // Add a node to the list to keep highlighted
+  // Add a node to the list of nodes to keep highlighted
   addToHighlightList = (element) => {
     // Add this node to the list
     this.highlighted.push(element);
@@ -57,6 +50,7 @@ class Surface {
     }
   }
 
+  // Remove a node from the list of nodes to keep highlighted
   removeFromHighlightList = (element) => {
 
     // Find and remove element from the highlight list
@@ -76,75 +70,6 @@ class Surface {
     });
     this.highlighted = [];
   }
-
-// // ---------- CONTEXT MENU ----------
-//   // Create context menu
-//   createContextMenu = (e, target) => {
-//     console.log(target.constructor.name)
-
-//     // Setup
-//     e.preventDefault();
-//     $("context-menu-container").innerHTML = "";
-    
-//     // Build container for context menu
-//     let $ContextMenu = $create(`
-//       <div id="context-menu" class="context-menu"></div>
-//     `);
-
-//     // Construct items inside context menu
-//     let $AddButton = $create(`
-//     <div id="context-menu-add-button" class="context-menu-button">
-//       <span class="material-icons context-menu-button-component"> add </span>
-//       <div class="context-menu-button-component">Add</div>
-//     </div>
-//     `);
-//     $AddButton.style.display = "inherit";
-//     $AddButton.onclick = function(e) {
-//       hand.addGrain();
-//       $("context-menu-container").innerHTML = "";
-//     }
-
-//     let $DeleteButton = $create(`
-//     <div id="context-menu-delete-button" class="context-menu-button">
-//       <span class="material-icons context-menu-button-component"> delete </span>
-//       <div class="context-menu-button-component">Delete</div>
-//     </div>
-//     `);
-//     $DeleteButton.style.display = "inherit";
-//     // $deleteButton.onclick = this.removeGrain();
-
-//     // Construct menu heirarchy
-//     $ContextMenu.appendChild($AddButton);
-//     $ContextMenu.appendChild($DeleteButton);
-//     $("context-menu-container").appendChild($ContextMenu);
-//     $ContextMenu.style.visibility = "visible";
-
-//     // Configure
-//     switch (target.constructor.name) {
-//       case "Crystal":
-//       case "Grain":
-//       default:
-//         $ContextMenu.style.left = e.clientX + "px";
-//         $ContextMenu.style.top = e.clientY + "px";
-//         break;
-//     }
-
-//     document.addEventListener("mousemove", this.track);
-
-//     return $ContextMenu;
-//   };
-
-  clearContextMenu = () => {
-    console.log("clearing context menu");
-    document.removeEventListener("mousemove", this.track);
-    this.$ContextMenu.clear();
-    this.$ContextMenu = null;
-  }
-
-  track = (e) => {
-    console.log(getDistFromElem(e, this.$ContextMenu));
-  }
-
 }
 
 class Lattice {
@@ -181,8 +106,11 @@ class Lattice {
   }
 
   $render = () => {
-    // Recursively go through child nodes and render to complete whole render
+
+    // Create header to represent lattice
     
+
+    // Recursively go through child nodes and render to complete whole render
     let result = this.nucleus.$render();
     return result;
   } 
@@ -268,7 +196,7 @@ class Crystal {
     let $Caret = $create(`
       <div class="caret-icon">
       <i class="material-icons">${
-        this.isExpanded ? Surface.expandedCaret : Surface.collapsedCaret
+        this.isExpanded ? expandedCaretName : collapsedCaretName
       }</i>
       </div>`)
 
