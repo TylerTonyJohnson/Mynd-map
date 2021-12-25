@@ -48,6 +48,17 @@ class Hand {
     }
   }
 
+  downloadPearl = () => {
+    console.log("Downloading Pearl")
+    let exportData = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pearl));
+    let $Export = document.createElement("a");
+    $Export.setAttribute("href", exportData);
+    $Export.setAttribute("download", "pearl.json");
+    document.body.appendChild($Export);
+    $Export.click();
+    $Export.remove();
+  }
+
   // Reset to default
   resetPearl = () => {
     this.pearl.grains = createDefaultPearl();
@@ -61,7 +72,7 @@ class Hand {
   render = () => {
 
     // Renderer 1
-    let tree = JsonView.createTree(this.pearl.grains);
+    let tree = JsonView.createTree(this.pearl);
     JsonView.render(tree, $("surface1"));
     // JsonView.expandChildren(tree);
 

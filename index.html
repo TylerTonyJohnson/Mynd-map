@@ -49,10 +49,14 @@
       <div class="header-buttons">
         <button id="debug-button" onclick="hand.toggleDebug()">Debug</button>
         <button id="reset-button" onclick="hand.resetPearl()">Reset</button>
-        <button id="save-button" onclick="hand.savePearl()">Save</button>
-        <button id="load-button" onclick="hand.loadPearl()">Load</button>
+        <span class="spacer">-</span>
         <button id="add-button" onclick="hand.addGrain()">Add</button>
         <button id="remove-button" onclick="hand.removeGrain()">Remove</button>
+        <span class="spacer">-</span>
+        <button id="save-button" onclick="hand.savePearl()">Save</button>
+        <button id="load-button" onclick="hand.loadPearl()">Load</button>
+        <button id="export-button" onclick="hand.downloadPearl()">Download</button>
+
       </div>
     </header>
     <div class="readouts">
@@ -69,14 +73,4 @@
     <!-- <overlay id="overlay">hi</overlay> -->
   </body>
   <div id="context-menu-container"></div>
-  <!-- Templates (mostly just using for context menus now.) -->
-  <template id="context-menu" class="context-menu"></template>
-  <template id="context-menu-add-button" class="context-menu-button">
-    <span class="material-icons context-menu-button-component"> add </span>
-    <div class="context-menu-button-component">Add</div>
-  </template>
-  <template id="context-menu-delete-button" class="context-menu-button">
-    <span class="material-icons context-menu-button-component"> delete </span>
-    <div class="context-menu-button-component">Delete</div>
-  </template>
 </html>

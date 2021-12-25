@@ -9,7 +9,7 @@ function setup() {
 
   // Create core MVC engine
   pearl = new Pearl();
-  lens = new Surface(pearl, $("surface"));
+  lens = new Surface(null, $("surface"));
   hand = new Hand(pearl, lens);
 
   lens.target = hand.pearl.grains;  // Create two-way reference

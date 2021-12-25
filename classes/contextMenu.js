@@ -40,7 +40,7 @@ class ContextMenu {
     </div>
     `);
     $DeleteButton.style.display = "inherit";
-    // $deleteButton.onclick = this.removeGrain();
+    $DeleteButton.onclick = hand.removeGrain;
 
     // Construct context menu heirarchy
     $ContextMenu.appendChild($AddButton);
@@ -74,12 +74,12 @@ class ContextMenu {
   }
 
   // Static clear function
-  static clear = (lens) => {
-    console.log("clearing context menu");
+  static clear = (targetLens) => {
+    let clearLens = targetLens || lens;
     document.removeEventListener("mousemove", this.trackFocus);
-    if (lens.$ContextMenu) {
-      lens.$ContextMenu.element.remove();
-      lens.$ContextMenu = null;
+    if (clearLens.$ContextMenu) {
+      clearLens.$ContextMenu.$Element.remove();
+      clearLens.$ContextMenu = null;
     }
   }
 
@@ -91,18 +91,18 @@ class ContextMenu {
 
       switch (true) {
         case (dist > maxFadeThresh):
-          console.log("Greater")
+                // console.log("Greater")
           this.clear();
           break;
         case (dist < minFadeThresh):
-          console.log("Lesser")
+                // console.log("Lesser")
           break;
         case (dist >= minFadeThresh && dist <= maxFadeThresh):
-          console.log("Fading" + this.$Element.style.opacity);
+                // console.log("Fading" + this.$Element.style.opacity);
           this.$Element.style.opacity = (1 - fadePercent);
           break;
         default:
-          console.log("Something is wrong");
+                console.log("Something is wrong");
       }
   }
 }

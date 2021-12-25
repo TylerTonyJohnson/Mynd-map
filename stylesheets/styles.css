@@ -15,7 +15,18 @@ html {
 header {
   /* border: solid green 1px; */
   background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0.15));
-  mix-blend-mode: normal;
+  /* mix-blend-mode: normal; */
+}
+
+.header-buttons {
+  display: flex;
+  /* border: solid red 1px; */
+  justify-content: center;
+  gap: 10px;
+}
+
+.spacer {
+  width: 10px;
 }
 
 .logo-bar {
@@ -165,7 +176,6 @@ body {
 .collapsed .caret-icon {
   transform: rotate(0deg);
 }
-
 
 canvas {
   display: flex;
