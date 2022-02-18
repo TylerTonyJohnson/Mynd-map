@@ -35,7 +35,7 @@ class Surface {
     this.$Element.innerHTML = "";
     
     // Render
-    this.$Element.appendChild(this.lattice.$render());
+    this.$Element.appendChild(this.lattice.$Render());
   }
 
 // ---------- HIGHLIGHTING ----------
@@ -80,38 +80,29 @@ class Lattice {
     // console.log(target);
     this.target = target;
     this.surface = surface;                 // Get parent
-    this.nucleus = new Crystal(this.target, this);
-    this.nucleus.lattice = this;            // Two-way binding to parent
-
-    // switch (this.nucleus.type) {
-    //   case "object":
-    //     for (let key of Object.keys(target)) {
-
-    //       //FIXME: Need to figure out how I'm going to iterate through my objects without including the functions.
-    //       console.log(key + " - " + typeof key);
-    //     }
-    //     break;
-    //   case "array":
-    //     for (let crystal of target) {
-    //       console.log(crystal + " - " + typeof(crystal));
-    //     }
-    //     break;
-    //   default:
-    //     break;
-    // }
-    this.name = "Charles";
+    
+    // Crystal organization
     this.crystals = [];
+    this.depth = 0;
+    this.$Element = null;
 
+    // Child stuff
+    this.nucleus = new Crystal(this.target, this);
+    this.nucleus.surface = this.surface;
+    this.nucleus.lattice = this;
+    this.crystals.push(this.nucleus);
   }
 
-  $render = () => {
+  $Render = () => {
 
-    // Create header to represent lattice
-    
+    // Set up container for rendering inside
+    this.$Element = $Create(`
+      <div id="crystal-container"></div>
+    `);
 
     // Recursively go through child nodes and render to complete whole render
-    let result = this.nucleus.$render();
-    return result;
+    this.$Element.appendChild(this.nucleus.$Render());
+    return this.$Element;
   } 
 }
 
@@ -122,15 +113,18 @@ class Crystal {
 
   // Right now, this only supports arrays, objects, strings, numbers, booleans
 
- constructor(target, parent = null) {
-   this.parent = parent;              // If the parent is a lattice, that means this is a root node
-   this.surface = parent.surface;     // Convenient handle to surface
-   
-   // Figure out what kind of crystal this will be
-   switch (typeof target) {
-     case ("object"):
-       console.log("I am an object");
-       break;
+  constructor(target, parent = null) {
+
+    console.log("Constructing new Crystal")
+    console.log(target);
+    // Make sure target exists
+    if (target == null) return;
+
+    // Figure out what kind of crystal this will be
+    switch (typeof target) {
+      case ("object"):
+      console.log("I am an object");
+      break;
     case ("array"):
       console.log("I am an array");
       break;
@@ -148,48 +142,63 @@ class Crystal {
       this.value = target;
       break;
     }
+    this.target = target;
+    this.type = typeof target;
 
-    this.type = typeof(target);
-    this.depth = (this.parent) ? this.parent.depth + 1 : 0;
+    // Parent stuff
+    this.parent = parent;              // If the parent is a lattice, that means this is a root node
+    console.log((this.parent.constructor.name === "Lattice") ? "I am a nucleus" : "I am not a nucleus");
+    this.surface = parent.surface;     // Convenient handle to surface
+    this.lattice = parent.lattice;
+    this.depth = this.parent.depth + 1;
+    console.log("Depth - " + this.parent.depth)
+    
     this.$Element = null;
+    this.$Children = null;
     this.class = this.constructor.name;
     this.isExpanded = false;
     
     // Generate children
     this.properties = [];
-    this.children = [];
-    // this.populateChildren(target);
-          
+    this.children = [];  
+    this.createChildren();
   }
         
   // ---------- Change ----------
   
-  // Fill in the references to all the children of this crystal
-  populateChildren = (target) => {
-    // console.log(target)
-    for (let property in target) {
-      console.log(typeof target[property] + " - " + target[property]);
-
-      switch (true) {
-        case (typeof target[property] === "object"):
-          this.children.push(property);
-          console.log("added property to child list");
-          break;
-        case (Array.isArray(target[property])):
-          this.children.push(property)
-          console.log("Added this property to child list")
-          break;
-        case (typeof target[property] === "string"):
-          this.properties.push(property)
-          console.log("Added this to property list");
-          break;
-        default:
-          console.log("Didn't know what to do with this")
-          break;
-      }
-
-
+  // Generate initial child data
+  createChildren = (target = this.target) => {
+    console.log("creating children")
+    for (let key in target) {
+      this.children.push(target[key]);
     }
+  }
+
+  // Generate HTML for children
+  $RenderChildren = (target = this.target) => {
+
+    // Check if children have been populated yet
+    if (this.children.length < 1) {
+      this.createChildren();
+    }
+    
+    // Clear the rendered children buffer
+    this.$Children.innerHTML = "";
+
+    
+
+
+    // Add children one by one
+    this.children.forEach(targetChild => {
+      // console.log(targetChild);
+      // console.log("creating " + targetChild + " - " + typeof targetChild)
+      let child = new Crystal(targetChild, this);
+      // console.log(child);
+      let $Child = child.$Render();
+      this.$Children.appendChild($Child);
+      // console.log(this.$Children);
+    });
+
   }
 
   addChild = (child) => {
@@ -198,16 +207,21 @@ class Crystal {
   
   // Expand
   expand = () => {
+    console.log("expanding");
     this.isExpanded = true;
     this.$Element.classList.add("expanded");
     this.$Element.classList.remove("collapsed");
+    this.$RenderChildren();
+    this.$Children.classList.remove("hide");
   }
   
   // Collapse
   collapse = () => {
+    console.log("collapsing");
     this.isExpanded = false;
     this.$Element.classList.add("collapsed");
     this.$Element.classList.remove("expanded");
+    this.$Children.classList.add("hide");
   }
   
   // Toggle expand/collapse
@@ -223,16 +237,21 @@ class Crystal {
   // ---------- Rendering ----------
   
   // Create HTML node with events for this node line
-  $render = () => {
+  $Render = () => {
     
     // Caret > Label > spacer > value
 
     // Create main contaner for node line
-    let $Container = $create(`<div class="node-line"></div>`);
-    
+    let $CrystalContainer = $Create(`<div class="crystal-container"></div>`);
+    let $ContentContainer = $Create(`<div class="crystal-line"></div>`);
+    let $ChildContainer = $Create(`<div class="crystal-child"></div>`);
+
+    $CrystalContainer.appendChild($ContentContainer);
+    $CrystalContainer.appendChild($ChildContainer);
+
     // Create caret element in node line
     let $Caret = this.createCaret();
-    
+    $ContentContainer.appendChild($Caret);
     // Left click caret function
     $Caret.onclick = e => {
       e.stopPropagation();
@@ -246,8 +265,11 @@ class Crystal {
       e.stopPropagation();
     };
     
-    //  Create label in node-line
-    let $Label = $create(`
+    //  Create content in crystal-line
+    let $Content = this.createContent();
+    $ContentContainer.appendChild($Content);
+
+    $Create(`
     <div id="toaster" class="node-container">
     <div class="node-key">${this.class}</div>
     <div class="node-spacer">:</div>
@@ -259,37 +281,108 @@ class Crystal {
     `);
     
     // Left click label function
-    $Label.onclick = e => {
+    $Content.onclick = e => {
       e.stopPropagation();
       console.log("Left clicked node label")
-      this.surface.addToHighlightList($Label);
+      this.surface.addToHighlightList($Content);
     };
     
     // Right click label function
-    $Label.oncontextmenu = e => {
+    $Content.oncontextmenu = e => {
       console.log("Right clicked node label")
-      this.surface.addToHighlightList($Label);
+      this.surface.addToHighlightList($Content);
       this.surface.$ContextMenu = new ContextMenu(e, this);
     };
     
     // Build element out of parts and return
-    $Container.appendChild($Caret);
-    $Container.appendChild($Label);
-    this.$Element = $Container;
+
+
+    // $CrystalContainer.appendChild($Caret);
+    // $CrystalContainer.appendChild($Content);
+    this.$Element = $CrystalContainer;
+    this.$Children = $ChildContainer;
     return this.$Element;
   }
 
   createCaret = () => {
-    return ($create(`
+    return $Create(`
     <div class="caret-icon">
       <i class="material-icons">${
         this.isExpanded ? expandedCaretName : collapsedCaretName
       }</i>
-    </div>`));
+    </div>`);
   }
 
   createSpacer = () => {
-    return ($create(`<div class="node-spacer">:</div>`));
+    return ($Create(`<div class="node-spacer">:</div>`));
+  }
+
+  // Create the content of the exported HTML rendered
+  createContent = () => {
+
+    // Create container
+    let $Content;
+
+    // Figure out what kind of content it should have
+    console.log(this.type)
+    switch (this.type) {
+      case ("object"):
+        console.log("I am an object");
+        $Content = $Create(`
+          <div class="crystal-content">
+            <div class="node-key">${this.type}</div>
+            <div class="node-size">
+            ${this.children.length > 0 ? "{" + this.children.length + "}" : ""}
+            </div>
+          </div>
+        `);
+        break;
+      case ("array"):
+        console.log("I am an array");
+        $Content = $Create(`
+          <div class="crystal-content">
+            <div class="node-key">${this.type}</div>
+            <div>ARRAY</div>
+          </div>
+        `);
+        break;
+      case ("string"):
+        console.log("I am a string");
+        $Content = $Create(`
+          <div class="crystal-content">
+            <div class="node-key">${this.type}</div>
+            <div>STRING</div>
+          </div>
+        `);
+        break;
+      case ("number"):
+        console.log("I am a number");
+        $Content = $Create(`
+          <div class="crystal-content">
+            <div class="node-key">${this.type}</div>
+            <div>NUMBER</div>
+          </div>
+        `);
+        break;
+      case ("boolean"):
+        console.log("I am a boolean");
+        $Content = $Create(`
+          <div class="crystal-content">
+            <div class="node-key">${this.type}</div>
+            <div>BOOLEAN</div>
+          </div>
+        `);
+        break;
+      default:
+        console.log("I am something else, a " + typeof target);
+        $Content = $Create(`
+          <div>DEFAULT<div>
+        `);
+        break;
+    }
+
+    console.log($Content)
+    return $Content;
   }
 
 // Context Menu

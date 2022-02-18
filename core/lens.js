@@ -2,4 +2,13 @@
 
 class Lens {
     
+
+  render = () => {
+    console.log("Rendering")
+  }
+
+  startRender = () => {
+    this.render();
+  }
+
 }

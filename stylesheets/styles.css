@@ -83,11 +83,12 @@ body {
   position: relative;
 }
 
-.node-line {
+.crystal-container {
   display: flex;
-  /* border: solid red 1px; */
+  flex-direction: column;
+  border: solid red 1px;
   font-size: 16px;
-  align-items: center;
+  align-items: left;
 }
 
 .caret-icon {
@@ -113,17 +114,17 @@ body {
   /* border: solid red 1px; */
 }
 
-.node-container {
+.crystal-line {
   display: flex;
   position: relative;
   box-sizing: border-box;
   height: 26px;
   align-items: center;
   border-radius: 6px;
-  /* border: solid green 1px; */
+  border: solid green 1px;
 }
 
-.node-container::before {
+.crystal-line::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -151,14 +152,14 @@ body {
   color: tan;
 }
 
-.label {
-  display: inline-block;
+.crystal-content {
+  display: flex;
   white-space: nowrap;
-  border: solid green 1px;
+  border: solid yellow 1px;
 }
 
 .caret-icon:hover::before,
-.node-container:hover::before,
+.crystal-content:hover::before,
 .highlighted::before {
   background-color: rgba(255,255,255,0.1);
   border: solid rgba(255,255,255,0.75) 2px;
@@ -187,7 +188,6 @@ canvas {
   border: solid black 4px;
   margin: auto;
   border-radius: 30px;
-  
 }
 
 .hide {

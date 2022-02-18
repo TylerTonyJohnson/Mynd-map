@@ -9,25 +9,18 @@ function setup() {
 
   // Create core MVC engine
   pearl = new Pearl();
-  lens = new Surface(null, $("surface"));
+  // lens = new Surface(pearl, $("surface"));
+  lens = new Lens(pearl, $("surface"));
   hand = new Hand(pearl, lens);
 
-  lens.target = hand.pearl.grains;  // Create two-way reference
+  // Create two-way reference
+  lens.target = hand.pearl.grains;  
   lens.hand = hand;
   hand.loadPearl();
   // hand.render();
 }
 
-// ---------- Defaults ----------
 
-function createDefaultPearl() {
-
-  let defaultPearl = [];
-  for (let i = 0; i < 3; i++) {
-    defaultPearl.push(new Idea());
-  }
-  return defaultPearl; 
-}
 
 
 

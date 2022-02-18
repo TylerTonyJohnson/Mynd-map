@@ -16,12 +16,12 @@ class ContextMenu {
   create = (event, target) => {
 
     // Build container for context menu
-    let $ContextMenu = $create(`
+    let $ContextMenu = $Create(`
       <div id="context-menu" class="context-menu"></div>
     `);
 
     // Construct items inside context menu
-    let $AddButton = $create(`
+    let $AddButton = $Create(`
     <div id="context-menu-add-button" class="context-menu-button">
       <span class="material-icons context-menu-button-component"> add </span>
       <div class="context-menu-button-component">Add</div>
@@ -33,7 +33,7 @@ class ContextMenu {
       $("context-menu-container").innerHTML = "";
     }
 
-    let $DeleteButton = $create(`
+    let $DeleteButton = $Create(`
     <div id="context-menu-delete-button" class="context-menu-button">
       <span class="material-icons context-menu-button-component"> delete </span>
       <div class="context-menu-button-component">Delete</div>

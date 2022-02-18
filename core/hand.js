@@ -1,12 +1,16 @@
 // The purpose of this is to interact with the data
 
 class Hand {
-  pearl = null;
-  lens = null;
 
   constructor (pearl, lens) {
     this.pearl = pearl || null;
     this.lens = lens || null;
+
+    if (localStorage.pearl) {
+      this.pearl.grains = JSON.parse(localStorage.pearl);
+    } else {
+      this.pearl.grains = this.createDefaultPearl();
+    }
   }
 
   // ---------- Pearl CRUD functions ----------  
@@ -61,10 +65,9 @@ class Hand {
 
   // Reset to default
   resetPearl = () => {
-    this.pearl.grains = createDefaultPearl();
+    this.pearl.grains = this.createDefaultPearl();
     this.render();
   }
-
 
   // ---------- View Functions (Rendering) ----------
 
@@ -94,4 +97,14 @@ class Hand {
 
   // ---------- Interaction Events ----------
 
+  // ---------- Defaults ----------
+
+  createDefaultPearl() {
+
+    let defaultPearl = [];
+    for (let i = 0; i < 3; i++) {
+      defaultPearl.push(new Idea());
+    }
+    return defaultPearl; 
+  }
 }
